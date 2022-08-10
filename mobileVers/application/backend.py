@@ -465,3 +465,71 @@ def broadcast_email_pw_reset(email, content):
         print(response.headers)
     except Exception as e:
         print(e.message)
+
+
+def broadcast_new_program(email, counter):
+    """
+    New program email, must figure out where this function belongs in Get FoCo (perhaps in admin page as a button?)
+    Utilizes SendGrid DynamicEmail template New Program Available, lets clients know to apply for new programs
+
+
+    Parameters
+    ----------
+    email : str
+        email to send to client(s)
+    counter: int
+        counter allows us to choose which version of the message to send
+        1) Apply for new program (general)
+        2) Apply for new program because of lowered AMI
+        
+
+    Raises
+    ------
+    Exception
+        Email may not be valid
+
+    Returns / Outside Action
+    -------
+    API return
+        Sendgrid sends email
+
+    """
+    TEMPLATE_ID = settings.TEMPLATE_ID_DYNAMIC_EMAIL
+    message = Mail(
+        from_email='getfoco@fcgov.com',
+        to_emails=email)
+    if counter == 1:        
+        message.dynamic_template_data = {
+            'program1': "Connexion",
+            'program2': "Grocery Rebate",
+            'program3': "Recreation",
+            'date': str(datetime.datetime.now().date()),
+        }
+
+    elif counter == 2:        
+        message.dynamic_template_data = {
+            'program1': "Connexion",
+            'program2': "Grocery Rebate",
+            'program3': "Recreation",
+
+            'ConnexionRequirements': "For Connexion, you require an AMI of... ",
+            'ConnexionContact': "Phone Number: xxx-xxx-xxxx; Email: connexion@connexion.com",
+            
+            'GroceryRequirements': "",
+            'GroceryContact': "",
+
+            'RecreationRequirements': "For Recreation you must buy a family pass using the information provided on Get:FoCo, please give them your email when you buy your pass more information found below.",
+            'RecreationContact': "https://www.fcgov.com/recreation/",
+
+            'date': str(datetime.datetime.now().date()),
+        }
+    
+    message.template_id = TEMPLATE_ID
+    try:
+        sg = SendGridAPIClient("***REMOVED***")
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)
