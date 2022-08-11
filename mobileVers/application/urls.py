@@ -38,8 +38,9 @@ urlpatterns = [
     # Recreation Dependent Pages
     path('RecreationQuickApply', views.RecreationQuickApply, name='RecreationQuickApply'),
     path('ConnexionQuickApply', views.ConnexionQuickApply, name='ConnexionQuickApply'),
-    path('comingSoon', views.comingSoon, name='comingSoon'),
+    path('SPINQuickApply', views.SPINQuickApply, name='SPINQuickApply'),
     # ETC. pages
+    path('comingSoon', views.comingSoon, name='comingSoon'),
     path('mayQualify', views.mayQualify, name='mayQualify'),
     path('privacyPolicy', views.privacyPolicy, name='privacyPolicy'),
     path('dependentInfo', views.dependentInfo, name='dependentInfo'),

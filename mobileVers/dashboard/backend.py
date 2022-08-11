@@ -18,6 +18,7 @@ from django.conf import settings
 from azure.storage.blob import BlockBlobService
 
 from .models import User
+from application.models import MoreInfo
 
 
 def blobStorageUpload(filename, file):
@@ -85,33 +86,79 @@ def files_to_string(file_list, request):
 def what_page(user,request):
     if user.is_authenticated:
         #for some reason, none of these login correctly... reviewing this now
-        try:
+        try: #check if address is completely filled
             value = request.user.addresses
         except AttributeError:
             return "application:address"
 
-        try:
+        try: #check if finances is filled
             value = request.user.eligibility
         except AttributeError:
             return "application:finances"
+
+        try: #check if dependents / birthdays are filled
+            searchForUser = request.user.id
+            if(MoreInfo.objects.all().filter(user_id_id=searchForUser).exists()):
+                print("MoreInfo exists")
+            else:
+                print("MoreInfo doesn't exist")
+                return "application:moreInfoNeeded"
+        except AttributeError or ObjectDoesNotExist:
+            return "application:moreInfoNeeded"
         
-        try:
+        try: #check if programs is filled out
             value = request.user.programs
         except AttributeError or ObjectDoesNotExist:
             return "application:programs"
         
-        try:
-            print(request.user.files.all()) #Check for all files per how many programs the client selected
-            value = request.user.files.all()
-            if not value.exists():
-               print("object doesn't exist")
-               return "dashboard:files"
+        try: #check if files are all uploaded
+            file_list = {"SNAP Card": request.user.programs.snap,
+                # Have Reduced Lunch be last item in the list if we add more programs
+                "PSD Reduced Lunch Approval Letter": request.user.programs.freeReducedLunch,
+                "Affordable Connectivity Program": request.user.programs.ebb_acf,
+                "Identification": request.user.programs.Identification,
+                "1040 Form": request.user.programs.form1040,
+                "LEAP Letter": request.user.programs.leap,
+            }
+
+            Forms = request.user.files
+            checkAllForms = [not(request.user.programs.snap),not(request.user.programs.freeReducedLunch),not(request.user.programs.ebb_acf),not(request.user.programs.Identification),not(request.user.programs.leap),not(request.user.programs.form1040),]
+            for group in Forms.all():
+                if group.document_title == "SNAP":
+                    checkAllForms[0] = True
+                    file_list["SNAP Card"] = False
+                if group.document_title == "Free and Reduced Lunch":
+                    checkAllForms[1] = True
+                    file_list["PSD Reduced Lunch Approval Letter"] = False
+                if group.document_title == "ACP Letter":
+                    checkAllForms[2] = True
+                    file_list["Affordable Connectivity Program"] = False
+                if group.document_title == "Identification":
+                    checkAllForms[3] = True
+                    file_list["Identification"] = False
+                if group.document_title == "LEAP Letter":
+                    checkAllForms[4] = True
+                    file_list["LEAP Letter"] = False
+                if group.document_title == "1040 Form":
+                    checkAllForms[5] = True
+                    file_list["1040 Form"] = False
+            if False in checkAllForms:
+                return "dashboard:files"
             else:
-                print("object exists")
+                print("files found")
         except AttributeError:
             return "dashboard:files"
-        
-        return "dashboard:dashboard"
 
+        try: #check if ACP last four SSN is needed or not...
+            if ((request.user.programs.ebb_acf) == True) and ((request.user.taxinformation.last4SSN) == "NULL"):
+                return "application:filesInfoNeeded"
+            else:
+                print("last 4 ssn found")
+        except:
+            return "application:filesInfoNeeded"
+
+
+
+        return "dashboard:dashboard"
     else:
         return "application:account"

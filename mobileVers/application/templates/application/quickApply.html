@@ -10,7 +10,7 @@ the Free Software Foundation, either version 3 of the License, or
     <div class="content spaceAround">
         <!--NOTE: For the future have numbers change based on database-->
         {% if 'grocery' in programName|lower %}
-            <h1><b>Thank you for quick applying to the {{ programName }} program! The program runs each year between August and October; your application will be processed during that period.</b></h1>
+            <h1><b>Thank you for quick applying to the {{ programName }} program!</b></h1>
         {% else %}
             <h1><b>Thank you for quick applying to the {{ programName }} program! We'll let you know when you've been enrolled.</b></h1>
 
@@ -21,7 +21,7 @@ the Free Software Foundation, either version 3 of the License, or
             <br />
             <br />
             {% if enroll_failure is True %}
-                <p style="color:red">Unfortunately we were unable to register you for Connexion service notifications (your registration to the Reduced-Rate Connexion program was successful) - please go to <a href="https://www.fcgov.com/connexion/residential#service-availability">the Connexion site</a> and fill out the service notification form.
+                <p style="color:red">Unfortunately we were unable to register you for Connexion service notifications (your registration to the Reduced-Rate Connexion program was successful) - please go to <a href="https://fcconnexion.com/service-availability/#notify">the Connexion site</a> and fill out the service notification form.
                 </p>
             {% elif is_enrolled is True %}
                 <p>You have been successfully signed up for Connexion updates at your account email address.</p>

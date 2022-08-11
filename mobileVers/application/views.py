@@ -802,6 +802,45 @@ def RecreationQuickApply(request):
                 },
             )
 
+def SPINQuickApply(request):
+    obj = request.user.eligibility
+    print(obj.SPINQualified)
+    #print(request.user.eligibility.GRQualified)
+    
+    # Calculate if within the qualification range
+
+    qualifyAmiPc = iqProgramQualifications.objects.filter(name='spin').values(
+        'percentAmi'
+        ).first()['percentAmi']
+    print('SPIN max AMI %:',qualifyAmiPc)
+    
+    # If GenericQualified is 'ACTIVE' or 'PENDING' (this will assume they are being truthful with their income range)
+    if (obj.GenericQualified == QualificationStatus.ACTIVE.name or obj.GenericQualified == QualificationStatus.PENDING.name) and obj.AmiRange_max <= qualifyAmiPc:
+        obj.SPINQualified = QualificationStatus.PENDING.name
+        obj.save()
+        return render(
+            request,
+            "application/quickApply.html",
+            {
+                'programName': 'Spin',
+                'Title': "Spin Quick Apply Complete",
+                'is_prod': django_settings.IS_PROD,
+                },
+            )
+    else:
+        obj.SPINQualified = QualificationStatus.NOTQUALIFIED.name        
+        print(obj.SPINQualified)
+        obj.save()
+        return render(
+            request,
+            "application/notQualify.html",
+            {
+                'programName': 'SPIN',
+                'Title': "SPIN Not Qualified",
+                'is_prod': django_settings.IS_PROD,
+                },
+            )
+
 
 def attestation(request):
     if request.method == "POST": 

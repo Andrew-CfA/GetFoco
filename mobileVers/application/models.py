@@ -176,10 +176,13 @@ class Eligibility(TimeStampedModel):
     ConnexionQualified = models.CharField(max_length=20)
     GRqualified = models.CharField(max_length=20)
     RecreationQualified = models.CharField(max_length=20)
+    SPINQualified = models.CharField(max_length=20)
+
     #TODO 5/13/2021
     #insert other rebate flags here i.e.
     #xQualified = models.CharField(max_length=20)
     #utilitiesQualified = models.CharField(max_length=20)
+    
 
     grossAnnualHouseholdIncome = models.CharField(max_length=20)    
     # Define the min and max Gross Annual Household Income as a fraction of 
