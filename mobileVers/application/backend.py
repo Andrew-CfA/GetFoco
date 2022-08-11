@@ -413,7 +413,7 @@ def broadcast_program_enrolled_email(email, counter):
             'GroceryRequirements': "",
             'GroceryContact': "",
 
-            'RecreationRequirements': "For Recreation you must buy a family pass using the information provided on Get:FoCo, please give them your email when you buy your pass more information found below.",
+            'RecreationRequirements': "For Recreation you must buy a family pass using the information provided on Get FoCo, please give them your email when you buy your pass more information found below.",
             'RecreationContact': "https://www.fcgov.com/recreation/",
 
             'date': str(datetime.datetime.now().date()),
@@ -512,13 +512,13 @@ def broadcast_new_program(email, counter):
             'program2': "Grocery Rebate",
             'program3': "Recreation",
 
-            'ConnexionRequirements': "For Connexion, you require an AMI of... ",
+            'ConnexionRequirements': "For Connexion, you require an AMI of... ", #TODO insert dynamic AMI reference here
             'ConnexionContact': "Phone Number: xxx-xxx-xxxx; Email: connexion@connexion.com",
             
-            'GroceryRequirements': "",
+            'GroceryRequirements': "",#TODO insert dynamic AMI reference here
             'GroceryContact': "",
 
-            'RecreationRequirements': "For Recreation you must buy a family pass using the information provided on Get:FoCo, please give them your email when you buy your pass more information found below.",
+            'RecreationRequirements': "For Recreation you must buy a family pass using the information provided on Get FoCo, please give them your email when you buy your pass more information found below.", #TODO insert dynamic AMI reference here
             'RecreationContact': "https://www.fcgov.com/recreation/",
 
             'date': str(datetime.datetime.now().date()),
