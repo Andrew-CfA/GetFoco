@@ -64,9 +64,9 @@ the Free Software Foundation, either version 3 of the License, or
 
                     <div class="row" style="height: 5vh; vertical-align: middle; display: table-cell; text-align: right;overflow: initial;">
                         <!--TODO: MAKE SURE THIS LINK WORKS-->
-                            <a href="#How it Works" class ="navLink"> How it Works</a>
-                            <a href="#Available Programs" class ="navLink"> Available Programs </a>
-                            <a href="#Check Availability" class ="navLink"> Check Availability </a>
+                            <a href="#Learn More" class ="navLink">Learn More</a>
+                            <a href="#Available Programs" class ="navLink">Available Programs</a>
+                            <a href="#Check Availability" class ="navLink">Check Availability</a>
                             <a class="link" style = "display: inline;" href="{% url 'dashboard:login' %}">LOG IN</a>
                             <button onclick="location.href='{% url 'application:getReady' %}'"><b>APPLY</b></button>
                     </div>
@@ -83,26 +83,94 @@ the Free Software Foundation, either version 3 of the License, or
             </div>
         </div>
         <div class=whitemain>
-            <h2 style="text-align:center"><b><a id="How it Works">How it Works</a></b></h2>
+            <h2 style="text-align:center"><b><a id="Learn More">Learn More</a></b></h2>
             <p style="padding-bottom:20px">With Get Foco, you’ll be able to do more with your City of Fort Collins program applications than ever before.</p>
             <div class="column">
-                <div class="row"  style = "justify-content: space-around;">
-                    <div class="img">
-                        <div class="fadeLarge">
-                            <img src="{% static 'application/images/control.png' %}" alt="Control" style="width:100%">
+                <div class="exploreDivPrograms">
+                    <div class="row"  style = "justify-content: space-around;">
+                        <div class="img">
+                            <div class="fadeLarge">
+                                <img src="{% static 'application/images/control.png' %}" alt="Control" style="width:100%">
+                            </div>
+                            <div class ="fadeSmall">
+                                <img src="{% static 'application/images/control.svg' %}" alt="Control" style="width:100%">
+                            </div>
                         </div>
-                        <div class ="fadeSmall">
-                            <img src="{% static 'application/images/control.svg' %}" alt="Control" style="width:100%">
+                        <div class="wordblock">
+                            <p style="margin-top:0;"><b>Control Your Application</b></p>
+                            <p>Manage applications in real 
+                                time with up-to-date 
+                                application status.</p>
                         </div>
-                    </div>
-                    <div class="wordblock">
-                        <p style="margin-top:0;"><b>Control Your Application</b></p>
-                        <p>Manage applications in real 
-                            time with up-to-date 
-                            application status.</p>
                     </div>
                 </div>
             </div>
+            <div class="column">
+                <div class="exploreDivPrograms">
+                    <div class="row" style = "justify-content: space-around;">
+                        <div class="img">
+                            <div class="fadeLarge">
+                                <img src="{% static 'application/images/save.png' %}" alt="Save" style="width:100%">
+                            </div>
+                            <div class ="fadeSmall">
+                                <img src="{% static 'application/images/save.svg' %}" alt="Save" style="width:100%">
+                            </div>
+                        </div>
+                        <div class="wordblock">
+                            <p style="margin-top:0;"><b>Do More, Save More</b></p>
+                            <p>If you qualify, you’ll get access 
+                                to specific City of Fort Collins' income qualified programs
+                                that are tailored to save you money.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="exploreDivPrograms">
+                    <div class="row"  style = "justify-content: space-around;">
+                        <div class="img">
+                            <div class="fadeLarge">
+                                <img src="{% static 'application/images/forget.png' %}" alt="Forget" style="width:100%">
+                            </div>
+                            <div class ="fadeSmall">
+                                <img src="{% static 'application/images/forget.svg' %}" alt="Forget" style="width:100%">
+                            </div>
+                        </div>
+                        <div class="wordblock">
+                            <p style="margin-top:0;"><b>Forget “Forgetting”</b></p>
+                            <p>Never forget to renew your 
+                                application with easy reminders – making information 
+                                updates a breeze.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="exploreDivPrograms">
+                    <div class="row"  style = "justify-content: space-around;">
+                        <div class="img">
+                            <div class="fadeLarge">
+                                <img src="{% static 'application/images/know.png' %}" alt="Know" style="width:100%">
+                            </div>
+                            <div class ="fadeSmall">
+                                <img src="{% static 'application/images/know.svg' %}" alt="Know" style="width:100%">
+                            </div>
+                        </div>
+                        <div class="wordblock">
+                            <p style="margin-top:0;"><b>Stay in the Know</b></p>
+                            <p>Be informed with the latest
+                                news & updates from both
+                                Connexion & the City.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class=whitemain>
+            <h2 style="text-align:center"><b><a id="How it Works">How it Works</a></b></h2>
+            <p style="padding-bottom:20px">With Get Foco, you’ll be able to do more with your City of Fort Collins program applications than ever before.</p>
+
             <div class="column">
                 <div class="row" style = "justify-content: space-around;">
                     <div class="img">
@@ -114,50 +182,89 @@ the Free Software Foundation, either version 3 of the License, or
                         </div>
                     </div>
                     <div class="wordblock">
-                        <p style="margin-top:0;"><b>Do More, Save More</b></p>
-                        <p>If you qualify, you’ll get access 
-                            to specific City of Fort Collins' income qualified programs
-                            that are tailored to save you money.</p>
+                        <p style="margin-top:0;"><b>Step 1</b></p>
+                        <p> Create your account </p>
                     </div>
                 </div>
-            </div>
-            <div class="column">
                 <div class="row"  style = "justify-content: space-around;">
                     <div class="img">
                         <div class="fadeLarge">
-                            <img src="{% static 'application/images/forget.png' %}" alt="Forget" style="width:100%">
+                            <img src="{% static 'application/images/save.png' %}" alt="Save" style="width:100%">
                         </div>
                         <div class ="fadeSmall">
-                            <img src="{% static 'application/images/forget.svg' %}" alt="Forget" style="width:100%">
+                            <img src="{% static 'application/images/save.svg' %}" alt="Save" style="width:100%">
                         </div>
                     </div>
                     <div class="wordblock">
-                        <p style="margin-top:0;"><b>Forget “Forgetting”</b></p>
-                        <p>Never forget to renew your 
-                            application with easy reminders – making information 
-                            updates a breeze.</p>
+                        <p style="margin-top:0;"><b>Step 2</b></p>
+                        <p> Enter your address to see local programs</p>
                     </div>
                 </div>
-            </div>
-            <div class="column">
+
+                <div class="row" style = "justify-content: space-around;">
+                    <div class="img">
+                        <div class="fadeLarge">
+                            <img src="{% static 'application/images/save.png' %}" alt="Save" style="width:100%">
+                        </div>
+                        <div class ="fadeSmall">
+                            <img src="{% static 'application/images/save.svg' %}" alt="Save" style="width:100%">
+                        </div>
+                    </div>
+                    <div class="wordblock">
+                        <p style="margin-top:0;"><b>Step 3</b></p>
+                        <p> Enter basic household information </p>
+                    </div>
+                </div>
                 <div class="row"  style = "justify-content: space-around;">
                     <div class="img">
                         <div class="fadeLarge">
-                            <img src="{% static 'application/images/know.png' %}" alt="Know" style="width:100%">
+                            <img src="{% static 'application/images/save.png' %}" alt="Save" style="width:100%">
                         </div>
                         <div class ="fadeSmall">
-                            <img src="{% static 'application/images/know.svg' %}" alt="Know" style="width:100%">
+                            <img src="{% static 'application/images/save.svg' %}" alt="Save" style="width:100%">
                         </div>
                     </div>
                     <div class="wordblock">
-                        <p style="margin-top:0;"><b>Stay in the Know</b></p>
-                        <p>Be informed with the latest
-                            news & updates from both
-                            Connexion & the City.</p>
+                        <p style="margin-top:0;"><b>Step 4</b></p>
+                        <p> Let us know income qualified programs you may be signed-up for already to speed up the application </p>
                     </div>
                 </div>
+
+                <div class="row"  style = "justify-content: space-around;">
+                    <div class="img">
+                        <div class="fadeLarge">
+                            <img src="{% static 'application/images/save.png' %}" alt="Save" style="width:100%">
+                        </div>
+                        <div class ="fadeSmall">
+                            <img src="{% static 'application/images/save.svg' %}" alt="Save" style="width:100%">
+                        </div>
+                    </div>
+                    <div class="wordblock">
+                        <p style="margin-top:0;"><b>Step 5</b></p>
+                        <p> Upload pictures of programs </p>
+                    </div>
+                </div>
+
+                <div class="row"  style = "justify-content: space-around;">
+                    <div class="img">
+                        <div class="fadeLarge">
+                            <img src="{% static 'application/images/save.png' %}" alt="Save" style="width:100%">
+                        </div>
+                        <div class ="fadeSmall">
+                            <img src="{% static 'application/images/save.svg' %}" alt="Save" style="width:100%">
+                        </div>
+                    </div>
+                    <div class="wordblock">
+                        <p style="margin-top:0;"><b>Step 6</b></p>
+                        <p> Finished!</p>
+                    </div>
+                </div>
+                
             </div>
+  
+ 
         </div>
+
         <div class=programsListmain>
             <h2 style="color:white; text-align: center;"><a id="Available Programs">Available Income Eligible Programs</a></h2>
             <p style="color:white; text-align: center;">Get FOCO is always working to include more programs into the mobile app– making it easier for you to be connected!</p>
