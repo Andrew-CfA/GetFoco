@@ -178,7 +178,6 @@ p {
     background-color: white;
     
     border-radius: 2vh;
-    color:white;
     height: auto;
     font-size: max(3.8vw, 16px);
     font-weight: 700;
@@ -579,7 +578,6 @@ input.fill:focus ~ label, input.fill:valid ~ label {
         background-color: var(--darkblue);
         
         border-radius: 2vh;
-        color:white;
         height: auto;
         font-size: max(3.8vw, 16px);
         font-weight: 700;
