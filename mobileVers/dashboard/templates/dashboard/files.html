@@ -9,35 +9,6 @@ the Free Software Foundation, either version 3 of the License, or
 
 {% block body %}
 
-<script type='text/javascript'>
-    function previewImages() {
-        var preview = document.querySelector('#preview');
-        if (this.files) {
-        [].forEach.call(this.files, readAndPreview);
-        }
-        function readAndPreview(file) {
-        // Make sure `file.name` matches our extensions criteria
-        if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
-            return alert(file.name + " is not an image");
-        } // else...
-        var reader = new FileReader();
-        reader.addEventListener("load", function() {
-            var image = new Image();
-            image.height = 100;
-            image.title  = file.name;
-            image.src    = this.result;
-            preview.appendChild(image);
-        });
-        reader.readAsDataURL(file);
-        document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
-        }
-    document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
-    document.querySelector('#id_document').addEventListener("change", previewImages);
-    }
-    
-</script>
-
-
 <!--Modal for preview of what we require for SNAP-->
 <div id="modalImageInstructions" class="modal-alert">
     <!-- Modal content -->
@@ -287,7 +258,10 @@ the Free Software Foundation, either version 3 of the License, or
                         </div>
                     </div>
                 </button>
-                <input type="file" name ="{{field.name}}" id="{{ field.id_for_label }}" required multiple>
+                <input type="file" name ="{{field.name}}" id="document" required multiple>
+                <div class="preview"> 
+                    <img style ="max-width:100%;" id="preview"/>
+                </div>
                 {{ field.id_for_label }}
                 {{field.name}}
             </div>
@@ -357,6 +331,33 @@ the Free Software Foundation, either version 3 of the License, or
     }
   </script>
     
+    <script type='text/javascript'>
+        function previewImages() {
+            var preview = document.querySelector('#preview');
+            if (this.files) {
+            [].forEach.call(this.files, readAndPreview);
+            }
+            function readAndPreview(file) {
+            // Make sure `file.name` matches our extensions criteria
+            if (!/\.(jpe?g|png|gif)$/i.test(file.name)) {
+                return alert(file.name + " is not an image");
+            } // else...
+            var reader = new FileReader();
+            reader.addEventListener("load", function() {
+                var image = new Image();
+                image.height = 100;
+                image.title  = file.name;
+                image.src    = this.result;
+                preview.appendChild(image);
+            });
+            reader.readAsDataURL(file);
+            document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
+            }
+        document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
+        document.querySelector('#document').addEventListener("change", previewImages);
+        }
+        
+    </script>
   
 
 
