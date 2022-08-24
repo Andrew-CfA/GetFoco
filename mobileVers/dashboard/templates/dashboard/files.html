@@ -9,19 +9,6 @@ the Free Software Foundation, either version 3 of the License, or
 
 {% block body %}
 
-<script type='text/javascript'>
-    function preview_image(event){
-        var output = document.getElementById("id_document");
-        var quantity = output.files.length;
-        for(i = 0; i < quantity; i++){
-            var urls = URL.createObjectURL(event.target.files[i]);
-            document.getElementById("output_image").innerHTML += '<img src="'+urls+'">';
-        }
-        document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
-    }
-    </script>
-
-
 <!--Modal for preview of what we require for SNAP-->
 <div id="modalImageInstructions" class="modal-alert">
     <!-- Modal content -->
@@ -338,6 +325,17 @@ the Free Software Foundation, either version 3 of the License, or
       }
     }
   </script>
+  <script type='text/javascript'>
+    function preview_image(event){
+        var output = document.getElementById("id_document");
+        var quantity = output.files.length;
+        for(i = 0; i < quantity; i++){
+            var urls = URL.createObjectURL(event.target.files[i]);
+            document.getElementById("output_image").innerHTML += '<img src="'+urls+'">';
+        }
+        document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
+    }
+</script>
     
 
 
