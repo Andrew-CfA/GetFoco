@@ -203,6 +203,7 @@ input[type="checkbox"]{
     }
     .p2{
         color:var(--darkblue);
+        font-size: max(10px, 20px);
     }
     
 
