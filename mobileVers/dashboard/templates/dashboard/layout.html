@@ -46,12 +46,20 @@ the Free Software Foundation, either version 3 of the License, or
         <div class =fadeLarge><img style="display: block; padding-top: 4%; margin-left: auto; margin-right: auto; width: 30%;" src="{% static 'application/images/CityLogoWhite-01.png' %}"></div>
         <div style="position: fixed; bottom: 0%; right: 1%; display: flex; justify-content: flex-end;background-color: #FFB300; height: 30px; width: auto;" id="google_translate_element"></div>
         <div class=nav>
-            <a class="row" onClick="window.history.back();return false;">
-                <div class=fadeSmall><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
-                <div class=fadeLarge><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
-                <p style = "font-weight: 700;">BACK</p>
-            </a>
-            <p class=p2 alt="back" alt="exit" style=" margin-right: 5px;" onclick="location.href='{% url 'application:index' %}'">Save & Logout</p>
+            <div class="row">
+                <div class=fadeSmall><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;" onClick="window.history.back();return false;"></div>
+                <div class=fadeLarge><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;" onClick="window.history.back();return false;"></div>
+                <p style = "font-weight: 700; padding-right: 5%; display: inline;">BACK</p>
+
+                <p class="p2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1: Account</p>
+                <p class="p2" style = "display: inline;" onclick="location.href='{% url 'application:address' %}'">Step 2: Address</p>
+                <p class="p2" style = "display: inline;" onclick="location.href='{% url 'application:finances' %}'">Step 3: Financial Info</p>
+                <p class="p2" style = "display: inline;" onclick="location.href='{% url 'application:programs' %}'">Step 4: Programs</p>
+                <p class="p2" style = "display: inline;" onclick="location.href='{% url 'dashboard:files' %}'">Step 5: Files</p>
+                <p class="p2" style = "display: inline;" onclick="location.href='{% url 'dashboard:broadcast' %}'">Step 6: Done</p>
+        
+                <p class="p2" alt="back" style=" margin-right: 5px;" onclick="location.href='{% url 'application:index' %}'">Save & Logout</p>
+            </div>
         </div>
         <div class="marginauto content desktop" style="height:150vh;">
                 <!--Whatever I need in the other pages, I can enter it here-->
