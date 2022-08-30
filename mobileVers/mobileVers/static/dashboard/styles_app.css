@@ -167,6 +167,11 @@ p {
     color:var(--darkblue);
 }
 
+.p2{
+    color:var(--darkblue);
+    font-size: max(10px, 20px);
+}
+
 
 .preview {
     margin: auto;
