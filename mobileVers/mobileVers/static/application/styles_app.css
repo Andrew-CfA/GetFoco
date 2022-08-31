@@ -622,6 +622,18 @@ input[type="checkbox"]{
         width:85%;
     }
 
+    .button2 {
+        border-radius:20px;
+        border: none;
+        color: white;
+        padding: 7px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 10px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
 
     .buttonCheck{
         width:100%;
