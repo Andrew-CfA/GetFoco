@@ -638,6 +638,18 @@
         height: 5px;
     }
 
+    .button3 {
+        border-radius:20px;
+        border: none;
+        color: white;
+        padding: 7px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 10px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
 
     .files{
         background-color: var(--darkblue);

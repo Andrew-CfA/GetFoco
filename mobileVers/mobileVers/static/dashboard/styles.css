@@ -161,43 +161,44 @@ td {
         box-sizing: border-box;
         font-size: 22px;
         font-family: "Helvetica", sans-serif;
-        /*color: #333333;*/
+
+        /*color: #333333; commented this out, for some reason this breaks google translate and makes css invalid... ONLY IN GOOGLE TRANSLATE*/
       }
       
-      .container {
-        background-color: #FFFFFF;
-        padding:10px;
-        /*border: 2px solid #CCCCCC;*/
-        width: 74%;
-        margin-left: 400px;
-        height: 41vw;
-        display: flex;
-        flex-flow: column wrap; /* Shorthand – you could use ‘flex-direction: column’ and ‘flex-wrap: wrap’ instead */
-        justify-content: flex-start;
-        align-items: flex-start;
-        overflow-x: scroll;
-      }
-      .divider{
-        border-top-style: solid; 
-        color:rgba(85, 161, 211, 0.3); 
-        border-top-width: thin; 
-        margin-top:20px; 
-        margin-bottom: 20px;
-      }
-      
-      .item {
-        background-color: white;
-        border-radius: 10px;
-        border: 1px solid rgba(85, 161, 211, 0.3);
-        height: 150px;
-        width: 31%;
-        margin: 1%;
-        padding: 10px;
-      }
-      
-      .item.extraLarge {
-       /* background-color: yellow;*/
-        height: 500px;
+    .container {
+    background-color: #FFFFFF;
+    padding:10px;
+    /*border: 2px solid #CCCCCC;*/
+    width: 74%;
+    margin-left: 400px;
+    height: 41vw;
+    display: flex;
+    flex-flow: column wrap; /* Shorthand – you could use ‘flex-direction: column’ and ‘flex-wrap: wrap’ instead */
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow-x: scroll;
+    }
+    .divider{
+    border-top-style: solid; 
+    color:rgba(85, 161, 211, 0.3); 
+    border-top-width: thin; 
+    margin-top:20px; 
+    margin-bottom: 20px;
+    }
+    
+    .item {
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid rgba(85, 161, 211, 0.3);
+    height: 150px;
+    width: 31%;
+    margin: 1%;
+    padding: 10px;
+    }
+    
+    .item.extraLarge {
+    /* background-color: yellow;*/
+    height: 500px;
     }
     
     .item.large {
