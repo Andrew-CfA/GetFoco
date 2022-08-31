@@ -100,14 +100,26 @@ the Free Software Foundation, either version 3 of the License, or
         {% endif %}
     {% endfor %}
     <br>
-    <!--<div class="preview"> 
-        <img style ="max-width:100%;" id="output_image"/>
+ 
+    <div id="output_image" style="padding: 5px;"> 
     </div>
-    -->
+    
     <br>
     <div class="footer">
         <button type ="submit" > UPLOAD FILES </button>
     </div>
 </form>
+
+<script type='text/javascript'>
+    function preview_image(event){
+        var output = document.getElementById("id_document");
+        var quantity = output.files.length;
+        for(i = 0; i < quantity; i++){
+            var urls = URL.createObjectURL(event.target.files[i]);
+            document.getElementById("output_image").innerHTML += '<img src="'+urls+'">';
+        }
+        document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
+    }
+</script>
 
 {% endblock %}
