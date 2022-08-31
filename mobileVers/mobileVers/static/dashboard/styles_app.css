@@ -259,7 +259,7 @@
     }
 
     #output_image {
-        flex-direction: row
+        flex-direction: row;
         }
 
     #output_image img{
@@ -480,7 +480,7 @@
         margin-left: auto;
         margin-right: auto;
     }
-}
+
 
 
 
@@ -655,7 +655,7 @@
         font-weight: 700;
     }
     #output_image {
-        flex-direction: column
+        flex-direction: column;
         }
     
     #output_image img{
