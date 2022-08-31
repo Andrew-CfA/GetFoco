@@ -110,7 +110,7 @@ def what_page(user,request):
             value = request.user.programs
         except AttributeError or ObjectDoesNotExist:
             return "application:programs"
-        
+
         try: #check if files are all uploaded
             file_list = {"SNAP Card": request.user.programs.snap,
                 # Have Reduced Lunch be last item in the list if we add more programs

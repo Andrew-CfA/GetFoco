@@ -345,8 +345,7 @@ def validateUSPS(inobj):
         
     else:
         raise AttributeError('Unknown validation input')
-        
-    print (address)
+
     usps = USPSApi(settings.USPS_SID, test=True)
     validation = usps.validate_address(address)
     outDict = validation.result
@@ -356,7 +355,7 @@ def validateUSPS(inobj):
         return outDict
     
     except KeyError:
-        print("Wrong address info added")
+        print("Address could not be found - no guesses")
         raise
 
 

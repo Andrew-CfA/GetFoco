@@ -155,10 +155,15 @@ class GAHIBuilder:
                             ),
                         )
                 else:
+                    # Add $1 to the low end of each range to improve clarity
+                    # (range ends will now not overlap)
+                    # Adding to the low end means applicants at the edge of the
+                    # range will select the lower range and increase their
+                    # available benefits.
                     self.list.append(
                         GAHIVal(
                             f"{self.amiCutoffPc[idx]}^{self.amiCutoffPc[idx+1]}",
-                            f"${itm:06,.0f} ~ ${amiCutoffVals[idx+1]:06,.0f}",
+                            f"${itm+1:06,.0f} ~ ${amiCutoffVals[idx+1]:06,.0f}",
                             ),
                         )
                 
@@ -171,6 +176,36 @@ class GAHIVal:
 
         self.val = val
         self.text = text
+        
+# Use the following tag mapping for USPS standards for all functions
+tag_mapping = {
+   'Recipient': 'recipient',
+   'AddressNumber': 'address_2',
+   'AddressNumberPrefix': 'address_2',
+   'AddressNumberSuffix': 'address_2',
+   'StreetName': 'address_2',
+   'StreetNamePreDirectional': 'address_2',
+   'StreetNamePreModifier': 'address_2',
+   'StreetNamePreType': 'address_2',
+   'StreetNamePostDirectional': 'address_2',
+   'StreetNamePostModifier': 'address_2',
+   'StreetNamePostType': 'address_2',
+   'CornerOf': 'address_2',
+   'IntersectionSeparator': 'address_2',
+   'LandmarkName': 'address_2',
+   'USPSBoxGroupID': 'address_2',
+   'USPSBoxGroupType': 'address_2',
+   'USPSBoxID': 'address_2',
+   'USPSBoxType': 'address_2',
+   'BuildingName': 'address_1',
+   'OccupancyType': 'address_1',
+   'OccupancyIdentifier': 'address_1',
+   'SubaddressIdentifier': 'address_1',
+   'SubaddressType': 'address_1',
+   'PlaceName': 'city',
+   'StateName': 'state',
+   'ZipCode': 'zipcode',
+}
         
 # first index page we come into
 def index(request):
@@ -186,36 +221,6 @@ def index(request):
                 # Remove 'fort collins' - the multi-word city can confuse the
                 # parser
                 addressStr = form.cleaned_data['address'].lower().replace('fort collins','')
-                
-                # Use the following tag mapping for USPS standards
-                tag_mapping = {
-                   'Recipient': 'recipient',
-                   'AddressNumber': 'address_2',
-                   'AddressNumberPrefix': 'address_2',
-                   'AddressNumberSuffix': 'address_2',
-                   'StreetName': 'address_2',
-                   'StreetNamePreDirectional': 'address_2',
-                   'StreetNamePreModifier': 'address_2',
-                   'StreetNamePreType': 'address_2',
-                   'StreetNamePostDirectional': 'address_2',
-                   'StreetNamePostModifier': 'address_2',
-                   'StreetNamePostType': 'address_2',
-                   'CornerOf': 'address_2',
-                   'IntersectionSeparator': 'address_2',
-                   'LandmarkName': 'address_2',
-                   'USPSBoxGroupID': 'address_2',
-                   'USPSBoxGroupType': 'address_2',
-                   'USPSBoxID': 'address_2',
-                   'USPSBoxType': 'address_2',
-                   'BuildingName': 'address_1',
-                   'OccupancyType': 'address_1',
-                   'OccupancyIdentifier': 'address_1',
-                   'SubaddressIdentifier': 'address_1',
-                   'SubaddressType': 'address_1',
-                   'PlaceName': 'city',
-                   'StateName': 'state',
-                   'ZipCode': 'zipcode',
-                }
                 
                 rawAddressDict, addressType = usaddress.tag(
                     addressStr,
@@ -308,9 +313,6 @@ def address(request):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.user_id = request.user
-            #checking for "#" in client form of "Apt, Suite, etc." # breaks the USPS api
-            pattern = r'#'
-            instance.address2 = re.sub(pattern, '', instance.address2)
             instance.save()            
             return redirect(reverse("application:addressCorrection"))
     else:
@@ -339,19 +341,89 @@ def addressCorrection(request):
             "state": request.user.addresses.state,
             "zipcode": str(request.user.addresses.zipCode),})
         
-        dict_address = validateUSPS(q)
-        print(dict_address['AddressValidateResponse']['Address'])
+        # Loop through a maximum of two times to try an extra iteration of
+        # specifying 'unit' in from of the apt/unit number
+        for idx in (0,1):
+            print("Start loop {}".format(idx+1))
+            addressStr = "{ad1} {ad2}, {ct}, {st} {zp}".format(
+                ad1=q['address'],
+                ad2=q['address2'].replace('#',''),
+                ct=q['city'],
+                st=q['state'],
+                zp=q['zipcode'])
+
+            rawAddressDict, addressType = usaddress.tag(
+                addressStr,
+                tag_mapping,
+                )
+                            
+            # Ensure the necessary keys for USPS validation are included
+            uspsKeys = [
+                'name',
+                'address_1',
+                'address_2',
+                'city',
+                'state',
+                'zipcode']
+            rawAddressDict.update(
+                {key:'' for key in uspsKeys if key not in rawAddressDict.keys()}
+                )
+            print('rawAddressDict:', rawAddressDict)
+
+            # Validate to USPS address
+            dict_address = validateUSPS(rawAddressDict)        
+            validationAddress = dict_address['AddressValidateResponse']['Address']
+            print('USPS Validation return:', validationAddress)
+            
+            if 'Address1' not in validationAddress.keys():
+                validationAddress['Address1'] = ''
+            
+            # Kick back to the user if the USPS API needs more information
+            if 'ReturnText' in validationAddress.keys():
+                if idx == 1 or q['address2'] == '':
+                    print('Address not found - either end of loop or Line 1 of the address is blank')
+                    raise TypeError()
+                    
+                else:
+                    # If 'ReturnText' is not found and address2 is not None,
+                    # remove possible keywords and try again
+                    print('Address not found - try to remove keywords')
+                    removeList = ['apt', 'unit', '#']
+                    for wrd in removeList:
+                        q['address2'] = q['address2'].lower().replace(wrd, '')
+
+                    q['address2'] = 'Unit {}'.format(q['address2'].lstrip())
+                    
+            else:
+                break
         
-        # Kick back to the user if the USPS API needs more information
-        if 'ReturnText' in dict_address['AddressValidateResponse']['Address'].keys():
-            raise TypeError()
+        program_string_2 = [validationAddress['Address2'], 
+                            validationAddress['Address1'],
+                            validationAddress['City'] + " "+ validationAddress['State'] +" "+  str(validationAddress['Zip5'])]
+        print('program_string_2', program_string_2)
         
-        program_string_2 = [dict_address['AddressValidateResponse']['Address']['Address2'], 
-                            dict_address['AddressValidateResponse']['Address']['Address1'],
-                            dict_address['AddressValidateResponse']['Address']['City'] + " "+ dict_address['AddressValidateResponse']['Address']['State'] +" "+  str(dict_address['AddressValidateResponse']['Address']['Zip5'])]
-        
-    except KeyError or TypeError or RelatedObjectDoesNotExist:
-        program_string_2 = ["Sorry, we couldn't verify this address through USPS.", "Please press 'back' and re-enter."]
+    except TypeError:
+        print("More address information is needed from user")
+        # Only pass to the user for the 'more information is needed' case
+        # --This is all that has been tested--
+        if 'more information is needed' in validationAddress['ReturnText']:
+            program_string_2 = [
+                validationAddress['ReturnText'].replace('Default address: ',''),
+                "Please press 'back' and re-enter.",
+                ]
+            
+        else:
+            print("Some other issue than 'more information is needed'")
+            program_string_2 = [
+                "Sorry, we couldn't verify this address through USPS.",
+                "Please press 'back' and re-enter.",
+                ]
+
+    except KeyError or RelatedObjectDoesNotExist:
+        program_string_2 = [
+            "Sorry, we couldn't verify this address through USPS.",
+            "Please press 'back' and re-enter.",
+            ]
         print("USPS couldn't figure it out!")
         
     else:

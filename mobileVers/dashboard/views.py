@@ -880,8 +880,8 @@ def dashboardGetFoco(request):
     else:
         SPINDisplay = "none"
 
-    # auto apply grocery rebate people if their AMI is 0.3% AND snap / PSD letter uploaded
-    if ((request.user.eligibility.AmiRange_max == Decimal('0.3') and request.user.eligibility.AmiRange_min == Decimal('0.0'))):
+    # auto apply grocery rebate people if their AMI is <=30%
+    if request.user.eligibility.AmiRange_max <= Decimal('0.3'):
         request.user.eligibility.GRqualified = QualificationStatus.PENDING.name
         
     # TODO callus should no longer be relevant, delete!
