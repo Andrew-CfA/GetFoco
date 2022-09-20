@@ -9,11 +9,29 @@ the Free Software Foundation, either version 3 of the License, or
 
 {% block body %}
 
-<!--Modal for preview of what we require for SNAP-->
-<div id="modalImageInstructions" class="modal-alert">
+
+
+<div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-      <span class="close2">&times;</span>
+      <span class="close">&times;</span>
+      <p style="color: var(--darkblue);"><u>Need to Upload Multiple Files?</u></p>
+      <div class ="fadeSmall"><p style="color: var(--darkblue);">If you are uploading multiple files, be sure to click and <b>hold</b> the Ctrl key on your keyboard and click on each file. See an example below!</p></div>
+      <div class ="fadeLarge"><p style="color: var(--darkblue);">Be sure to take your pictures first and then choose gallery or similar and long press or hold on each item to upload multiple files. See an example below!</p></div>
+
+            <br>
+            <br>
+            <br>
+            <div class="fadeSmall"><img src="{% static 'application/images/Step5InstructionsDesktop.gif' %}" width=700px height=auto></div>
+            <div class="fadeLarge"><img src="{% static 'application/images/Step5InstructionsMobile.gif' %}" width=300px height=auto></div>
+
+
+
+            <br>
+            <br>
+
+            <p style="color: var(--darkblue);"><u>Uploading your EBT Card?</u></p>
+            <br>
       <div class ="fadeSmall"><p style="color: var(--darkblue);"> Please upload your EBT Card from your EBT account, take a screenshot just like the image below. For physical cards, please make sure the name and card number are clear and for ID's, please take both a front and back picture like below.</p></div>
       <div class ="fadeLarge"><p style="color: var(--darkblue);"> Please upload your EBT Card from your EBT account, take a screenshot just like the image below. For physical cards, please make sure the name and card number are clear and for ID's, please take both a front and back picture like below.</p></div>
   
@@ -22,27 +40,10 @@ the Free Software Foundation, either version 3 of the License, or
             <br>
             <div class ="row">
               <div class="fadeSmall"><img src="{% static 'application/images/SampleEBTScreenshot.png' %}" width="300px" height=auto></div>
-              <div class="fadeSmall"><img src="{% static 'application/images/ColoradoIDCardSample.jpg' %}" width="500" height=auto></div>
+              <div class="fadeSmall"><img src="{% static 'application/images/ColoradoIDCardSample.jpg' %}" width="500px" height=auto></div>
             </div>
-            <div class="fadeLarge"><img src="{% static 'application/images/SampleEBTScreenshot.png' %}" width="300px" height=auto></div>
-            <div class="fadeLarge"><img src="{% static 'application/images/ColoradoIDCardSample.jpg' %}" width="300px" height=auto></div>
-    </div>
-</div>
-  
-
-<div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class ="fadeSmall"><p style="color: var(--darkblue);">If you are uploading multiple files, be sure to click and <b>hold</b> the Ctrl key on your keyboard and click on each file. See an example below!</p></div>
-
-      <div class ="fadeLarge"><p style="color: var(--darkblue);">Be sure to take your pictures first and then choose gallery or similar and long press or hold on each item to upload multiple files. See an example below!</p></div>
-
-            <br>
-            <br>
-            <br>
-            <div class="fadeSmall"><img src="{% static 'application/images/Step5InstructionsDesktop.gif' %}"></div>
-            <div class="fadeLarge"><img src="{% static 'application/images/Step5InstructionsMobile.gif' %}" width="300px" height=auto></div>
+            <div class="fadeLarge"><img src="{% static 'application/images/SampleEBTScreenshot.png' %}" width="200px" height=auto></div>
+            <div class="fadeLarge"><img src="{% static 'application/images/ColoradoIDCardSample.jpg' %}" width="200px" height=auto></div>
     </div>
 </div>
 
@@ -303,28 +304,8 @@ the Free Software Foundation, either version 3 of the License, or
 </script>
 
 
-<script>
-    // Get the modal
-    var modal = document.getElementById("modalImageInstructions");
-    
-  
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close2")[0];
-    
-  
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-    
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-  </script>
-  <script type='text/javascript'>
+
+<script type='text/javascript'>
     function preview_image(event){
         var output = document.getElementById("id_document");
         var quantity = output.files.length;
