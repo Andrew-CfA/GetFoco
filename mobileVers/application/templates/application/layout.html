@@ -129,63 +129,63 @@ the Free Software Foundation, either version 3 of the License, or
                 <div class=fadeLarge>
                     <div class="row">
                         {% if step is 1 %}
-                            <button class="button button2" style = "display: inline; color: green;" onclick="location.href='{% url 'application:account' %}'">Step 1</button>
-                            <button class="button button2" style = "display: inline;">Step 2</button>
-                            <button class="button button2" style = "display: inline;">Step 3</button>
-                            <button class="button button2" style = "display: inline;">Step 4</button>
-                            <button class="button button2" style = "display: inline;">Step 5</button>
+                            <button class="button button2" style = "display: inline; color: green;" onclick="location.href='{% url 'application:account' %}'">Step 1</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 2</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 3</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 4</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 5</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
                             <button class="button button2" style = "display: inline;">Step 6</button>
                         {% endif %}
 
                         {% if step is 2 %}
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button>
-                            <button class="button button2" style = "display: inline; color: green;" onclick="location.href='{% url 'application:address' %}'">Step 2</button>
-                            <button class="button button2" style = "display: inline;">Step 3</button>
-                            <button class="button button2" style = "display: inline;">Step 4</button>
-                            <button class="button button2" style = "display: inline;">Step 5</button>
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline; color: green;" onclick="location.href='{% url 'application:address' %}'">Step 2</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 3</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 4</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 5</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
                             <button class="button button2" style = "display: inline;">Step 6</button>
                         {% endif %}
 
                         {% if step is 3 %}
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:address' %}'">Step 2</button>
-                            <button class="button button2" style = "display: inline;color: green;" onclick="location.href='{% url 'application:finances' %}'">Step 3</button>
-                            <button class="button button2" style = "display: inline;">Step 4</button>
-                            <button class="button button2" style = "display: inline;">Step 5</button>
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:address' %}'">Step 2</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;color: green;" onclick="location.href='{% url 'application:finances' %}'">Step 3</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 4</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 5</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
                             <button class="button button2" style = "display: inline;">Step 6</button>
                         {% endif %}
 
                         {% if step is 4 %}
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:address' %}'">Step 2</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:finances' %}'">Step 3</button>
-                            <button class="button button2" style = "display: inline;color: green;" onclick="location.href='{% url 'application:programs' %}'">Step 4</button>
-                            <button class="button button2" style = "display: inline;">Step 5</button>
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:address' %}'">Step 2</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:finances' %}'">Step 3</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;color: green;" onclick="location.href='{% url 'application:programs' %}'">Step 4</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;">Step 5</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
                             <button class="button button2" style = "display: inline;">Step 6</button>
                         {% endif %}
 
                         {% if step is 5 %}
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:address' %}'">Step 2</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:finances' %}'">Step 3</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:programs' %}'">Step 4</button>
-                            <button class="button button2" style = "display: inline; color:green" onclick="location.href='{% url 'dashboard:files' %}'">Step 5</button>
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:address' %}'">Step 2</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:finances' %}'">Step 3</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:programs' %}'">Step 4</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline; color:green" onclick="location.href='{% url 'dashboard:files' %}'">Step 5</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
                             <button class="button button2" style = "display: inline;">Step 6</button>
                         {% endif %}
 
 
                         {% if step is 6 %}
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:address' %}'">Step 2</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:finances' %}'">Step 3</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:programs' %}'">Step 4</button>
-                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'dashboard:files' %}'">Step 5</button>
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:account' %}'">Step 1</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:address' %}'">Step 2</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:finances' %}'">Step 3</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'application:programs' %}'">Step 4</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
+                            <button class="button button2" style = "display: inline;" onclick="location.href='{% url 'dashboard:files' %}'">Step 5</button> <img id src="{% static 'application/images/BackArrow-white.svg' %}" style="width:min(4.5vw,20px); display: inline; transform: scaleX(-1);">
                             <button class="button button2" style = "display: inline; color: green" onclick="location.href='{% url 'dashboard:broadcast' %}'">Step 6</button>
                         {% endif %}
                     </div>
                 </div>
         
-                <p class="p2" alt="back" style=" padding-left: 5px;" onclick="location.href='{% url 'application:index' %}'">Save & Logout</p>
+                <p class="p2" alt="back" style=" padding-left: 10px;" onclick="location.href='{% url 'application:index' %}'">Save & Logout</p>
             </div>
         </div>
         <div class="content desktop" style="height:150vh">
