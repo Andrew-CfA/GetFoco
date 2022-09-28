@@ -387,46 +387,47 @@ the Free Software Foundation, either version 3 of the License, or
       <p style="font-weight: 400;">Application Status</p>
     <!--CSV HERE / Also template for printing out all updates-->
       <p style="color: #999999">Updates to your Application will appear here! </p>
-      <div class="divider"></div>
       
       {% if groceryStatus == "Reviewing your application, expect to hear back in two weeks" %}
+      <div class="divider"></div>
       <img src="{% static 'dashboard/images/hourglass.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p>Grocery Tax Rebate</p>
       <p>{{groceryStatus}}</p> 
-        <div class="divider"></div>
       {% endif %}
 
       {% if groceryStatus == "Application approved" %}
+      <div class="divider"></div>
       <img src="{% static 'dashboard/images/greenCheck.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p>Grocery Tax Rebate</p>
       <p>{{groceryStatus}}</p> 
-        <div class="divider"></div>
       {% endif %}
       
       {% if connexionStatus == "Reviewing your application, look for an email from Connexion within two weeks" %}
+      <div class="divider"></div>
       <img src="{% static 'dashboard/images/hourglass.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p style="font-weight:400;">Reduced-Rate Connexion</p>
-        <p>{{connexionStatus}}</p>
-        <div class="divider"></div>
+      <p>{{connexionStatus}}</p>
       {% endif %}
 
       {% if connexionStatus == "Application approved" %}
+      <div class="divider"></div>
       <img src="{% static 'dashboard/images/greenCheck.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p style="font-weight:400;">Reduced-Rate Connexion</p>
-        <p>{{connexionStatus}}</p>
-        <div class="divider"></div>
+      <p>{{connexionStatus}}</p>
       {% endif %}
 
       {% if connexionStatus == "There was an issue with your application, please check your email" %}
+      <div class="divider"></div>
       <img src="{% static 'dashboard/images/sunshine.png' %}" style="width:30px; float: left;margin-right: 10px;"> <p style="font-weight:400;">Reduced-Rate Connexion</p>
-        <p>{{connexionStatus}}</p>
-        <div class="divider"></div>
+      <p>{{connexionStatus}}</p>
       {% endif %}
       
       {% if recreationStatus == "Reviewing your application, expect to hear back in two weeks" %}
+      <div class="divider"></div>
       <img src="{% static 'dashboard/images/hourglass.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p>Recreation Reduced Fee</p>
-        <p>{{recreationStatus}}</p>
+      <p>{{recreationStatus}}</p>
       {% endif %}
 
       {% if recreationStatus == "Application approved" %}
+      <div class="divider"></div>
       <img src="{% static 'dashboard/images/greenCheck.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p>Recreation Reduced Fee</p>
-        <p>{{recreationStatus}}</p>
+      <p>{{recreationStatus}}</p>
       {% endif %}
     </div>
 
