@@ -717,13 +717,13 @@
     }
 
     .button3 {
-        border-radius:20px;
         border: none;
+        border-radius: 15px;
         color: white;
-        padding: 7px;
+        padding: 3px;
         text-align: center;
         text-decoration: none;
-        font-size: 10px;
+        font-size: 13px;
         margin: 4px 2px;
         cursor: pointer;
     }
