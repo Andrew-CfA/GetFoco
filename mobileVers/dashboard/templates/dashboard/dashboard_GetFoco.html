@@ -381,17 +381,34 @@ the Free Software Foundation, either version 3 of the License, or
     </div>
     <!-- end calendar-container -->
     
+    {% if  PendingNumber >= 0  %}
+
     <div class="item large" style="align-content:flex-end">
-      <p style = "color: #999999">Upcoming Program Updates </p>
+      <p style="font-weight: 400;">Application Status</p>
     <!--CSV HERE / Also template for printing out all updates-->
-      <p style="font-weight: 550;">Stay Tuned for Updates! </p>
-      <p> Grocery Rebate</p>
-        <p>{{groceryStatus}}</p>
-      <p> Connexion</p>
+      <p style="color: #999999">Updates to your Application will appear here! </p>
+      <div class="divider"></div>
+      
+      {% if groceryStatus == "Reviewing your application, expect to hear back in two weeks" %}
+      <img src="{% static 'dashboard/images/hourglass.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p>Grocery Tax Rebate</p>
+      <p>{{groceryStatus}}</p> 
+        <div class="divider"></div>
+      {% endif %}
+      
+      {% if connexionStatus == "Reviewing your application, look for an email from Connexion within two weeks" %}
+      <img src="{% static 'dashboard/images/hourglass.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p style="font-weight:400;">Reduced-Rate Connexion</p>
         <p>{{connexionStatus}}</p>
-      <p> Recreation</p>
+        <div class="divider"></div>
+      {% endif %}
+      
+      {% if recreationStatus == "Reviewing your application, expect to hear back in two weeks" %}
+      <img src="{% static 'dashboard/images/hourglass.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p>Recreation Reduced Fee</p>
         <p>{{recreationStatus}}</p>
+      {% endif %}
     </div>
+
+    {% endif %}
+
 
     <!-- News Section -->
     <div class="item large">
