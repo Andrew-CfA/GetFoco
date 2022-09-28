@@ -17,7 +17,7 @@ the Free Software Foundation, either version 3 of the License, or
     {% if  QProgramNumber == 0 and PendingNumber == 0 and ActiveNumber == 0 %}
       <p>We're sorry, currently you do not qualify for any programs. If you think this is an error please <a href="mailto: GetFoCo@fcgov.com?subject=Income Qualification Question - Get FoCo&body=Hello Get FoCo team, I seem to be having an issue with qualification, can you help clarify the qualifications for the available progrms?" style="font-style: none;">contact us</a>. <br> <br> Furthermore, you may click on <a style = "display: inline;" href="{% url 'dashboard:ProgramsList' %}">Programs</a> to view our available programs and their qualifications. </p>
     {% else %}
-      <p>Congrats on creating an account! <br> <br> With the information you provided we gathered all the programs you may qualify for! All you need to do now is to click on Quick Apply + for programs you may be interested in to apply.</p>
+      <p>With the information you provided we gathered all the programs you may qualify for! All you need to do now is to click on Quick Apply + for programs you may be interested in to apply.</p>
     {% endif %}
   </div>
 </div>
@@ -82,7 +82,7 @@ the Free Software Foundation, either version 3 of the License, or
         <p style="font-weight: 550; margin: 5px 0">Check out Utility programs that can reduce your monthly expenses.
           https://www.fcgov.com/utilities/manage-your-account/payment-options/utilities-affordability-portfolio/          
           </p>
-        <p style = "color:#999999;margin-top:0;" >April 2022</p>
+        <p style = "color:#999999;margin-top:0;" ></p>
       </div>
 
       <div>
@@ -92,7 +92,7 @@ the Free Software Foundation, either version 3 of the License, or
           <a href="https://uwaylc.org/Get-Help/">uwaylc.org/Get-Help/</a>
           
           </p>
-        <p style = "color:#999999;margin-top:0;" >April 2022</p>
+        <p style = "color:#999999;margin-top:0;" ></p>
       </div>
   </div>
 </div>
@@ -412,6 +412,12 @@ the Free Software Foundation, either version 3 of the License, or
         <p>{{connexionStatus}}</p>
         <div class="divider"></div>
       {% endif %}
+
+      {% if connexionStatus == "There was an issue with your application, please check your email" %}
+      <img src="{% static 'dashboard/images/sunshine.png' %}" style="width:30px; float: left;margin-right: 10px;"> <p style="font-weight:400;">Reduced-Rate Connexion</p>
+        <p>{{connexionStatus}}</p>
+        <div class="divider"></div>
+      {% endif %}
       
       {% if recreationStatus == "Reviewing your application, expect to hear back in two weeks" %}
       <img src="{% static 'dashboard/images/hourglass.jpg' %}" style="width:30px; float: left;margin-right: 10px;"> <p>Recreation Reduced Fee</p>
@@ -441,7 +447,7 @@ the Free Software Foundation, either version 3 of the License, or
           <a href="https://www.larimer.org/health/communicable-disease/coronavirus-covid-19" style="font-weight: 550; margin: 5px 0"> <ul>More Information Here</ul>
           </a>
         </p>
-        <p style = "color:#999999;margin-top:0;" >April 2022</p>
+        <p style = "color:#999999;margin-top:0;" ></p>
       </div>
 
       <div>
@@ -449,7 +455,7 @@ the Free Software Foundation, either version 3 of the License, or
         <p style="font-weight: 550; margin: 5px 0">Information is available for Larimer County residents in need of rent, food or utilities assistance.
           Also includes resources for seniors, small business, mental health support, families, unemployment and medical needs.
           <a href="https://uwaylc.org/Get-Help/">uwaylc.org/Get-Help/</a></p>
-        <p style = "color:#999999;margin-top:0;" >April 2022</p>
+        <p style = "color:#999999;margin-top:0;" ></p>
       </div>
     </div>
     

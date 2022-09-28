@@ -899,7 +899,9 @@ def dashboardGetFoco(request):
         CONDisplayPending = ""
         CONDisplay = "none"
 
-        connexionStatus = "Reviewing your application, look for an email from Connexion within two weeks"
+        #connexionStatus = "Reviewing your application, look for an email from Connexion within two weeks"
+        connexionStatus = "There was an issue with your application, please check your email"
+        
     elif request.user.eligibility.ConnexionQualified == QualificationStatus.ACTIVE.name:
         ConnexionButtonText = "Enrolled!"
         ConnexionButtonColor = "blue"
@@ -909,7 +911,7 @@ def dashboardGetFoco(request):
         QProgramNumber = QProgramNumber - 1
         CONDisplayPending = "None"
         CONDisplay = "none"
-        
+
         connexionStatus = "Application approved"
     else:
         ConnexionButtonText = "Quick Apply +"
@@ -983,7 +985,8 @@ def dashboardGetFoco(request):
         RECPendingDate = "Estimated Notification Time: Two Weeks"
         RECDisplay ="none"
 
-        recreationStatus = "Reviewing your application, expect to hear back in two weeks"
+        #recreationStatus = "Reviewing your application, expect to hear back in two weeks"
+        recreationStatus = "Application approved"
 
     elif request.user.eligibility.RecreationQualified == QualificationStatus.ACTIVE.name:
         RECButtonText = "Enrolled!" 
