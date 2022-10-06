@@ -42,8 +42,17 @@ the Free Software Foundation, either version 3 of the License, or
     <br>
     <br>
 
-    <button onclick="location.href='{% url 'dashboard:dashboard' %}'"> CONTINUE </button>
+    <!-- <button onclick="location.href='{% url 'dashboard:dashboard' %}'"> CONTINUE </button>-->
+
+    <button onclick= quickApplyAlert()> CONTINUE </button>
 </div>
+
+<script>
+    function quickApplyAlert(){
+        alert("On the next page, click on Quick-Apply for any programs you qualify for to sign up for rebates!")
+        window.location ='GetFOCO';
+        }
+</script>
 
 {% endblock %}
 
