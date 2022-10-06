@@ -899,8 +899,7 @@ def dashboardGetFoco(request):
         CONDisplayPending = ""
         CONDisplay = "none"
 
-        #connexionStatus = "Reviewing your application, look for an email from Connexion within two weeks"
-        connexionStatus = "There was an issue with your application, please check your email"
+        connexionStatus = "Reviewing your application, look for an email from Connexion within two weeks"
         
     elif request.user.eligibility.ConnexionQualified == QualificationStatus.ACTIVE.name:
         ConnexionButtonText = "Enrolled!"
@@ -985,8 +984,7 @@ def dashboardGetFoco(request):
         RECPendingDate = "Estimated Notification Time: Two Weeks"
         RECDisplay ="none"
 
-        #recreationStatus = "Reviewing your application, expect to hear back in two weeks"
-        recreationStatus = "Application approved"
+        recreationStatus = "Reviewing your application, expect to hear back in two weeks
 
     elif request.user.eligibility.RecreationQualified == QualificationStatus.ACTIVE.name:
         RECButtonText = "Enrolled!" 
