@@ -984,7 +984,7 @@ def dashboardGetFoco(request):
         RECPendingDate = "Estimated Notification Time: Two Weeks"
         RECDisplay ="none"
 
-        recreationStatus = "Reviewing your application, expect to hear back in two weeks
+        recreationStatus = "Reviewing your application, expect to hear back in two weeks"
 
     elif request.user.eligibility.RecreationQualified == QualificationStatus.ACTIVE.name:
         RECButtonText = "Enrolled!" 
