@@ -30,21 +30,21 @@ the Free Software Foundation, either version 3 of the License, or
     <p>Check the email at {{program_string}}.</p>
     <p>Be sure to check your spam folder!</p>
     <br>
-    <p>Didn't get an email from us?</p>
-    
+    <p>Didn't get an email from us?</p>    
     <br>
 
     <div class="fadeLarge"><a class=yellow href="{% url 'dashboard:broadcast' %}" style="font-size: 2vw;"><u>Click here to re-send it!</u></a></b></div>
     <div class="fadeSmall"><a href="{% url 'dashboard:broadcast' %}" style="font-size: 2vw;"><u>Click here to re-send it!</u></a></b></div>
-        <!--Whatever I need in the other pages, I can enter it here-->
+
+    <br>
+    <p>On the next page, you can quick apply to programs you may qualify for!</p>
 
     <br>
     <br>
-    <br>
 
-    <!-- <button onclick="location.href='{% url 'dashboard:dashboard' %}'"> CONTINUE </button>-->
+    <button onclick="location.href='{% url 'dashboard:dashboard' %}'"> CONTINUE </button>
 
-    <button onclick= quickApplyAlert()> CONTINUE </button>
+    <!-- <button onclick= quickApplyAlert()> CONTINUE </button> -->
 </div>
 
 <script>
