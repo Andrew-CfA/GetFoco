@@ -98,3 +98,12 @@ Holds HTML templates for Get FoCo, of everything that is within the /application
 ### 'mobileVers/dashboard/test/'
 Here are where unit tests are found for "/dashboard/" section of website, tests still need to be implemented!
 
+### 'mobileVers/mobileVers/media/'
+Files for local instances found here!
+
+### 'mobileVers/mobileVers/settings/'
+Dev, local and production settings are found here, each one corresponds to a different environment, for example, dev uses the dev postgresql database.
+
+### 'mobileVers/mobileVers/static/'
+Files that are generated when python collecstatic is run
+
