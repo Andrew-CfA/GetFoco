@@ -86,3 +86,15 @@ Here you'll find important forms information for the "dashboard" part of the web
 ### 'mobileVers/dashboard/models.py'
 Here you'll find models used for the database in tandem with the forms to create critical tables for the database. This models file pertains to the 'dashboard' portion of Get FoCo, that is to say files, file uploads, tax information and feedback.
 
+### 'mobileVers/dashboard/views.py'
+This file contains the crucial "/dashboard/" (I.E. steps 5 - 6 + dashboard + auxiliary pages of more income verification in quick apply applications of Get Foco) logic. This file contains some important AMI logic, as well as the views for steps 1-4, index page, and separate quick apply views pages for the dashboard. Dashboard logic very very important in this file, marked at qualifiedPrograms and def dashboardGetFoco
+
+### 'mobileVers/dashboard/static/dashboard/'
+Holds static images used to make Get FoCo look good, images include icons found throughout Get FoCo.
+
+### 'mobileVers/dashboard/static/templates/'
+Holds HTML templates for Get FoCo, of everything that is within the /application/ part of the site. 
+
+### 'mobileVers/dashboard/test/'
+Here are where unit tests are found for "/dashboard/" section of website, tests still need to be implemented!
+
