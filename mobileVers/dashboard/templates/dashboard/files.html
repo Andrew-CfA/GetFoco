@@ -100,7 +100,7 @@ the Free Software Foundation, either version 3 of the License, or
     <br>
     <br>
 </div>
-<form action="{% url 'dashboard:files' %}" method="post" autocomplete="false" enctype="multipart/form-data">
+<form action="{% url 'dashboard:files' %}" method="post" autocomplete="false" enctype="multipart/form-data" class="dropzone">
     {% csrf_token %}
     {% for field in form %}
         {% if form.errors %}
@@ -314,6 +314,13 @@ the Free Software Foundation, either version 3 of the License, or
         }
         document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
     }
+
+    $('#file').on('change', function() {
+        //preview_image(this);
+        $(".output_image").replaceWith(preview_image(event));
+        //imagesPreview(this, 'div.gallery');
+        //$(".imgFile").replaceWith(imagesPreview(this, 'div.gallery'));
+  });
 </script>
     
 
