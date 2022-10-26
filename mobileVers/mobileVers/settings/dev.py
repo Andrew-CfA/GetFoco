@@ -75,7 +75,7 @@ CONTAINER_NAME = env("CONTAINER_NAME")+'dev'
 IS_PROD = False
 
 # SECURITY WARNING: don't run with debug turned on for any live site!
-DEBUG = False
+DEBUG = True
 
 # ANDREW: Make sure to change this later!
 ALLOWED_HOSTS = ["*", "192.168.0.15","localhost"]

@@ -225,7 +225,6 @@
         padding-right: 50px;
     }
 
-
     .sideNav p{
         color: white;
         font-size: 20px;
@@ -242,7 +241,6 @@
         padding: 5% 5%;
         margin-left:18vw;
     }
-
     .preview {
         margin: auto;
         width:84%;
@@ -308,6 +306,7 @@
         padding-left:50px;
         padding-right: 50px;
     }
+
 
     }
     .content {
@@ -728,6 +727,36 @@
         margin: 4px 2px;
         cursor: pointer;
     }
+
+
+    
+    .buttonThumbs {
+        border-radius: none;
+        height: 0%;
+        width: 0%;
+        padding: none;
+        background-color: transparent;
+        border-radius: none;
+        border:none;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .usefulQuery {
+        height: auto;
+        max-width: 300px;
+        }
+
+    .usefulQuery.extended{
+        max-height:0px;
+        margin-top:0;
+        /*border: 1px solid yellow;*/
+    }
+    .usefulQuery.collapsed {
+        max-height: 200px;
+        /*border: 1px solid red;*/
+
+        }
 
 
     .files{

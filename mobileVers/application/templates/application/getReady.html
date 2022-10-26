@@ -28,16 +28,43 @@ the Free Software Foundation, either version 3 of the License, or
 <p style="padding: 50px;"><b>Privacy Notice</b>
     <br>Your privacy is important to us. We will only share your information, without your consent, with other City of Fort Collins income eligible services to evaluate your eligibility and make applying for these programs easier. </p> 
 
-<div class=sideNav> <div class=fadeSmall>
-    <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
-    <h1><b>You're on your way to greatness!</b></h1>
-    <p>Get FoCo has great things in store for you.</p>
+<div class=sideNav> 
+    <div class=fadeSmall>
+        <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
+        <h1><b>You're on your way to greatness!</b></h1>
+        <p>Get FoCo has great things in store for you.</p>
+        <div class ="usefulQuery" style="text-align: center;  position: fixed;bottom: 20px; "> <!-- display: block; margin-left: auto; margin-right: auto; width: 50%; -->
+            <p style="font-size: 15px; text-align: center; padding-right: 3%;">Is This Page Useful?</p>
+            <button class="button buttonThumbs" id="toggle-button1">
+                <img src="{% static 'dashboard/images/thumbsup.png' %}" style="width:30px;   display: inline-block;margin-left: auto;margin-right: auto;">
+            </button>
+            <button class="button buttonThumbs" id="toggle-button2">
+                <img src="{% static 'dashboard/images/thumbsdown.png' %}" style="width:30px; display: inline-block;margin-left: auto;margin-right: auto;">
+            </button>
+            <div class="usefulQuery extended">
+                <form>
+                    <textarea name="isPageUseful" rows="10" style="margin-left: 15%;">Tell us more!</textarea>
+                    <div style="padding-left:40%;">
+                        <input type="submit" value="Submit" style="background: var(--darkblue); color: #fff; border: 1px solid #eee; border-radius: 10px; text-shadow: none; font-size: 20px;">
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="footer">
     <button onclick="location.href='{% url 'application:account' %}'"> APPLY </button> 
 </div>
+
+
+<script>
+    document.querySelector('#toggle-button1').addEventListener('click', function() 
+    {
+      document.querySelector('.usefulQuery.extended').classList.toggle('collapsed');
+    });
+</script>
 
 
 {% endblock %}

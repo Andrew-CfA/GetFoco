@@ -12,6 +12,25 @@ the Free Software Foundation, either version 3 of the License, or
         <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
         <h1> <b>Provide your address so we can find programs you may qualify for!</b></h1>
     </div>
+
+    <div class ="usefulQuery" style="text-align: center;  position: fixed;bottom: 20px; "> <!-- display: block; margin-left: auto; margin-right: auto; width: 50%; -->
+        <p style="font-size: 15px; text-align: center; padding-right: 3%;">Is This Page Useful?</p>
+        <button class="button buttonThumbs" id="toggle-button1">
+            <img src="{% static 'dashboard/images/thumbsup.png' %}" style="width:30px;   display: inline-block;margin-left: auto;margin-right: auto;">
+        </button>
+        <button class="button buttonThumbs" id="toggle-button2">
+            <img src="{% static 'dashboard/images/thumbsdown.png' %}" style="width:30px; display: inline-block;margin-left: auto;margin-right: auto;">
+        </button>
+        <div class="usefulQuery extended">
+            <form>
+                <textarea name="isPageUseful" rows="10" style="margin-left: 15%;">Tell us more!</textarea>
+                <div style="padding-left:40%;">
+                    <input type="submit" value="Submit" style="background: var(--darkblue); color: #fff; border: 1px solid #eee; border-radius: 10px; text-shadow: none; font-size: 20px;">
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 <h2 style="font-weight: 700; margin:5vh 0"> Where do you live? </h2>
@@ -222,6 +241,13 @@ the Free Software Foundation, either version 3 of the License, or
       }
     }
 </script>
+
+<script>
+    document.querySelector('#toggle-button1').addEventListener('click', function() 
+    {
+      document.querySelector('.usefulQuery.extended').classList.toggle('collapsed');
+    });
+  </script>
 
 
 {% endblock %}

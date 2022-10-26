@@ -281,6 +281,34 @@ input[type="checkbox"]{
         font-weight: 700;
         width: 85%;
     }
+
+    .buttonThumbs {
+        border-radius: none;
+        height: 0%;
+        width: 0%;
+        padding: none;
+        background-color: transparent;
+        border-radius: none;
+        border:none;
+        outline: none;
+        box-shadow: none;
+    }
+
+    .usefulQuery {
+        height: auto;
+        max-width: 300px;
+        }
+
+    .usefulQuery.extended{
+        max-height:0px;
+        margin-top:0;
+        /*border: 1px solid yellow;*/
+    }
+    .usefulQuery.collapsed {
+        max-height: 200px;
+        /*border: 1px solid red;*/
+
+        }
     
     .buttonCheck{
         width:100%;

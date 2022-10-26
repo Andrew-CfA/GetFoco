@@ -13,6 +13,25 @@ the Free Software Foundation, either version 3 of the License, or
         <h1 style="font-weight: 700; margin:2vh 0; padding-top: 0px;"> Share basic information about your income </h1>
         <p>Your information will not be shared with anyone outside of the departments of City of Fort Collins' income eligible programs. They are meant to determine potential assistance programs you may qualify for.</p>
         <p><a href="{% url 'application:dependentInfo' %}" style="color: white;">What does "Household" mean<img src="{% static 'application/images/clipart249308.png' %}" alt="back" style="width:min(4.5vw,20px);"></a></p> 
+
+        <div class ="usefulQuery" style="text-align: center;  position: fixed;bottom: 20px; "> <!-- display: block; margin-left: auto; margin-right: auto; width: 50%; -->
+            <p style="font-size: 15px; text-align: center; padding-right: 3%;">Is This Page Useful?</p>
+            <button class="button buttonThumbs" id="toggle-button1">
+                <img src="{% static 'dashboard/images/thumbsup.png' %}" style="width:30px;   display: inline-block;margin-left: auto;margin-right: auto;">
+            </button>
+            <button class="button buttonThumbs" id="toggle-button2">
+                <img src="{% static 'dashboard/images/thumbsdown.png' %}" style="width:30px; display: inline-block;margin-left: auto;margin-right: auto;">
+            </button>
+            <div class="usefulQuery extended">
+                <form>
+                    <textarea name="isPageUseful" rows="10" style="margin-left: 15%;">Tell us more!</textarea>
+                    <div style="padding-left:40%;">
+                        <input type="submit" value="Submit" style="background: var(--darkblue); color: #fff; border: 1px solid #eee; border-radius: 10px; text-shadow: none; font-size: 20px;">
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 </div>
 <div class=fadeLarge><h2 style="font-weight: 700; margin:5vh 0"> Please share basic information about your income </h2></div>
@@ -59,5 +78,12 @@ the Free Software Foundation, either version 3 of the License, or
       }
     }
 </script>
+
+<script>
+    document.querySelector('#toggle-button1').addEventListener('click', function() 
+    {
+      document.querySelector('.usefulQuery.extended').classList.toggle('collapsed');
+    });
+  </script>
 
 {% endblock %}
