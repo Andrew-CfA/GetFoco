@@ -34,6 +34,13 @@ Using the information from steps 1 - 6, the dashboard uses logic and facts to fi
 ## Code Map
 Here you will find brief explanations of files, directories and data structures.
 
+## Architecture
+The web app is split up into two sections called "application" and "dashboard" - you can better see how these two sections are divided by visiting the "mobileVers/application" and "mobileVers/dashboard" directories. 
+
+
+
+## Admin
+
 ### '.github/workflows'
 Future workflow GitHub implementation.
 
@@ -45,6 +52,8 @@ Files not in folders are all crucial Docker files or django necessary files such
 
 ### 'mobileVers/Dockerfile'
 Crucial Docker file holding instructions to containerize Get FoCo using Docker, subsequent files, entrypoint.sh and init.sh are utilized in tandem to create a pleasant Docker containerizing experience.
+
+## Application
 
 ### 'mobileVers/application/backend.py'
 Here you'll find some useful backend logic / functions used in the main application, most of these functions are used to 
@@ -73,6 +82,8 @@ Holds HTML templates for Get FoCo, of everything that is within the /application
 
 ### 'mobileVers/application/test/'
 Here are where unit tests are found, tests still need to be implemented!
+
+## Dashboard
 
 ### 'mobileVers/dashboard/'
 Directory for critical files for "/dashboard/" part of Get FoCo
