@@ -41,6 +41,8 @@ The web app is split up into two sections called "application" and "dashboard" -
 
 ## Admin
 
+Here is the main settings directory for Get FoCo, this section holds key information and settings utilities. These include Dockerfile, workflows, etc.
+
 ### '.github/workflows'
 Future workflow GitHub implementation.
 
@@ -54,6 +56,8 @@ Files not in folders are all crucial Docker files or django necessary files such
 Crucial Docker file holding instructions to containerize Get FoCo using Docker, subsequent files, entrypoint.sh and init.sh are utilized in tandem to create a pleasant Docker containerizing experience.
 
 ## Application
+Application holds steps 1 - 4 of the application as well as the index page, privacy policy, file upload page for parts of the application and future parts of the application that require more files (I.E. recreation portion of Get FoCo that requires extra steps) and pages that aren't directly tied to dashboard pages. 
+
 
 ### 'mobileVers/application/backend.py'
 Here you'll find some useful backend logic / functions used in the main application, most of these functions are used to 
@@ -84,6 +88,9 @@ Holds HTML templates for Get FoCo, of everything that is within the /application
 Here are where unit tests are found, tests still need to be implemented!
 
 ## Dashboard
+Dashboard contains steps 5 and 6 as well as the Dashboard of GetFoCo and all of the pages that go within (i.e. settings page for clients, Get FoCo Bag Badge, etc.)
+
+Some thing to note is a future update to Get FoCo should separate steps 5 and 6 from Dashboard and place it in Application! For some reason during the initial stages of Get FoCo, we split up steps 5 and 6 into dashboard. 
 
 ### 'mobileVers/dashboard/'
 Directory for critical files for "/dashboard/" part of Get FoCo
