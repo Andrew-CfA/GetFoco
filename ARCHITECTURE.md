@@ -3,7 +3,8 @@
 Here you will find high-level architecture of Get FoCo.
 Getting to know Get FoCo starts here!
 
-## Top Level
+## Top Level![Get FoCo Process Flow](https://user-images.githubusercontent.com/72939569/198737977-8c08368e-d138-4493-a637-df12e332ef4a.png)
+
 
 Get FoCO is a web-app that allows residents of Fort Collins to create accounts with their financial information and income verification (SNAP, EBT, PSD Letter, ACP Letter) which then is used by Get FoCo to see what kind of income qualified programs they may qualify for.
 
