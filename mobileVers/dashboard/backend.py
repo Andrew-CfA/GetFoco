@@ -18,7 +18,7 @@ from django.conf import settings
 from azure.storage.blob import BlockBlobService
 
 from .models import User
-from application.models import MoreInfo
+from application.models import MoreInfo, Addresses
 
 
 def blobStorageUpload(filename, file):
@@ -85,9 +85,17 @@ def files_to_string(file_list, request):
 # completed in the application process
 def what_page(user,request):
     if user.is_authenticated:
+        
+        searchForUser = request.user.id
+        
         #for some reason, none of these login correctly... reviewing this now
-        try: #check if address is completely filled
-            value = request.user.addresses
+        try: #check if the addresses.is_verified==True
+            if Addresses.objects.all().filter(user_id_id=searchForUser).exists() and Addresses.objects.get(user_id_id=searchForUser).is_verified:
+                print("Address has been verified")
+            else:
+                print("Still need to verify address")
+                raise AttributeError()
+            
         except AttributeError:
             return "application:address"
 
@@ -97,7 +105,6 @@ def what_page(user,request):
             return "application:finances"
 
         try: #check if dependents / birthdays are filled
-            searchForUser = request.user.id
             if(MoreInfo.objects.all().filter(user_id_id=searchForUser).exists()):
                 print("MoreInfo exists")
             else:

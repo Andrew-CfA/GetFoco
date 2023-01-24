@@ -543,9 +543,9 @@ def login_user(request):
             obj.modified = datetime.datetime.now(datetime.timezone.utc)
             obj.save()
             # Push user to correct page
-            print(what_page(request.user, request))
             page = what_page(request.user, request)
-            if what_page(request.user, request) == "dashboard:dashboard":
+            print(page)
+            if page == "dashboard:dashboard":
                 return redirect(reverse("dashboard:dashboard"))
             else:
                 return redirect(reverse("dashboard:notifyRemaining"))
@@ -561,9 +561,15 @@ def login_user(request):
                     },
                 )
     
-    # If it turns out user is already logged in but is trying to log in again redirect to user's homepage
+    # If it turns out user is already logged in but is trying to log in again,
+    # run through what_page() to find the correct place
     if request.method == "GET" and request.user.is_authenticated:
-        return redirect(reverse("dashboard:dashboard"))
+        page = what_page(request.user, request)
+        print(page)
+        if page == "dashboard:dashboard":
+            return redirect(reverse("dashboard:dashboard"))
+        else:
+            return redirect(reverse("dashboard:notifyRemaining"))
 
     # Just give back log in page if none of the above is true
     else:
@@ -882,7 +888,11 @@ def dashboardGetFoco(request):
 
     # auto apply grocery rebate people if their AMI is <=30%
     if request.user.eligibility.AmiRange_max <= Decimal('0.3'):
+        # Update the current model so the dashboard displays correctly
         request.user.eligibility.GRqualified = QualificationStatus.PENDING.name
+
+        # Update the database
+        Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.PENDING.name)
         
     # TODO callus should no longer be relevant, delete!
     # apply for other dynamic income work etc.
@@ -1034,6 +1044,7 @@ def dashboardGetFoco(request):
         QProgramNumber = QProgramNumber - 1
         SPINDisplayPending = "None"
         SPINDisplayActive = ""
+        SPINPendingDate = ""
         SPINDisplay ="none"
     elif request.user.eligibility.SPINQualified == QualificationStatus.NOTQUALIFIED.name:
         SPINButtonText = "Can't Enroll"

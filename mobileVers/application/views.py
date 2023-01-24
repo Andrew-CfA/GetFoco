@@ -340,75 +340,139 @@ def addressCorrection(request):
             "city": request.user.addresses.city,
             "state": request.user.addresses.state,
             "zipcode": str(request.user.addresses.zipCode),})
+
+        q_orig = QueryDict('', mutable=True)
+        q_orig.update({"address": request.user.addresses.address, 
+            "address2": request.user.addresses.address2, 
+            "city": request.user.addresses.city,
+            "state": request.user.addresses.state,
+            "zipcode": str(request.user.addresses.zipCode),})
         
-        # Loop through a maximum of two times to try an extra iteration of
-        # specifying 'unit' in from of the apt/unit number
-        for idx in (0,1):
-            print("Start loop {}".format(idx+1))
-            addressStr = "{ad1} {ad2}, {ct}, {st} {zp}".format(
-                ad1=q['address'],
-                ad2=q['address2'].replace('#',''),
-                ct=q['city'],
-                st=q['state'],
-                zp=q['zipcode'])
+        # Loop through maxLoopIdx+1 times to try different methods of
+        # parsing the address
+        # Loop 0: as-entered > usaddress > USPS API
+        # Loop 1: as-entered with apt/suite keywords replaced with 'unit' >
+            # usaddress > USPS API
+        # Loop 2: an-entered with keyword replacements > USPS API
+        maxLoopIdx = 2
+        idx = 0     # starting idx
+        flag_needMoreInfo = False   # flag for previous iter needing more info
+        while 1:
+            print("Start loop {}".format(idx))
 
-            rawAddressDict, addressType = usaddress.tag(
-                addressStr,
-                tag_mapping,
-                )
-                            
-            # Ensure the necessary keys for USPS validation are included
-            uspsKeys = [
-                'name',
-                'address_1',
-                'address_2',
-                'city',
-                'state',
-                'zipcode']
-            rawAddressDict.update(
-                {key:'' for key in uspsKeys if key not in rawAddressDict.keys()}
-                )
-            print('rawAddressDict:', rawAddressDict)
+            try:
+                if idx in (0,1):
+                    addressStr = "{ad1} {ad2}, {ct}, {st} {zp}".format(
+                        ad1=q['address'].replace('#',''),
+                        ad2=q['address2'].replace('#',''),
+                        ct=q['city'],
+                        st=q['state'],
+                        zp=q['zipcode'])
 
-            # Validate to USPS address
-            dict_address = validateUSPS(rawAddressDict)        
-            validationAddress = dict_address['AddressValidateResponse']['Address']
-            print('USPS Validation return:', validationAddress)
-            
-            if 'Address1' not in validationAddress.keys():
-                validationAddress['Address1'] = ''
-            
-            # Kick back to the user if the USPS API needs more information
-            if 'ReturnText' in validationAddress.keys():
-                if idx == 1 or q['address2'] == '':
-                    print('Address not found - either end of loop or Line 1 of the address is blank')
-                    raise TypeError()
+                    try:
+                        rawAddressDict, addressType = usaddress.tag(
+                            addressStr,
+                            tag_mapping,
+                            )
+
+                    # Go directly to the QueryDict version if there's a usaddress
+                    # issue
+                    except usaddress.RepeatedLabelError:
+                        print('Error in usaddress labels - continuing as loop 2')
+                        idx = 2
+                        raise AttributeError
+
+                    # Ensure the necessary keys for USPS validation are included
+                    uspsKeys = [
+                        'name',
+                        'address_1',
+                        'address_2',
+                        'city',
+                        'state',
+                        'zipcode']
+                    rawAddressDict.update(
+                        {key:'' for key in uspsKeys if key not in rawAddressDict.keys()}
+                        )
+
+                # Validate to USPS address - use usaddress first, then try
+                # with input QueryDict
+                try:
+                    if idx == 2:
+                        print('Input QueryDict:', q)
+                        dict_address = validateUSPS(q)   
+                    else:
+                        print('rawAddressDict:', rawAddressDict)
+                        dict_address = validateUSPS(rawAddressDict)        
+                    validationAddress = dict_address['AddressValidateResponse']['Address']
+                    print('USPS Validation return:', validationAddress)
                     
+                except KeyError:
+                    if idx == maxLoopIdx:
+                        if flag_needMoreInfo:
+                            raise TypeError(str_needMoreInfo)
+                        raise
+                    idx+=1
+                    raise AttributeError
+
+                # Ensure 'Address1' is a valid key
+                if 'Address1' not in validationAddress.keys():
+                    validationAddress['Address1'] = ''
+                
+                # Kick back to the user if the USPS API needs more information
+                if 'ReturnText' in validationAddress.keys():
+                    if idx == maxLoopIdx:
+                        print('Address not found - end of loop')
+                        raise TypeError(validationAddress['ReturnText'])
+
+                    # Continue checking, but flag that this was a result from 
+                    # the USPS API and store the text
+                    else:
+                        flag_needMoreInfo = True
+                        str_needMoreInfo = validationAddress['ReturnText']
+
+                else:   # success!
+                    break
+
+                if idx == maxLoopIdx:   # this is just here for safety
+                    break
                 else:
-                    # If 'ReturnText' is not found and address2 is not None,
-                    # remove possible keywords and try again
-                    print('Address not found - try to remove keywords')
-                    removeList = ['apt', 'unit', '#']
-                    for wrd in removeList:
-                        q['address2'] = q['address2'].lower().replace(wrd, '')
+                    idx+=1
+                    raise AttributeError
 
-                    q['address2'] = 'Unit {}'.format(q['address2'].lstrip())
-                    
-            else:
-                break
+            except AttributeError:
+                # Use AttributeError to skip to the end of the loop
+                # Note that idx has already been iterated before this point
+                print('AttributeError raised with idx', idx)
+                if q['address2'] != '':  
+                    if idx == 1:
+                        # For loop 1: if 'ReturnText' is not found and address2 is
+                        # not None, remove possible keywords and try again
+                        # Note that this will affect later loop iterations
+                        print('Address not found - try to remove/replace keywords')
+                        removeList = ['apt', 'unit', '#']
+                        for wrd in removeList:
+                            q['address2'] = q['address2'].lower().replace(wrd, '')
+
+                        q['address2'] = 'Unit {}'.format(q['address2'].lstrip())
+
+                else:
+                    # This whole statement updates address2, so if it's blank,
+                    # iterate through idx prematurely
+                    idx = 2
         
         program_string_2 = [validationAddress['Address2'], 
                             validationAddress['Address1'],
                             validationAddress['City'] + " "+ validationAddress['State'] +" "+  str(validationAddress['Zip5'])]
         print('program_string_2', program_string_2)
         
-    except TypeError:
+    except TypeError as msg:
         print("More address information is needed from user")
         # Only pass to the user for the 'more information is needed' case
         # --This is all that has been tested--
-        if 'more information is needed' in validationAddress['ReturnText']:
+        msg = str(msg)
+        if 'more information is needed' in msg:
             program_string_2 = [
-                validationAddress['ReturnText'].replace('Default address: ',''),
+                msg.replace('Default address: ',''),
                 "Please press 'back' and re-enter.",
                 ]
             
@@ -431,37 +495,40 @@ def addressCorrection(request):
         print(q)
         print(dict_address)                   
         
-    # If validation was successful and all address parts are case-insensitive
-    # exact matches between entered and validation, skip addressCorrection()
-    
-    # Rewrite any blank values in q to match '-' from USPS API
-    q = {key: q[key] if q[key]!='' else '-' for key in q.keys()}
-    if 'usps_address_validate' in request.session.keys() and \
-        dict_address['AddressValidateResponse']['Address']['Address2'].lower() == q['address'].lower() and \
-            dict_address['AddressValidateResponse']['Address']['Address1'].lower() == q['address2'].lower() and \
-                dict_address['AddressValidateResponse']['Address']['City'].lower() == q['city'].lower() and \
-                    dict_address['AddressValidateResponse']['Address']['State'].lower() == q['state'].lower() and \
-                        str(dict_address['AddressValidateResponse']['Address']['Zip5']).lower() == q['zipcode'].lower():         
+        # If validation was successful and all address parts are case-insensitive
+        # exact matches between entered and validation, skip addressCorrection()
         
-        print('Exact (case-insensitive) address match!')
-        return redirect(reverse("application:takeUSPSaddress"))
+        # Run the QueryDict 'q' to get just dict
+        # If just a string input was used (loop idx == 2), use '-' for blanks
+        if idx == 2:
+            q_orig = {key: q_orig[key] if q[key]!='' else '-' for key in q_orig.keys()}
+        else:
+            q_orig = {key: q_orig[key] for key in q_orig.keys()}
+        if 'usps_address_validate' in request.session.keys() and \
+            dict_address['AddressValidateResponse']['Address']['Address2'].lower() == q_orig['address'].lower() and \
+                dict_address['AddressValidateResponse']['Address']['Address1'].lower() == q_orig['address2'].lower() and \
+                    dict_address['AddressValidateResponse']['Address']['City'].lower() == q_orig['city'].lower() and \
+                        dict_address['AddressValidateResponse']['Address']['State'].lower() == q_orig['state'].lower() and \
+                            str(dict_address['AddressValidateResponse']['Address']['Zip5']).lower() == q_orig['zipcode'].lower():         
+            
+            print('Exact (case-insensitive) address match!')
+            return redirect(reverse("application:takeUSPSaddress"))
     
-    else:
-        print('Address match not found - proceeding to addressCorrection')
-                            
-        program_string = [request.user.addresses.address, request.user.addresses.address2, request.user.addresses.city + " " + request.user.addresses.state + " " + str(request.user.addresses.zipCode)]
-        return render(
-            request,
-            'application/addressCorrection.html',
-            {
-                'step':2,
-                'formPageNum':formPageNum,
-                'program_string': program_string,
-                'program_string_2': program_string_2,
-                'Title': "Address Correction",
-                'is_prod': django_settings.IS_PROD,
-                },
-            )
+    print('Address match not found - proceeding to addressCorrection')
+                        
+    program_string = [request.user.addresses.address, request.user.addresses.address2, request.user.addresses.city + " " + request.user.addresses.state + " " + str(request.user.addresses.zipCode)]
+    return render(
+        request,
+        'application/addressCorrection.html',
+        {
+            'step':2,
+            'formPageNum':formPageNum,
+            'program_string': program_string,
+            'program_string_2': program_string_2,
+            'Title': "Address Correction",
+            'is_prod': django_settings.IS_PROD,
+            },
+        )
 
 def takeUSPSaddress(request):
     try:
@@ -480,8 +547,12 @@ def takeUSPSaddress(request):
         instance.state = dict_address['AddressValidateResponse']['Address']['State']
         instance.zipCode = int(dict_address['AddressValidateResponse']['Address']['Zip5'])
         
+        # Record the service area and Connexion status
         instance.isInGMA = isInGMA
         instance.hasConnexion = hasConnexion
+        
+        # Final step: mark the address record as 'verified'
+        instance.is_verified = True
         
         instance.save()
     except KeyError or TypeError or RelatedObjectDoesNotExist:

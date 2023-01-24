@@ -120,6 +120,7 @@ class Addresses(TimeStampedModel):
     
     isInGMA = models.BooleanField(null=True, default=None)
     hasConnexion = models.BooleanField(null=True, default=None)
+    is_verified = models.BooleanField(default=False)
 
 choices = (
     ('More than 3 Years', 'More than 3 Years'),

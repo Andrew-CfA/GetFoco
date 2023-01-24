@@ -110,8 +110,8 @@ class programForm(forms.ModelForm):
             'freeReducedLunch': 'Poudre School District Free and Reduced Lunch',
             'Identification':'Identification Card',
             'form1040':'1040 Form',
-            'ebb_acf':'Affordable Connectivity Program',
-            'leap':'Low-income Energy Assistance Program',
+            'ebb_acf':'Affordable Connectivity Program (ACP)',
+            'leap':'Low-income Energy Assistance Program (LEAP)',
         } 
 
 class attestationForm(forms.ModelForm):
