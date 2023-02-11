@@ -37,6 +37,18 @@ the Free Software Foundation, either version 3 of the License, or
 
 <br>
 
-<a style="padding-top: 200px;" href="/dashboard/password_reset">Forgot your Password?</a>
+<a class="forgot_password" href="/dashboard/password_reset">Forgot your Password?</a>
+
+<style>
+    .forgot_password{
+        color: var(--darkblue);
+    }
+
+    @media screen and (max-width : 767px) {
+        .forgot_password{
+            color:white;
+        }
+    }
+</style>
 
 {% endblock %}
