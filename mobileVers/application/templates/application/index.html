@@ -37,7 +37,8 @@ the Free Software Foundation, either version 3 of the License, or
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">   
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>     
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -219,47 +220,23 @@ the Free Software Foundation, either version 3 of the License, or
                         <button style="background-color:var(--darkblue);font-weight: 700;" type="submit"> ENTER </button>
                     </div>
                 </form>
-                <!--
-                <button id="open-popup-1" style="background-color:var(--darkblue);padding: 5px 35px; margin: 15px 0 0 10px; height:40px;"><b>ENTER</b></button>
-                    -->
             <p class="link" style="margin:0; padding-top: 10%;">Service brought to you by the City of Fort Collins</p>
             <a class="link" href="{% url 'application:privacyPolicy' %}" style="margin:0; padding-top: 10%;"><u>Privacy Policy</u></a>        
         </div>
         
-        <!--TODO: Make another popup for when they are good to submit to digital equity-->
-        <!--TODO: make suure popup only comes up when  address is wrong-->
-        <div id="popup-1">
-            <div class="popup-content">
-                <img src="{% static 'application/images/X_gray.svg' %}" alt="back" style="width:5vw; top:20px;right:20px;position:absolute" onclick="location.href='{% url 'application:index' %}'">
-                <div>
-                    <h1 style="color:var(--yellow)"><b>Connexion is not quite ready to go where you are.</b></h1>
-                    <p>Stay updated for when Connexion will be available for you & your neighborhood.</p>
-                </div>
-                <div class="input">
-                    <!--TODO: Save input-->
-                    
-                    <input type="text" style="width:100%;border-bottom:1px solid#888; background-color: white;" required>
-                    
-                    <label style="color:#888">Email Address</label>    
-                </div>
-                <button id="close-popup-1" style="background-color:var(--lightblue);padding: 5px 35px; width:100%;"><b>SUSCRIBE TO UPDATES</b></button>
-            </div>
-        </div>
-        <!--POPUP JAVASCRIPT CODE-->
         <script>
-            var popup1 = document.getElementById("popup-1");
-            var openPopup1 = document.getElementById("open-popup-1");
-            var closePopup1 = document.getElementById('close-popup-1');
-            console.log(5);
-            openPopup1.addEventListener('click', () => {
-                popup1.style.display = "block";
-                console.log(6);
-            })
+            var inProgressAppSaved = {{ in_progress_app_saved|yesno:"true,false" }};
 
-            closePopup1.addEventListener('click', () => {
-                popup1.style.display = "none";
-                console.log(7);
-            })
+            $(document).ready(function() {
+                if (inProgressAppSaved) {
+                    Swal.fire({
+                        icon: "info",
+                        title: "Logged Out",
+                        text: "You're changes are saved. When you're ready to continue, log back in.",
+                        confirmButtonColor: "#13467D",
+                    });
+                }
+            });
         </script>
     </body>
 </html>

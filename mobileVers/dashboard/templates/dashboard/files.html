@@ -341,6 +341,14 @@ the Free Software Foundation, either version 3 of the License, or
         modal.style.display = "none";
       }
     }
+
+    // Select a paragraph element with the p2 class
+    var p2 = document.querySelector(".p2");
+    
+    // Replace the onclick attribute value of the p2 element
+    // by replacing the existing string to the following value
+    // "location.href='/application/?app_status=in_progress'"
+    p2.setAttribute("onclick", "location.href='/application/?app_status=in_progress'");
   </script>
     
   

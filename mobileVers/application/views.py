@@ -289,16 +289,36 @@ def index(request):
                 logging.warning("insert valid zipcode")
                 return(redirect(reverse("application:quickNotFound")))
     
-    form = addressLookupForm() 
-    logout(request)
-    return render(
-        request,
-        'application/index.html',
-        {
-            'form': form,
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
+    else:
+        # Check if the app_status query parameter is present
+        # If so, check if it is 'in_progress'
+        # If it's in progress, redirect to the application:index page
+        if 'app_status' in request.GET:
+            if request.GET['app_status'] == 'in_progress':
+                # Set the app_status session variable to 'in_progress'
+                request.session['app_status'] = 'in_progress'
+                return redirect(reverse("application:index"))
+
+        form = addressLookupForm() 
+    
+    
+        # Check if the user is logged in and has the 'app_status' session var
+        # set to 'in_progress'
+        in_progress_app_saved = False
+        if request.user.is_authenticated and 'app_status' in request.session:
+            if request.session['app_status'] == 'in_progress':
+                in_progress_app_saved = True
+
+        logout(request)
+        return render(
+            request,
+            'application/index.html',
+            {
+                'form': form,
+                'is_prod': django_settings.IS_PROD,
+                'in_progress_app_saved': in_progress_app_saved,
+                },
+            )
 
 def address(request):
 
