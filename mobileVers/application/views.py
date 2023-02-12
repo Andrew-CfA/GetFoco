@@ -17,9 +17,9 @@ from django.contrib import messages
 from django.http import QueryDict
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, attestationForm
-from .backend import addressCheck, validateUSPS, enroll_connexion_updates
-from .models import AMI, MoreInfo, iqProgramQualifications
+from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, attestationForm, UserUpdateForm, EligibilityUpdateForm
+from .backend import addressCheck, validateUSPS, enroll_connexion_updates, get_dependant_info
+from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility
 
 from py_models.qualification_status import QualificationStatus
 
@@ -580,10 +580,18 @@ def account(request):
         # maybe also do some password requirements here too
         try:
             existing = request.user
-            form = UserForm(request.POST,instance = existing)
+            # Check if the update_mode exists in the POST data.
+            update_mode = request.POST.get('update_mode')
+            if update_mode:
+                form = UserUpdateForm(request.POST,instance = existing)
+            else:
+                form = UserForm(request.POST,instance = existing)
         except AttributeError or ObjectDoesNotExist:
             form = UserForm(request.POST or None)
-        if form.is_valid():
+        if form.is_valid() and update_mode:
+            form.save()
+            return JsonResponse({"redirect":f"{reverse('dashboard:settings')}?page_updated=account"})
+        elif form.is_valid():
             passwordCheck = form.passwordCheck()
             passwordCheckDuplicate = form.passwordCheckDuplicate()
             #AJAX data function below, sends data to AJAX function in account.html. If client makes a mistake in password, AJAX lets them know, no page refresh
@@ -629,7 +637,19 @@ def account(request):
                     }
             return JsonResponse(data)
     else:
-        form = UserForm()
+        # We're only checking if the query parameter even exists, not its value
+        # if there is a query parameter, we're in update mode and we want to show the form
+        # with user's existing data. If there is no query parameter, the user is just now
+        # starting the application.
+        update_mode = request.GET.get('update_mode')
+        if update_mode:
+            # Query the users table for the user's data
+            user = User.objects.get(id=request.user.id)
+            form = UserUpdateForm(instance=user)
+            update_mode = True
+        else:
+            form = UserForm()
+            update_mode = False
 
     return render(
         request,
@@ -640,10 +660,9 @@ def account(request):
             'formPageNum':formPageNum,
             'Title': "Account",
             'is_prod': django_settings.IS_PROD,
+            'update_mode': update_mode,
             },
         )
-#    else:
-#        return redirect(reverse(page))
 def filesInfoNeeded(request):
     '''
     can be used in the future for more information that may be needed from client pertaining to IQ programs
@@ -685,64 +704,61 @@ def filesInfoNeeded(request):
 
 def moreInfoNeeded(request):
     if request.method =="POST":
+        # Check if the update_mode exists in the POST data.
+        update_mode = request.POST.get('update_mode')
         try:
-            existing = request.user.MoreInfo
-            form = MoreInfoForm(request.POST,instance = existing)
+            if update_mode:
+                existing = MoreInfo.objects.get(user_id=request.user.id)
+                form = MoreInfoForm(request.POST,instance=existing)
+            else:
+                existing = request.user.MoreInfo
+                form = MoreInfoForm(request.POST,instance=existing)
         except AttributeError or ObjectDoesNotExist:
             form = MoreInfoForm(request.POST or None)
-        if form.is_valid():
-            try:
-                instance = form.save(commit=False)
-                instance.user_id = request.user
-                instance.dependentInformation = str(form.data)
-                instance.save()
-                # If GenericQualified is 'ACTIVE',
-                # go to the financial information page
-                #if instance.GenericQualified == QualificationStatus.ACTIVE.name:
-                    #return redirect(reverse("application:mayQualify"))
-                #else:
-                return redirect(reverse("application:programs"))
-            except IntegrityError:
-                print("User already has information filled out for this section")
-                return redirect(reverse("application:programs"))
-        else:
-            print(form.data)
+        
+        try:
+            instance = form.save(commit=False)
+            instance.user_id = request.user
+            instance.dependentInformation = str(form.data)
+            instance.save()
+            if update_mode:
+                return redirect(f"{reverse('dashboard:settings')}?page_updated=financial")
+            return redirect(reverse("application:programs"))
+        except IntegrityError:
+            print("User already has information filled out for this section")
+            return redirect(reverse("application:programs"))
     else:
-        form = MoreInfoForm()
+        dependant_info = None
+        # We're only checking if the query parameter even exists, not its value
+        # if there is a query parameter, we're in update mode and we want to show the form
+        # with user's existing data. If there is no query parameter, the user is just now
+        # starting the application.
+        update_mode = request.GET.get('update_mode')
+        if update_mode:
+            # Query the users table for the user's data
+            more_info = MoreInfo.objects.get(user_id=request.user.id)
+            dependant_info = get_dependant_info(more_info)
+            form = MoreInfoForm(instance=more_info)
+            update_mode = True
+        else:
+            form = MoreInfoForm()
+            update_mode = False
      
-    """householdNum = AMI.objects.filter(
-            householdNum=request.user.eligibility.dependents_id,
-            active=True,
-            ).values('householdNum').first()['householdNum']"""
-    return render(
-        request,
-        "application/moreInfoNeeded.html",
-        {
-            'step':3,
-            #"""'dependent': householdNum,
-            #'list':list(range(householdNum)),"""
-            'dependent': str(request.user.eligibility.dependents),
-            'list':list(range(request.user.eligibility.dependents)),
-            'form':form,
-            'formPageNum':6,
-            'Title': "More Info Needed",
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
-     
-    '''"""householdNum = AMI.objects.filter(
-            householdNum=request.user.eligibility.dependents_id,
-            active=True,
-            ).values('householdNum').first()['householdNum']"""
-    return render(request, "application/moreInfoNeeded.html",{
-        'step':1,
-        #"""'dependent': householdNum,
-        #'list':list(range(householdNum)),"""
-        'dependent': str(request.user.eligibility.dependents),
-        'list':list(range(request.user.eligibility.dependents)),
-        'form':form,
-        'formPageNum':3,
-    })'''
+        return render(
+            request,
+            "application/moreInfoNeeded.html",
+            {
+                'step':3,
+                'dependent': str(request.user.eligibility.dependents),
+                'list':list(range(request.user.eligibility.dependents)),
+                'form':form,
+                'formPageNum':6,
+                'Title': "More Info Needed",
+                'is_prod': django_settings.IS_PROD,
+                'update_mode': update_mode,
+                'form_data': json.dumps(dependant_info) if dependant_info else None,
+                },
+            )
 
 
 def load_gahi_selector(request):
@@ -761,41 +777,51 @@ def load_gahi_selector(request):
 
 def finances(request):
     if request.method == "POST":
+        # Check if the update_mode exists in the POST data.
+        update_mode = request.POST.get('update_mode')
         try:
             existing = request.user.eligibility
-            form = EligibilityForm(request.POST,instance = existing)
+            if update_mode:
+                form = EligibilityUpdateForm(request.POST,instance = existing)
+            else:
+                form = EligibilityForm(request.POST,instance = existing)
         except AttributeError or ObjectDoesNotExist:
             form = EligibilityForm(request.POST or None)
-        if form.is_valid():
-            print(form.data)
-            instance = form.save(commit=False)
-            instance.user_id = request.user       
-            
-            # Parse the 'value' (carat-delimited) from the GAHIBuilder output
-            instance.AmiRange_min, instance.AmiRange_max = [
-                Decimal(x) for x in form.cleaned_data['grossAnnualHouseholdIncome'].split('^')
-                ]
-            
-            # Ensure AmiRange_max < 1 (that's all we need for GenericQualified)
-            if instance.AmiRange_max < Decimal('1'):
-                print("GAHI is below program AMI ranges")
-                instance.GenericQualified = QualificationStatus.PENDING.name
-            else:
-                print("GAHI is greater than program AMI ranges")
-                instance.GenericQualified = QualificationStatus.NOTQUALIFIED.name                  
-                
-            print("SAVING")
-            instance.save()
-            # If GenericQualified is 'ACTIVE' or 'PENDING' (this will assume they are being truthful with their income range), go to the financial information page
-            #TODO talk to the team about if they make too much money... if they do do we want them to still go through the application or to go to contact us page?
-            if instance.GenericQualified == QualificationStatus.ACTIVE.name or instance.GenericQualified == QualificationStatus.PENDING.name:
-                return redirect(reverse("application:moreInfoNeeded"))
-            else:
-                return redirect(reverse("application:moreInfoNeeded"))
+
+        instance = form.save(commit=False)
+        instance.user_id = request.user       
+        
+        # Parse the 'value' (carat-delimited) from the GAHIBuilder output
+        instance.AmiRange_min, instance.AmiRange_max = [
+            Decimal(x) for x in form.cleaned_data['grossAnnualHouseholdIncome'].split('^')
+            ]
+        
+        # Ensure AmiRange_max < 1 (that's all we need for GenericQualified)
+        if instance.AmiRange_max < Decimal('1'):
+            print("GAHI is below program AMI ranges")
+            instance.GenericQualified = QualificationStatus.PENDING.name
         else:
-            print(form.data)
+            print("GAHI is greater than program AMI ranges")
+            instance.GenericQualified = QualificationStatus.NOTQUALIFIED.name                  
+            
+        print("SAVING")
+        instance.save()
+
+        if update_mode:
+            return redirect(f'{reverse("application:moreInfoNeeded")}?update_mode=1')
+        else:
+            return redirect(reverse("application:moreInfoNeeded"))
+
     else:
-        form = EligibilityForm()
+        update_mode = request.GET.get('update_mode')
+        if update_mode:
+            # Query the users table for the user's data
+            eligibility = Eligibility.objects.get(user_id=request.user.id)
+            form = EligibilityUpdateForm(instance=eligibility)
+            update_mode = True
+        else:
+            form = EligibilityForm()
+            update_mode = False
 
     return render(
         request,
@@ -806,6 +832,7 @@ def finances(request):
             'formPageNum':formPageNum,
             'Title': "Finances",
             'is_prod': django_settings.IS_PROD,
+            'update_mode': update_mode,
             },
         )
 
@@ -1054,9 +1081,6 @@ def programs(request):
             },
         )
 
-#    else:
-#        return redirect(reverse(page))
-    #return render(request, 'application/programs.html',)
 
 
 
