@@ -442,6 +442,7 @@ def settings(request):
             'is_prod': django_settings.IS_PROD,
             "routes": {
                     "account": reverse('application:account'),
+                    "address": reverse('application:address'),
                     "finances": reverse('application:finances'),
                 },
             "page_updated": json.dumps({'page_updated': page_updated}, cls=DjangoJSONEncoder),

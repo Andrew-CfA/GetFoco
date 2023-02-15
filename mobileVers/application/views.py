@@ -19,7 +19,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, attestationForm, UserUpdateForm, EligibilityUpdateForm
 from .backend import addressCheck, validateUSPS, enroll_connexion_updates, get_dependant_info
-from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility
+from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility, Addresses
 
 from py_models.qualification_status import QualificationStatus
 
@@ -301,11 +301,16 @@ def index(request):
         )
 
 def address(request):
-
-    if request.method == "POST": 
+    if request.method == "POST":
         try:
-            existing = request.user.addresses
-            form = AddressForm(request.POST,instance = existing)
+            # Check if the update_mode input exists in the form data
+            update_mode = request.POST.get('update_mode')
+            if update_mode:
+                existing = request.user.addresses
+                form = AddressForm(request.POST,instance = existing)
+            else:
+                existing = request.user.addresses
+                form = AddressForm(request.POST,instance = existing)
         except ObjectDoesNotExist:
             form = AddressForm(request.POST or None)
 
@@ -314,9 +319,21 @@ def address(request):
             instance = form.save(commit=False)
             instance.user_id = request.user
             instance.save()            
-            return redirect(reverse("application:addressCorrection"))
+            return redirect(f"{reverse('application:addressCorrection')}{'?update_mode=1' if update_mode else ''}") 
     else:
-        form = AddressForm()
+        # We're only checking if the query parameter even exists, not its value
+        # if there is a query parameter, we're in update mode and we want to show the form
+        # with user's existing data. If there is no query parameter, the user is just now
+        # starting the application.
+        update_mode = request.GET.get('update_mode')
+        if update_mode:
+            # Query the users table for the user's data
+            users_mailing_address = Addresses.objects.get(user_id=request.user.id)
+            form = AddressForm(instance=users_mailing_address)
+            update_mode = True
+        else:
+            form = AddressForm()
+            update_mode = False
 
     return render(
         request,
@@ -328,12 +345,20 @@ def address(request):
             'formPageNum':formPageNum,
             'Title': "Address",
             'is_prod': django_settings.IS_PROD,
+            'update_mode': update_mode,
             },
         )
 
 
 def addressCorrection(request):
     try:
+        # Check if the update_mode query param exists
+        update_mode = request.GET.get('update_mode')
+        if update_mode:
+            update_mode = True
+        else:
+            update_mode = False
+
         q = QueryDict('', mutable=True)
         q.update({"address": request.user.addresses.address, 
             "address2": request.user.addresses.address2, 
@@ -512,7 +537,7 @@ def addressCorrection(request):
                             str(dict_address['AddressValidateResponse']['Address']['Zip5']).lower() == q_orig['zipcode'].lower():         
             
             print('Exact (case-insensitive) address match!')
-            return redirect(reverse("application:takeUSPSaddress"))
+            return redirect(f"{reverse('application:takeUSPSaddress')}{'?update_mode=1' if update_mode else ''}")
     
     print('Address match not found - proceeding to addressCorrection')
                         
@@ -527,11 +552,19 @@ def addressCorrection(request):
             'program_string_2': program_string_2,
             'Title': "Address Correction",
             'is_prod': django_settings.IS_PROD,
+            'update_mode': update_mode,
             },
         )
 
 def takeUSPSaddress(request):
     try:
+        # Check if the update_mode query parameter is present
+        update_mode = request.GET.get('update_mode')
+        if update_mode:
+            update_mode = True
+        else:
+            update_mode = False
+
         # Use the session var created in addressCorrection(), then remove it
         dict_address = request.session['usps_address_validate']
         del request.session['usps_address_validate']
@@ -563,16 +596,20 @@ def takeUSPSaddress(request):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     else:
-        return redirect(reverse("application:inServiceArea"))
+        return redirect(f"{reverse('application:inServiceArea')}{'?update_mode=1' if update_mode else ''}")
 
 
 
 def inServiceArea(request):
-    if request.user.addresses.isInGMA:
+    # Check if the update_mode query parameter is present
+    update_mode = request.GET.get('update_mode')
+    if request.user.addresses.isInGMA and update_mode:
+        return redirect(f"{reverse('dashboard:settings')}?page_updated=address")
+    elif request.user.addresses.isInGMA:
         return redirect(reverse("application:finances")) #TODO figure out to clean?
     else:
         print("address not in GMA")
-        return redirect(reverse("application:notAvailable")) 
+        return redirect(f"{reverse('application:notAvailable')}{'?update_mode=1' if update_mode else ''}") 
 
 
 def account(request):
@@ -1090,12 +1127,16 @@ def programs(request):
 
 
 def notAvailable(request):
+    # Get the update_mode query parameter
+    update_mode = request.GET.get('update_mode')
+    print(update_mode)
     return render(
         request,
         'application/notAvailable.html',
         {
             'Title': "Address Not in Service Area",
             'is_prod': django_settings.IS_PROD,
+            'update_mode': update_mode,
             },
         )
 

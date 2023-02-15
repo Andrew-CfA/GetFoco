@@ -84,11 +84,6 @@ class AddressForm(forms.ModelForm):
             'state':'State', 
             'zipCode':'Zip Code',
         }
-        #widgets = {
-            #'zipCode':TextField(attrs={'type':'number'}),
-            #'document': ClearableFileInput(attrs={'multiple': True}),
-            #=forms.widgets.DateInput(attrs={'type': 'date'})
-        #} 
 
 # form for basic finance eligibility
 class EligibilityForm(forms.ModelForm):
