@@ -36,6 +36,9 @@ the Free Software Foundation, either version 3 of the License, or
         </script>
         
         <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/e9a96b76c2.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
 
     <body>
@@ -60,8 +63,10 @@ the Free Software Foundation, either version 3 of the License, or
                 <ul id="menu">
                   <a style="color: {{ dashboard_color }} ; " href="{% url 'dashboard:dashboard' %}"><li>Dashboard</li></a>
                   <a style="color:{{ program_list_color }}; " href="{% url 'dashboard:ProgramsList' %}"><li>Program List</li></a>
-                  <a style="color:{{ FAQ_color }}; " href="{% url 'dashboard:FAQ' %}"><li>FAQ</li></a>
                   <a style="color:{{ Settings_color }}; " href="{% url 'dashboard:settings' %}"><li>Settings</li></a>
+                  {% if max_ami <= 0.6 and eligibility == 'ACTIVE' %}
+                  <a class="badge" style="color:{{ Settings_color }}; " href="#"><li>Badge</li></a>
+                  {% endif %}
                   <a style="color:{{ Privacy_Policy_color }}; " href="{% url 'application:privacyPolicy' %}"><li>Privacy Policy</li></a>
                   <a style="color:white; " href="{% url 'application:index' %}"><li>Log Out</li></a>
                 
@@ -76,9 +81,10 @@ the Free Software Foundation, either version 3 of the License, or
                   <p style="color: var(--yellow); font-weight: 700; font-size: 25px;">Get <p.1 style="color: white">FoCo</p></p>
                   <p> <img src="{% static 'dashboard/images/Dashboard.svg' %}">  <a style="color: {{ dashboard_color }}; text-decoration:none; " href="{% url 'dashboard:dashboard' %}">Dashboard</a></p>
                   <p> <img src="{% static 'dashboard/images/ProgramList.svg' %}"> <a style="color:{{ program_list_color }}; text-decoration:none;" href="{% url 'dashboard:ProgramsList' %}">Programs</a></p>
-                  <!-- <p> <img src="{% static 'dashboard/images/FAQ.svg' %}">  <a style="color:{{ FAQ_color }}; text-decoration:none;" href="{% url 'dashboard:FAQ' %}">FAQ</a></p> -->
                   <p> <img src="{% static 'dashboard/images/Settings.svg' %}">  <a style="color:{{ Settings_color }};text-decoration:none; " href="{% url 'dashboard:settings' %}">Settings</a></p>
-                  <!-- <p> <img src="{% static 'dashboard/images/Settings.svg' %}">  <a style="color:{{ Bag_It_color }};text-decoration:none; " href="{% url 'dashboard:BagIt' %}">Bag It</a></p>-->
+                  {% if max_ami <= 0.6 and eligibility == 'ACTIVE' %}
+                  <p class="badge">  <i class="fa-solid fa-certificate"></i><a style="color:white;text-decoration:none;padding-left:10px;" href="#">Badge</a></p>
+                  {% endif %}
                   <p> <img src="{% static 'dashboard/images/PrivacyPolicy.svg' %}">  <a style="color:{{ Privacy_Policy_color }};text-decoration:none; " href="{% url 'application:privacyPolicy' %}">Privacy Policy</a></p>
                   <p> <img src="{% static 'dashboard/images/LogOut.svg' %}">  <a style="color:white;text-decoration:none; " href="{% url 'application:index' %}">Log Out</a></p>
                   <p style="font-size: 15px; text-align: center;"> {{clientEmail}}</p>
@@ -109,11 +115,11 @@ the Free Software Foundation, either version 3 of the License, or
                     <div class="column" style="margin:0; width:100%;">
                       <p style="font-weight: 800;">How would you rate your experience so far using the Get FoCo portal? </p>
                       <div class="column" style="margin:0; width:100%;">
-                        <clearButton name="starRating" value="1" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star1" style="width:min(10vw, 50px);margin-right: 3vw;" onclick="fillStar(1)"> </clearButton>
-                        <clearButton name="starRating" value="2" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star2" style="width:min(10vw, 50px);margin-right: 3vw;" onclick="fillStar(2)"> </clearButton>
-                        <clearButton name="starRating" value="3" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star3" style="width:min(10vw, 50px);margin-right: 3vw;" onclick="fillStar(3)"> </clearButton>
-                        <clearButton name="starRating" value="4" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star4" style="width:min(10vw, 50px);margin-right: 3vw;" onclick="fillStar(4)"> </clearButton>
-                        <clearButton name="starRating" value="5" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star5" style="width:min(10vw, 50px);margin-right: 3vw;" onclick="fillStar(5)"> </clearButton>
+                        <clearButton name="starRating" value="1" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star1" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
+                        <clearButton name="starRating" value="2" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star2" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
+                        <clearButton name="starRating" value="3" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star3" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
+                        <clearButton name="starRating" value="4" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star4" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
+                        <clearButton name="starRating" value="5" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star5" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
                       </div>
                   </div>
                   <div class="column" style="width:100%; margin:0; justify-content: flex-start;">
@@ -131,100 +137,19 @@ the Free Software Foundation, either version 3 of the License, or
           </div>
           </div>
         </div>
-          <script>
-            var image1 =  document.getElementById("star1");
-            var image2 =  document.getElementById("star2");
-            var image3 =  document.getElementById("star3");
-            var image4 =  document.getElementById("star4");
-            var image5 =  document.getElementById("star5");
-            function fillStar(value)
-            {
-              switch (value)
-              {
-                  case 1:
-                  if (image1.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-                  {
-                    image1.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    document.getElementById("submit").value = value;
-                    return value;
-                  }
-                  else if((image2.getAttribute('src') || image3.getAttribute('src') || image4.getAttribute('src') || image5.getAttribute('src')) == "{% static 'dashboard/images/reviewStarFilled.svg' %}")
-                  {
-                    image5.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                    image4.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                    image3.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                    image2.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                  }
-
-                  break;
-  
-                  case 2: 
-                    if (image2.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-                    {
-                      image2.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                      image1.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                      document.getElementById("submit").value = value;
-                      return value;
-                      
-                    }
-                    else if((image3.getAttribute('src') || image4.getAttribute('src') || image5.getAttribute('src')) == "{% static 'dashboard/images/reviewStarFilled.svg' %}")
-                    {
-                      image5.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                      image4.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                      image3.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                    }
-
-                  break;
-                
-  
-                  case 3: 
-                  if (image3.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-                  {
-                    image3.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    image2.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    image1.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    document.getElementById("submit").value = value;
-                    return value;
-                  }
-                  else if((image4.getAttribute('src') || image5.getAttribute('src')) == "{% static 'dashboard/images/reviewStarFilled.svg' %}")
-                  {
-                    image5.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                    image4.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                  }
-
-                  break;
-  
-                  case 4: 
-                  if (image4.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-                  {
-                    image4.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    image3.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    image2.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    image1.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    document.getElementById("submit").value = value;
-                    return value;
-                  }
-                  else if(image5.getAttribute('src') == "{% static 'dashboard/images/reviewStarFilled.svg' %}")
-                  {
-                    image5.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-                  }
-
-                  break;
-  
-                  case 5: 
-                  if (image5.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-                  {
-                    image5.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    image4.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    image3.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    image2.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    image1.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-                    document.getElementById("submit").value = value;
-                    return value;
-                  }
-                  break;
-                } 
-            }
-          </script>
+        <script>
+          // Show the sweet alert when the Badge anchor tage is clicked.
+          // with a customer colored confirm button using jQuery
+          $('.badge').click(function(){
+            Swal.fire({
+              imageUrl: "{% static 'dashboard/images/GetFOCObadge.png' %}",
+              imageWidth: 250,
+              imageHeight: 250,
+              imageAlt: "Get FoCo Badge",
+              confirmButtonColor: "#13467D",
+              confirmButtonText: "Close"
+            });
+          });
+        </script>
       </body>
   </html>
