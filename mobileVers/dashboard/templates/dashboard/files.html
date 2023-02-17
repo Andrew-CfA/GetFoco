@@ -9,64 +9,6 @@ the Free Software Foundation, either version 3 of the License, or
 
 {% block body %}
 
-<script type='text/javascript'>
-    function preview_image(event) 
-    {
-        var reader = new FileReader();
-        reader.onload = function()
-        {
-        var output = document.getElementById('output_image');
-        output.src = reader.result;
-        }
-        
-        document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
-        reader.readAsDataURL(event.target.files[0]);
-
-    }
-</script>
-
-
-<!--Modal for preview of what we require for SNAP-->
-<div id="modalImageInstructions" class="modal-alert" style="display: none;">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span id="instructions-close" class="close">&times;</span>
-      <div class ="fadeSmall"><p style="color: var(--darkblue); padding-top:35px;"> Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p></div>
-      <div class ="fadeLarge"><p style="color: var(--darkblue); padding-top:35px;"> Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p></div>
-  
-            <br>
-            <br>
-            <br>
-            <div class ="row">
-              <div class="fadeSmall"><img src="{% static 'application/images/SampleEBTScreenshot.png' %}" width="300px" height=auto></div>
-              <div class="fadeSmall"><img src="{% static 'application/images/ColoradoIDCardSample.jpg' %}" width="500" height=auto></div>
-            </div>
-            <div class="fadeLarge"><img src="{% static 'application/images/SampleEBTScreenshot.png' %}" width="300px" height=auto></div>
-            <div class="fadeLarge"><img src="{% static 'application/images/ColoradoIDCardSample.jpg' %}" width="300px" height=auto></div>
-        </div>
-  </div>
-  
-
-<div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class ="fadeSmall"><p style="color: var(--darkblue);">If you are uploading multiple files, be sure to click and <b>hold</b> the Ctrl key on your keyboard and click on each file. See an example below!</p></div>
-
-      <div class ="fadeLarge"><p style="color: var(--darkblue);">Be sure to take your pictures first and then choose gallery or similar and long press or hold on each item to upload multiple files. See an example below!</p></div>
-
-            <br>
-            <br>
-            <br>
-            <div class="fadeSmall"><img src="{% static 'application/images/Step5InstructionsDesktop.gif' %}"></div>
-            <div class="fadeLarge"><img src="{% static 'application/images/Step5InstructionsMobile.gif' %}" width="300px" height=auto></div>
-
-        </div>
-</div>
-
-
-
-
 <div class=sideNav>
     <div class=fadeSmall>
         <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
@@ -97,15 +39,6 @@ the Free Software Foundation, either version 3 of the License, or
 <div style="margin-top: 3vh;">
     <p>To get verified, please upload your</p>
     <h3> {{program_string|linebreaks}} </h3>
-    <!--
-    <ul>
-        <li> {{program_string}} </li>
-    </ul>
-    
-    <ul>
-        <li>{{program_string}}</li>
-    </ul>
-    -->
 
     <br>
     <br>
@@ -195,64 +128,45 @@ the Free Software Foundation, either version 3 of the License, or
     var firstTimeVisitToFileUploadPage = {{ request.session.first_time_file_upload|yesno:"true,false"|escapejs }};
     var fileUploadSuccessful = JSON.parse('{{ file_upload|escapejs }}')['success_status'];
 
-    $(document).ready(function() {
-        // Get the modal
-        var modal = document.getElementById("myModal");
-        
-        // Get the button that opens the modal
-        var btn = document.getElementById("myBtn");
-        
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-        
-        // When the user clicks the button, open the modal 
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
-        
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-        
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+    $(document).ready(function() {     
+        $("#myBtn").click(function() {
+            var modalContent = `
+                <div class ="fadeSmall">
+                    <p style="color: var(--darkblue);">If you are uploading multiple files, be sure to click and <b>hold</b> the Ctrl key on your keyboard and click on each file. See an example below!</p>
+                </div>
 
-        // Get the modal
-        var instructionsModal = document.getElementById("modalImageInstructions");
-    
-        // Get the <span> element that closes the modal
-        var instructionsClose = document.getElementById("instructions-close");
-        
-    
-        // When the user clicks on <span> (x), close the modal
-        instructionsClose.onclick = function() {
-            instructionsModal.style.display = "none";
-        }
-        
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == instructionsModal) {
-                instructionsModal.style.display = "none";
-            }
-        }
+                <div class ="fadeLarge">
+                    <p style="color: var(--darkblue);">Be sure to take your pictures first and then choose gallery or similar and long press or hold on each item to upload multiple files. See an example below!</p>
+                </div>
 
-        if (firstTimeVisitToFileUploadPage) {
-            instructionsModal.style.display = "block";
-        }
+                <div class="fadeSmall">
+                    <img src="{% static 'application/images/step_5_desktop_instructions.gif' %}">
+                </div>
+                <div class="fadeLarge">
+                    <img src="{% static 'application/images/step_5_mobile_instructions.gif' %}">
+                </div>
+            `;
+            Swal.fire( {
+                title: 'Uploading Multiple Files',
+                html: modalContent,
+                confirmButtonColor: '#13467D',
+                confirmButtonText: 'Continue'
+            })
+        });
         
         if (fileUploadSuccessful === null) {
-            // Do nothing. The user has come to the page for the first time
+            // The user has come to the page for the first time
             // or has refreshed the page
-        }
-        else if (fileUploadSuccessful) {
             Swal.fire( {
-                title: 'Success',
-                text: 'Your file has been uploaded!',
+                title: 'File Upload',
+                html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
+                confirmButtonColor: '#13467D',
+                confirmButtonText: 'Continue'
+            })
+        } else if (fileUploadSuccessful) {
+            Swal.fire( {
+                title: 'Your file has been uploaded!',
+                html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
                 icon: 'success',
                 confirmButtonColor: '#13467D',
                 confirmButtonText: 'Continue'
@@ -267,5 +181,17 @@ the Free Software Foundation, either version 3 of the License, or
             })
         }
     });
+
+    function preview_image(event) {
+        var reader = new FileReader();
+        reader.onload = function()
+        {
+        var output = document.getElementById('output_image');
+        output.src = reader.result;
+        }
+        
+        document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
+        reader.readAsDataURL(event.target.files[0]);
+    }
 </script>
 {% endblock %}
