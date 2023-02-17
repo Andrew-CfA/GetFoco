@@ -1069,6 +1069,17 @@ def dashboardGetFoco(request):
             SPINPendingDate = ""
             SPINDisplayPending = "None"
 
+    # By default we assume the user has viewed the dashboard, but if they haven't
+    # we set the proxy_viewed_dashboard flag to false and update the user
+    # in the database to say that they have viewed the dashboard. This obviates
+    # the need to create some AJAX call to a Django template to update the database 
+    # when the user views the dashboard.
+    proxy_viewed_dashboard = True
+    if request.user.has_viewed_dashboard == False:
+        proxy_viewed_dashboard = False
+        request.user.has_viewed_dashboard = True
+        request.user.save()
+
     return render(
         request,
         'dashboard/dashboard_GetFoco.html',
@@ -1130,6 +1141,7 @@ def dashboardGetFoco(request):
             'is_prod': django_settings.IS_PROD,
             'max_ami': request.user.eligibility.AmiRange_max,
             'eligibility': request.user.eligibility.GenericQualified,
+            'proxy_viewed_dashboard': proxy_viewed_dashboard,
             },
         )
 

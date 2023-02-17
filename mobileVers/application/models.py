@@ -93,6 +93,7 @@ class User(TimeStampedModel,AbstractUser):
     phone_number = PhoneNumberField()
     files = models.ManyToManyField('dashboard.Form', related_name="forms")
     address_files = models.ManyToManyField('dashboard.residencyForm', related_name="residencyforms")
+    has_viewed_dashboard = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
