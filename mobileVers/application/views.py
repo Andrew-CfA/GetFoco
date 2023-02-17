@@ -1226,11 +1226,17 @@ def comingSoon(request):
         )
 
 def privacyPolicy(request):
+    # check if user is logged in
+    user_logged_in = False
+    if request.user.is_authenticated:
+        user_logged_in = True
+
     return render(
         request,
         'application/privacyPolicy.html',
         {
             'is_prod': django_settings.IS_PROD,
+            'user_logged_in': user_logged_in,
             },
         )
 
