@@ -65,7 +65,7 @@ the Free Software Foundation, either version 3 of the License, or
                 <div class=fadeLarge><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
                 <p style = "font-weight: 700;">BACK</p>
             </a>
-            <p class=p2 alt="back" style=" margin-right: 5px;" onclick="location.href='{% url 'application:index' %}'">Save & Logout</p>
+            <p class=p2 alt="back" style=" margin-right: 5px;" onclick="location.href='{% url 'application:index' %}?app_status=in_progress'">Save & Logout</p>
         </div>
         <div class="content desktop" style="height:150vh">
             <p style="font-weight: 700;"> STEP {{ step }} OF {{ formPageNum }} </p>
