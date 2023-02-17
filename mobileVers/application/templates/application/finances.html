@@ -38,18 +38,22 @@ the Free Software Foundation, either version 3 of the License, or
 
 <form action="{% url 'application:finances' %}" method="post" autocomplete="false" id="eligibilityForm" gahi-selector-url="{% url 'application:ajax_load_gahi' %}" novalidate>
     {% csrf_token %}
-    <!-- TODO: Make it yes or no not checkbox-->
-    <div class="input" style="padding-top:0">
-        <label class="labelword">How long have you lived at this address?</label>
-        <div class="row" style="justify-content:left; padding-top:5%">
-            {% for choice in form.rent %}
-                <label for="{{choice.id_for_label}}" class="row" style="padding-right: 5%;">
-                    <span class="radio">{{ choice.tag }}</span>
-                    <p>{{ choice.choice_label }}</p>
-                </label>
-            {% endfor %}
-        </div> 
-    </div>
+
+    {% if update_mode is True %}
+      {# We're not interested in updating their length of residency when we're updating financials #}
+    {% else %}
+      <div class="input" style="padding-top:0">
+          <label class="labelword">How long have you lived at this address?</label>
+          <div class="row" style="justify-content:left; padding-top:5%">
+              {% for choice in form.rent %}
+                  <label for="{{choice.id_for_label}}" class="row" style="padding-right: 5%;">
+                      <span class="radio">{{ choice.tag }}</span>
+                      <p>{{ choice.choice_label }}</p>
+                  </label>
+              {% endfor %}
+          </div> 
+      </div>
+    {% endif %}
     {% for field in form %}
         {% if field.label == "Rent" %}
         {% elif field.label == 'Number of Dependents' %}
@@ -63,13 +67,8 @@ the Free Software Foundation, either version 3 of the License, or
         {% endif %}
 
         <div class="input">
-            <!-- Below is code to be able to toggle text to visible and invisible and also an animation for text to appear, to be used possibly for dependents
-            <a href="#" onclick="toggle_visibility('foo');">Click here to toggle visibility of element #foo</a>
-            <div id="foo">This is foo</div>
-            <h1 class="animate__animated animate__bounce">An animated element</h1>
-            -->
             <label class="labelword"style="position:relative">How many individuals are in your household?</label>  <a href="{% url 'application:dependentInfo' %}"><img src="{% static 'application/images/clipart249308.png' %}" alt="info" style="width:min(4.5vw,20px);"></a>
-            <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}" value="" style="height: 3vh;">
+            <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}" value="{{ form.dependents.value }}" style="height: 3vh;">
         </div>
         {% else %}
         <div class="input">
@@ -83,30 +82,41 @@ the Free Software Foundation, either version 3 of the License, or
     {% endfor %}
 
     <div class="footer">
+      {% if update_mode is True %}
+        <input type="hidden" name="update_mode" value="true">
+        <button type="submit" >CONFIRM</button>
+      {% else %}
         <button type="submit"> CONTINUE </button>
+      {% endif %}
     </div>
 </form>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-$("#id_dependents").change(function () {
-  var url = $("#eligibilityForm").attr("gahi-selector-url");  // get the url of the `load_cities` view
-  var dependentsId = $(this).val();  // get the selected country ID from the HTML input
+  var update_mode = {{ update_mode|yesno:"true,false" }};
 
-  $.ajax({                       // initialize an AJAX request
-    url: '{% url 'application:ajax_load_gahi' %}',                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-    data: {
-      'dependents': dependentsId       // add the country id to the GET parameters
-    },
-    success: function (data) {   // `data` is the return of the `load_cities` view function
-      $("#gahiDiv").html(data);  // replace the contents of the city input with the data that came from the server
-    }
-  });
+  $(document).ready(function(){
+    $("#id_dependents").on("input", function() {
+      var url = $("#eligibilityForm").attr("gahi-selector-url");  // get the url of the `load_cities` view
+      var dependentsId = $(this).val();  // get the selected country ID from the HTML input
 
-});
-</script>
+      $.ajax({                       // initialize an AJAX request
+        url: '{% url 'application:ajax_load_gahi' %}',                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'dependents': dependentsId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#gahiDiv").html(data);  // replace the contents of the city input with the data that came from the server
 
-<script>
+          if (update_mode) {
+            $("#id_grossAnnualHouseholdIncome").val('{{ form.grossAnnualHouseholdIncome.value }}');
+          }
+        }
+      });
+    });
+
+    $("#id_dependents").trigger('input');
+
     // Get the modal
     var modal = document.getElementById("myModal");
     
@@ -132,10 +142,6 @@ $("#id_dependents").change(function () {
         modal.style.display = "none";
       }
     }
-    </script>
-    
-  
-
+  });
+</script>
 {% endblock %}
-
-

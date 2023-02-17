@@ -10,6 +10,7 @@ Here you'll find some useful backend logic / functions used in the main applicat
 supplement the application and to keep views.py clutter to a minimum!
 '''
 import csv
+import ast
 from usps import USPSApi, Address
 import re
 import requests
@@ -464,3 +465,21 @@ def broadcast_email_pw_reset(email, content):
         print(response.headers)
     except Exception as e:
         print(e.message)
+
+def get_dependant_info(more_info):
+    """
+    In order to update the dependant information, we need to parse the QueryDict string
+    stored in the more_info object. This function will parse the string and return a
+    dictionary of the dependant information.
+    :param more_info: more_info object
+    :return: dictionary of dependant information
+    """
+    try:
+        dependant_info = more_info.dependentInformation
+        pattern = re.compile(r"<QueryDict: |>")
+        cleaned_string = pattern.sub("", dependant_info)
+        dependant_info = ast.literal_eval(cleaned_string)
+        return dependant_info
+    except Exception as exception:
+        print(exception)
+    

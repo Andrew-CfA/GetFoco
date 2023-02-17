@@ -20,7 +20,7 @@ the Free Software Foundation, either version 3 of the License, or
 
 <form action="{% url 'application:moreInfoNeeded' %}" method="post" autocomplete="false">
     {% csrf_token %}
-    <!-- TODO: Make it yes or no not checkbox-->
+    
     <div class="input" style="padding-top:0">
         <label class="labelword">You indicated you had {{ dependent }} individual(s) in your household, what are their names and birthdates?</label>
     </div>
@@ -32,32 +32,44 @@ the Free Software Foundation, either version 3 of the License, or
         <br>
         <br>
         <Br>
-    <!--
-        <div class="input">
-            <input type="checkbox" id="notChild{{forloop.counter}}" name="notChild" onclick="toggle()" style="vertical-align: middle; display: inline-block;"> Click here if over 18 years old.
-            <input class="fill" type="date" name="{{ field.name }}" id="{{forloop.counter}} " style="height: 3vh;"> 
-        </div>
-    -->
     {% endfor %}
 
     <div class="footer">
-        <button type ="submit" > CONTINUE </button>
+        {% if update_mode is True %}
+            <input type="hidden" name="update_mode" value="true">
+            <button type ="submit" > CONFIRM </button>
+        {% else %}
+            <button type ="submit" > CONTINUE </button>
+        {% endif %}
     </div>
     
 </form>
 
-
-
 <script>
-    function toggle() {
-      var x = document.getElementById("notChild{{forloop.counter}}");
-      var text = document.getElementById("{{forloop.counter}}");
-      if (x.checked == true) {
-        text.style.display = "block";
-      } else {
-        text.style.display = "none";
-      }
+    var update_mode = {{ update_mode|yesno:"true,false" }};
+    var formData = JSON.parse('{{ form_data | escapejs }}');
+
+    // If we are in update mode, fill in the form with the data we have in the formData object
+    // dependentsName will be an array that contains the names of the dependents
+    // dependentsBirth will be an array that contains the birthdates of the dependents
+    //id_dependentsName id_dependentsBirthdate these are the ids of the input fields in the form
+    if (update_mode) {
+        // get the input fields by name="dependentsName" and name="dependentsBirthdate"
+        var dependentsName = document.getElementsByName("dependentsName");
+        var dependentsBirth = document.getElementsByName("dependentsBirthdate");
+        // NOTE: Capturing the dependentInformation field to set it to null is a workaround
+        // Long term solution is an entire overhaul the entire form
+        var dependentInformation = document.getElementsByName("dependentInformation");
+        // fill in the input fields with the data from the formData object
+        for (var i = 0; i < dependentsName.length; i++) {
+            if (formData.dependentsName[i]) {
+                dependentsName[i].value = formData.dependentsName[i];
+                dependentsBirth[i].value = formData.dependentsBirthdate[i];
+                dependentInformation[i].value = "null";
+            } else {
+                dependentInformation[i].value = "null";
+            }
+        }
     }
 </script>
-
 {% endblock %}

@@ -49,6 +49,28 @@ class UserForm(forms.ModelForm):
             user.save()
         return user
 
+
+# form for user account creation
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name','last_name', 'email','phone_number']
+        labels  = { 
+            'first_name':'First Name', 
+            'last_name':'Last Name', 
+            'email':'Email',
+            'phone_number':'Phone Number',
+        }
+    
+    # Save function that will update the user's
+    # first name, last name, email, and phone number
+    def save(self, commit=True):
+        user = super(UserUpdateForm, self).save(commit=False)
+        if commit:
+            user.save()
+        return user
+
+
 # form for addresses
 class AddressForm(forms.ModelForm):
     class Meta:
@@ -76,6 +98,15 @@ class EligibilityForm(forms.ModelForm):
         fields = ['rent','dependents', 'grossAnnualHouseholdIncome']
         labels  = {
             'rent':'Rent',
+            'dependents':'Number of Dependents', 
+            'grossAnnualHouseholdIncome':'Adjusted Gross Annual Household Income',
+        } 
+
+class EligibilityUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Eligibility
+        fields = ['dependents', 'grossAnnualHouseholdIncome']
+        labels  = {
             'dependents':'Number of Dependents', 
             'grossAnnualHouseholdIncome':'Adjusted Gross Annual Household Income',
         } 

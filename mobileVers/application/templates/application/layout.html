@@ -35,6 +35,8 @@ the Free Software Foundation, either version 3 of the License, or
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jshashes/1.0.7/hashes.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <!---->
+        <!-- Add Favicon-->
+        <link rel="shortcut icon" href="{% static 'application/images/favicon.ico' %}" type="image/x-icon">
         <title> {{ Title }}</title>
         <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -65,7 +67,12 @@ the Free Software Foundation, either version 3 of the License, or
                 <div class=fadeLarge><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
                 <p style = "font-weight: 700;">BACK</p>
             </a>
-            <p class=p2 alt="back" style=" margin-right: 5px;" onclick="location.href='{% url 'application:index' %}?app_status=in_progress'">Save & Logout</p>
+            
+            {% if update_mode is True %}
+                {# Do nothing here. We just don't want to display 'Save & Logout' #}
+            {% else %}
+                <p class=p2 alt="back" style=" margin-right: 5px;" onclick="location.href='{% url 'application:index' %}?app_status=in_progress'">Save & Logout</p>
+            {% endif %}
         </div>
         <div class="content desktop" style="height:150vh">
             <p style="font-weight: 700;"> STEP {{ step }} OF {{ formPageNum }} </p>

@@ -8,8 +8,11 @@ the Free Software Foundation, either version 3 of the License, or
 {% load static %}
 {% block body %}
 
-
+{% if update_mode is True %}
+<h2 style="font-weight: 700; margin:5vh 0"> Update Your Account Information</h2>
+{% else %}
 <h2 style="font-weight: 700; margin:5vh 0"> Create an Account </h2>
+{% endif %}
 <div class=sideNav> 
   <div class=fadeSmall>
   <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
@@ -43,6 +46,7 @@ the Free Software Foundation, either version 3 of the License, or
                 <input class="fill" name="{{ field.name }}"
                     id="{{ field.id_for_label }}"
                     maxlength="{{ field.max_length }}"
+                    value="{{ form.first_name.value|default:'' }}"
                     type="text" 
                     style="width:80%;" 
                     required  
@@ -55,6 +59,7 @@ the Free Software Foundation, either version 3 of the License, or
                 id="{{ form.last_name.id_for_label }}"
                 maxlength="{{ form.last_name.max_length }}"
                 type="text" 
+                value="{{ form.last_name.value|default:'' }}"
                 style="width:100%;" 
                 required  
                 autocomplete="off">
@@ -70,6 +75,7 @@ the Free Software Foundation, either version 3 of the License, or
             id="phone_number"
             maxlength="{{ field.max_length }}"
             type="tel" 
+            value="{{ form.phone_number.value|default:'' }}"
             style="width:100%;" 
             required  
             autocomplete="off">
@@ -112,6 +118,7 @@ the Free Software Foundation, either version 3 of the License, or
         id="{{ field.id_for_label }}"
         maxlength="{{ field.max_length }}"
         type="text" 
+        value="{{ form.email.value|default:'' }}"
         style="width:100%;"
         required  
         autocomplete="off">
@@ -132,13 +139,15 @@ the Free Software Foundation, either version 3 of the License, or
 
 
 <div class="footer">
-    <button type ="submit" > CONTINUE </button>
+    {% if update_mode is True %}
+        <input type="hidden" name="update_mode" value="true">
+        <button type="submit"> CONFIRM </button>
+    {% else %}
+        <button type="submit"> CREATE </button>
+    {% endif %}
 </div>
 
 </form>
-
-
-
 
 <!-- Password Server Side Check -->
 <script>
@@ -240,17 +249,11 @@ the Free Software Foundation, either version 3 of the License, or
       }
     }
 
-</script>
-
-<script>
     document.getElementById('phone_number').addEventListener('input', function (e) {
     var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
     e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
     });
-</script>
-    
 
-<script>
     function finalChecks(){
         if(letter.classList == "invalid") {  
         alert("You need a lowercase letter in your password")

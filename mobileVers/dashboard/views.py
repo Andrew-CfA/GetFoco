@@ -6,6 +6,7 @@ the Free Software Foundation, either version 3 of the License, or
 """
 import json
 from django.shortcuts import render, redirect, reverse
+from django.core.serializers.json import DjangoJSONEncoder
 
 from application.models import iqProgramQualifications
 from .forms import FileForm, FeedbackForm, TaxForm, addressVerificationForm, AddressForm
@@ -422,64 +423,18 @@ def index(request):
 
 
 def settings(request):
-    if request.method == "POST":
+    # Get the success query string parameter
+    page_updated = request.GET.get('page_updated')
+    if page_updated:
+        request.session['page_updated'] = page_updated
+        return redirect(reverse('dashboard:settings'))
 
-        firstName = request.POST["firstName"]
-        lastName = request.POST["lastName"]
-        phoneNumber = request.POST["phoneNumber"]
-        #email = request.POST["email"]
-        #address = request.POST["address"]
-        #address2 = request.POST["address2"]
-        #zipCode = request.POST["zipCode"]
-        #state = request.POST["state"]
-        #password = request.POST["password"]
+    if 'page_updated' in request.session:
+        page_updated = request.session.get('page_updated')
+        del request.session['page_updated']
+    else:
+        page_updated = None
 
-        
-        obj = request.user
-        #print(request.user.eligibility.GRqualified)
-        if firstName == "":
-            pass
-        else:
-            obj.first_name = firstName
-
-        if lastName == "":
-            pass
-        else:
-            obj.last_name = lastName
-        
-        if phoneNumber == "":
-            pass
-        else:
-            obj.phone_number = phoneNumber
-        '''if email == "":
-            pass
-        else:
-            obj.email = email
-        if address == "":
-            pass
-        else:
-            obj.addresses.address = address
-        if address2 == "":
-            pass
-        else:
-            obj.addresses.address2 = address2
-        
-        if zipCode == "":
-            pass
-        else:
-            obj.addresses.zipCode = zipCode
-        if state == "":
-            pass
-        else:
-            obj.addresses.state = state
-        
-        if password == "":
-            pass
-        else:
-            obj.password = password
-            '''
-        obj.save()
-  
     return render(
         request,
         'dashboard/settings.html',
@@ -494,6 +449,11 @@ def settings(request):
             "password": request.user.password,
             "phoneNumber": request.user.phone_number,
             'is_prod': django_settings.IS_PROD,
+            "routes": {
+                    "account": reverse('application:account'),
+                    "finances": reverse('application:finances'),
+                },
+            "page_updated": json.dumps({'page_updated': page_updated}, cls=DjangoJSONEncoder),
             },
         )
 
@@ -903,11 +863,10 @@ def dashboardGetFoco(request):
 
         # Update the database
         Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.PENDING.name)
-        
-    # TODO callus should no longer be relevant, delete!
-    # apply for other dynamic income work etc.
-    if request.user.eligibility.AmiRange_max == Decimal('0.5') and request.user.eligibility.AmiRange_min == Decimal('0.3'):
-        text ="CallUs"
+    else:
+        # Update the current model so the dashboard displays correctly
+        request.user.eligibility.GRqualified = QualificationStatus.NOTQUALIFIED.name
+        Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.NOTQUALIFIED.name)
 
     if request.user.eligibility.ConnexionQualified == QualificationStatus.PENDING.name:
         ConnexionButtonText = "Applied"

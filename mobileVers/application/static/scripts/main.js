@@ -5,24 +5,24 @@
 *(at your option) any later version
 */
 
-$(document).on('submit','#account-form',function(e){
+$(document).on('submit', '#account-form', function (e) {
     e.preventDefault();
     $.ajax({
-        type : 'POST',
-        url:'/application/account',
+        type: 'POST',
+        url: '/application/account',
         data: $('#account-form').serialize(),
-        success:function(data){
-            if(data.result=="success")
-            {
+        success: function (data) {
+            if (data.result === "success") {
                 alert('account created!');
                 window.location = 'address';
-            }
-            else{
+            } else if ("redirect" in data) {
+                window.location.href = data.redirect;
+            } else {
                 alert(data.message)
             }
-            
+
         },
-        
+
         error: function (response) {
             console.log(response)
         },

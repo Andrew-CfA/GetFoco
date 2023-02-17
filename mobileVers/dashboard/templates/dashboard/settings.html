@@ -9,126 +9,138 @@ the Free Software Foundation, either version 3 of the License, or
 
 <!DOCTYPE html>
 <html lang="en">
-    <!--Get the various stylesheets I need like my fonts and CSS-->
-    <head>
-        <title>Settings</title>
-        <link href="{% static 'dashboard/styles_app.css' %}" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-         <!-- Global site tag (gtag.js) - Google Analytics -->
-         <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
-         <script>
-         window.dataLayer = window.dataLayer || [];
-         function gtag(){dataLayer.push(arguments);}
-         gtag('js', new Date());
- 
-         gtag('config', 'G-SL59NNQRH0');
-         </script>
-    </head>
+<!--Get the various stylesheets I need like my fonts and CSS-->
 
-    <body style="height:100vh;">
+<head>
+    <title>Settings</title>
+    <!-- Add Favicon-->
+    <link rel="shortcut icon" href="{% static 'application/images/favicon.ico' %}" type="image/x-icon">
+    <link href="{% static 'dashboard/styles_app.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-        {% if is_prod is False %}
-            <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
-        {% endif %}
-        
-        <div class=nav>
-            <a class="row" onClick="window.history.back();return false;">
-                <div class=fadeSmall><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px"></div>
-                <div class=fadeLarge><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
-                <p style = "font-weight: 700;">BACK</p>
-            </a>
-            
+        gtag('config', 'G-SL59NNQRH0');
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body class="h-100">
+
+    {% if is_prod is False %}
+    <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING
+        ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com"
+            target="_blank">https://getfoco.fcgov.com</a> instead</div>
+    {% endif %}
+
+    <div class=nav>
+        <a class="row" onClick="window.history.back();return false;">
+            <div class=fadeSmall><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back"
+                    style="width:max(4.5vw, 16px); margin-right: 5px"></div>
+            <div class=fadeLarge><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back"
+                    style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
+            <p style="font-weight: 700;">BACK</p>
+        </a>
+
+    </div>
+    <div class="container desktop">
+        {% block body %}
+
+        <h1>{{name}}</h1>
+        <h1 class="mb-3">{{lastName}}</h1>
+
+        <!-- Create a div that centers the content nested inside of it-->
+        <p class="pb-15">Manage your account information, including updating your account, address, and financial information.
+        </p>
+        <div class="w-100">
+            <a href="{{routes.account}}?update_mode=1" class="simple-and-cool-button">Account</a>
+            <a href="{{routes.finances}}?update_mode=1" class="simple-and-cool-button">Financials</a>
         </div>
-        <div class="marginauto content desktop" style="height:150vh;">
-                <!--Whatever I need in the other pages, I can enter it here-->
-            {% block body %}
 
-            <!--Login Page for GetyourConnexion-->
+        {% endblock %}
+    </div>
 
-            <h1>{{name}}</h1> 
-            <h1 style="margin-bottom: 3%;">{{lastName}}</h1> 
+    <style>
+        .h-100 {
+            height: 100vh;
+        }
 
-            <!--
-            <div class="input" style="margin-top: 10%;">
-                    
-                <input class="fill" type="text" name="email" placeholder={{email}} style="width: 100%;" autocomplete="off">
-                <label class="label">Email</label>    
-            </div>
+        .w-100 {
+            width: 100%;
+        }
 
-            <div class="input">
-                    
-                <input class="fill" type="password" name="password" style="width: 100%;" autocomplete="off">
-                <label class="label">Password</label>
-            </div>
-            -->
+        .mb-3 {
+            margin-bottom: 3%;
+        }
 
+        .pb-15 {
+            padding-bottom: 15px;
+        }
 
-            <!--Login fields-->
-            <form action="{% url 'dashboard:settings' %}" method="post" class="verticalContainer">
-                {% csrf_token %}
+        .container {
+            margin-bottom:5vw;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-                <div class="input">
-                    <!--Have styling that I like on the forms-->      
-                    <input class="fill" type="text" name="firstName" placeholder="{{name}}" style="width: 100%;" autocomplete="off">
-                    <label class="label">First Name</label>    
-                </div>
-                <div class="input">
-                    <!--Have styling that I like on the forms-->      
-                    <input class="fill" type="text" name="lastName" placeholder="{{lastName}}" style="width: 100%;" autocomplete="off">
-                    <label class="label">Last Name</label>    
-                </div>
+        .simple-and-cool-button {
+            border: 0.1em solid;
+            cursor: pointer;
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            font-size: 1.0em;
+            margin: 0.5em 0.0em 1.0em 0.0em;
+            padding: 1.9em;
+            padding-top: 0.5em;
+            padding-bottom: 0.5em;
+            text-align: center;
+            -moz-border-radius: 0.5em;
+            -webkit-border-radius: 0.5em;
+            border-radius: 0.5em;
+            -moz-transition: all 0.3s ease-in-out;
+            -o-transition: all 0.3s ease-in-out;
+            -webkit-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+            background-color: var(--lightblue);
+            color: white;
+            border-color: var(--lightblue);
+            border-radius: 3vh;
+        }
 
-                <div class="input">
-                    <!--Have styling that I like on the forms-->      
-                    <input class="fill" type="number" name="phoneNumber" placeholder="{{phoneNumber}}" style="width: 100%;" autocomplete="off">
-                    <label class="label">Phone Number</label>    
-                </div>
+        @media screen and (max-width: 767px) {
+            .container {
+                margin: 6vw;
+                height: 50vh;
+            }
+        }
+    </style>
 
-                <!--
-                <div class="input">
-                        
-                    <input class="fill" type="text" name="address" placeholder= "{{address}}" style="width: 100%;" autocomplete="off">
-                    <label class="label">Address</label>    
-                </div>
-                <div class="input">
-                        
-                    <input class="fill" type="text" name="address2"  placeholder= "{{address2}}" style="width: 100%;" autocomplete="off">
-                    <label class="label">Apartment #, Suite, Etc.</label>    
-                </div>
-                <div class="input">
-                            
-                    <input class="fill" type="text" name="zipCode"  placeholder= "{{zipCode}}" style="width: 100%;" autocomplete="off">
-                    <label class="label">Zip Code</label>    
-                </div>
+    <script>
+        $(document).ready(function() {
+            var page_updated = JSON.parse('{{ page_updated | escapejs }}');
 
-                <div class="input">
-                        
-                    <input class="fill" type="text" name="state"  placeholder={{state}} style="width: 100%;" autocomplete="off">
-                    <label class="label">State</label>    
-                </div>
-                -->
+            if (page_updated['page_updated']) {            
+                Swal.fire({
+                    title: 'Success!',
+                    text: `Your ${page_updated['page_updated']} information was updated!`,
+                    icon: 'success',
+                    confirmButtonColor: '#13467D',
+                });
 
+                $("a.row").attr("onclick", "window.location='/dashboard/GetFOCO'");
+                $("a.row > p").text("Dashboard");
+            }
+        });
+    </script>
 
-                <div class="input">
-                    <!--Have styling that I like on the forms-->      
-                    <label class="label">File Upload</label>    
-                    <br>
-                    <p style="margin-left: 1%;">Coming Soon</p>
-                </div>
-
-                <button type="submit" style="width: 100%; margin-top: 20%;"><strong>Done</strong></button>
-            </form>
-
-          
-
-  
-            {% endblock %}
-        </div>
-        
-    </body>
+</body>
 </html>
-
-
