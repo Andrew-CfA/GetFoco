@@ -267,5 +267,11 @@ the Free Software Foundation, either version 3 of the License, or
             })
         }
     });
+
+    // Get the element with the id="dashboardBackBtn"
+    var dashboardBackBtn = document.getElementById("dashboardBackBtn");
+    // Update the back button's onclick attribute to go back to the
+    // application programs page
+    dashboardBackBtn.setAttribute("onclick", "window.location.href='/application/programs'");
 </script>
 {% endblock %}
