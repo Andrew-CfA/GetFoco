@@ -1,4 +1,4 @@
-django==3.1.7
+django==4.1.7
 sendgrid==6.6.0
 django-formwizard~=1.0
 django-formtools~=2.2
@@ -13,7 +13,3 @@ psycopg2-binary
 django-crispy-forms
 python-magic
 azure-storage-blob==2.1.0
-#pytesseract
-#tesseract need to system install, not pip install... i think
-#poppler need to system install
-#pdf2image
