@@ -12,10 +12,12 @@ the Free Software Foundation, either version 3 of the License, or
 {% block body %}
 
 <!--Back to dashboard button-->
-<a class="row" onClick="window.history.back();return false;" style="text-decoration: none;justify-content: start;align-items: center;">
-    <img src="{% static 'dashboard/images/Path 1083.svg' %}" alt="back" style="height: 3vw; margin-right: 5px;color:black">
-    <p style = "color:var(--lightblue);margin-left: 3%;">Back to Dashboard</p>
-</a>
+<div class="fadeLarge">
+    <a class="row" onClick="window.history.back();return false;" style="text-decoration: none;justify-content: start;align-items: center;">
+        <img src="{% static 'dashboard/images/Path 1083.svg' %}" alt="back" style="height: 3vw; margin-right: 5px;color:black">
+        <p style = "color:var(--lightblue);margin-left: 3%;">Back to Dashboard</p>
+    </a>
+</div>
 
 <!-- example of qualified program-->
 <div class="fadeLarge">
