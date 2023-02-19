@@ -1285,19 +1285,6 @@ def mayQualify(request):
             },
         )
 
-# TODO: The 'CallUs' page should no longer be referenced elsewhere - ensure this is true and remove this function
-# (also remove from urls.py)
-def callUs(request):
-    return render(
-        request,
-        'application/callUs.html',
-        {
-            'step':3,
-            'formPageNum':formPageNum,
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
-
 
 def getReady(request):
      return render(

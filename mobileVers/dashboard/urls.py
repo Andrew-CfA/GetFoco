@@ -28,7 +28,6 @@ urlpatterns = [
     path('GetFOCO', views.dashboardGetFoco, name='dashboard'),
     path('qualifiedPrograms', views.qualifiedPrograms, name='qualifiedPrograms'),
     path('ProgramsList', views.ProgramsList, name='ProgramsList'),
-    path('BagIt', views.BagIt, name='BagIt'),
     path('FAQ', views.FAQ, name='FAQ'),
     path('settings', views.settings, name='settings'),
 

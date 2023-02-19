@@ -33,8 +33,7 @@ urlpatterns = [
     path('inServiceArea', views.inServiceArea, name='inServiceArea'),
     path('GRQuickApply', views.GRQuickApply, name='GRQuickApply'),
     path('takeUSPSaddress', views.takeUSPSaddress, name='takeUSPSaddress'),
-    # Grocery Rebate Dependent Pages
-    path('callUs', views.callUs, name='callUs'),
+
     # Recreation Dependent Pages
     path('RecreationQuickApply', views.RecreationQuickApply, name='RecreationQuickApply'),
     path('ConnexionQuickApply', views.ConnexionQuickApply, name='ConnexionQuickApply'),

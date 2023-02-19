@@ -565,12 +565,7 @@ def notifyRemaining(request):
         )
 
 
-def qualifiedPrograms(request):
-    # apply for other dynamic income work etc.
-    # TODO: The 'CallUs' text should no longer be referenced elsewhere - ensure this is true and remove this statement
-    if request.user.eligibility.AmiRange_max == Decimal('0.5') and request.user.eligibility.AmiRange_min == Decimal('0.3'):
-        text ="CallUs"
-        
+def qualifiedPrograms(request):        
     #Logic for AMI and IQ checks to show or hide quick apply programs
     if (request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='grocery').values('percentAmi').first()['percentAmi']):
         toggleGrocery = ""
@@ -1049,7 +1044,6 @@ def dashboardGetFoco(request):
             "FAQ_color": "white",
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
-            "Bag_It_color": "white",
     
             "GRButtonText": GRButtonText,
             "GRButtonColor": GRButtonColor,
@@ -1115,27 +1109,7 @@ def ProgramsList(request):
             "FAQ_color": "white",
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
-            "Bag_It_color": "white",
             'Title': "Programs List",
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
-
-def BagIt(request):
-    return render(
-        request,
-        'dashboard/BagIt.html',
-        {
-            "page_title": "Bag It",
-            "dashboard_color": "white",
-            "program_list_color": "white",
-            "FAQ_color": "white",
-            "Settings_color": "white",
-            "Privacy_Policy_color": "white",
-            "Bag_It_color": "var(--yellow)",
-            'Title': "Bag It",
-            'lastName': request.user.last_name,
-            'date': datetime.datetime.now().date(),
             'is_prod': django_settings.IS_PROD,
             },
         )
@@ -1152,7 +1126,6 @@ def FAQ(request):
             "FAQ_color": "var(--yellow)",
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
-            "Bag_It_color": "white",
             'Title': "FAQ",
             'is_prod': django_settings.IS_PROD,
             },
