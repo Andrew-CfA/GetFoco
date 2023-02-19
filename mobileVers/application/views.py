@@ -1068,39 +1068,6 @@ def attestation(request):
 
 
 
-def programs(request):
-    if request.method == "POST": 
-        try:
-            existing = request.user.programs
-            form = programForm(request.POST,instance = existing)
-        except AttributeError or ObjectDoesNotExist:
-            form = programForm(request.POST or None)
-        if form.is_valid():
-            print(form.data)
-            print(request.session)
-            try:
-                instance = form.save(commit=False)
-                instance.user_id = request.user
-                instance.save()    
-                return redirect(reverse("dashboard:files"))
-            except IntegrityError:
-                print("User already has information filled out for this section")
-            #enter upload code here for client to upload images
-            return redirect(reverse("application:available"))
-    else:
-        form = programForm()
-
-    return render(
-        request,
-        'application/programs.html',
-        {
-            'form':form,
-            'step':4,
-            'formPageNum':formPageNum,
-            'Title': "Programs",
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
 
 
 
