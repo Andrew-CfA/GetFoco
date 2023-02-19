@@ -25,6 +25,8 @@ from django.urls import path, include
 from application import views
 
 from django.contrib.auth import views as auth_views #import this
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,3 +43,6 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="dashboard/PasswordReset/passwordResetConfirm.html"), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='dashboard/PasswordReset/passwordResetComplete.html'), name='password_reset_complete'),      
 ]
+
+# Add static files route
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

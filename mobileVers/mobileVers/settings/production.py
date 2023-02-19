@@ -171,12 +171,10 @@ USE_TZ = True
 PHONENUMBER_DEFAULT_REGION = 'US'
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+STATICFILES_DIRS = [
+    f'{BASE_DIR.parent}/staticfiles',
+]
 STATIC_URL = '/static/'
-# CSS files
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 #added media path for file uploads
