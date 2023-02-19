@@ -17,8 +17,6 @@ urlpatterns = [
     path('', views.feedback, name='index'), #path('', views.index, name='index'), #TODO need to rename this to feedback instead of index... because views.feedback contains the feedback code!
     # Pages for forms
     path('files', views.files, name='files'),
-    path('filesContinued', views.filesContinued, name='filesContinued'),
-    path('addressVerification', views.addressVerification, name='addressVerification'),
     path('login', views.login_user, name='login'),
     path('broadcast', views.broadcast, name='broadcast'),
     path('feedbackReceived', views.feedbackReceived, name="feedbackReceived"),
