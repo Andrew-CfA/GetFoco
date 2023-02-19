@@ -692,7 +692,6 @@ def qualifiedPrograms(request):
             "Title": "Qualified Programs",
             "dashboard_color": "white",
             "program_list_color": "var(--yellow)",
-            "FAQ_color": "white",
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
     
@@ -1046,7 +1045,6 @@ def dashboardGetFoco(request):
             "Title": "Get FoCo Dashboard",
             "dashboard_color": "var(--yellow)",
             "program_list_color": "white",
-            "FAQ_color": "white",
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
             "Bag_It_color": "white",
@@ -1112,7 +1110,6 @@ def ProgramsList(request):
             "page_title": "Programs List",
             "dashboard_color": "white",
             "program_list_color": "var(--yellow)",
-            "FAQ_color": "white",
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
             "Bag_It_color": "white",
@@ -1136,24 +1133,6 @@ def BagIt(request):
             'Title': "Bag It",
             'lastName': request.user.last_name,
             'date': datetime.datetime.now().date(),
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
-
-
-def FAQ(request):
-    return render(
-        request,
-        'dashboard/FAQ.html',
-        {
-            "page_title": "FAQ",
-            "dashboard_color": "white",
-            "program_list_color": "white",
-            "FAQ_color": "var(--yellow)",
-            "Settings_color": "white",
-            "Privacy_Policy_color": "white",
-            "Bag_It_color": "white",
-            'Title': "FAQ",
             'is_prod': django_settings.IS_PROD,
             },
         )

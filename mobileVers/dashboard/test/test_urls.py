@@ -72,9 +72,4 @@ class TestUrls(SimpleTestCase):
         url = reverse("dashboard:ProgramsList")
         print("Test - ProgramsList url")
         self.assertEquals(resolve(url).func, ProgramsList)
-
-    def test_FAQ_resolved(self):
-        url = reverse("dashboard:FAQ")
-        print("Test - FAQ url")
-        self.assertEquals(resolve(url).func, FAQ)
         
