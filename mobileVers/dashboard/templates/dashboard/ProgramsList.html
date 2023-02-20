@@ -17,167 +17,44 @@ the Free Software Foundation, either version 3 of the License, or
     <p style = "color:var(--lightblue);margin-left: 3%;">Back to Dashboard</p>
 </a>
 
-<!-- example of qualified program-->
-<div class="fadeLarge">
-    <div class="modulequickApply" id="connexionRebate">
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 550; margin: 0">Reduced-Rate Connexion</p>
-                <p style = "margin-top:3px;"> Connexion Assistance </p>
-                <p style = "margin-top:3px;"> As Connexion comes online in neighborhoods across our community, the City of Fort Collins is committed to fast, affordable internet. Digital Access & Equity is an income-qualified rate of $19.95 per month for 1 gig-speed of internet plus wireless</p>
+<div class="iq_program_container">
+    {% for program in iq_programs %}
+        <div class="modulequickApply">
+            <div class = "row" style="margin:0; width:100%">
+                <div style="margin:0">
+                    <p style ="font-weight: 550; margin: 0">{{ program.title }}</p>
+                    <p style = "margin-top:3px;"> {{ program.subtitle }} </p>
+                    <p style = "margin-top:3px;">{{ program.description }}</p>
+
+                </div>
+            </div>
+            <div class = "row" style="margin:0;width:100%">
+                <a class="row" href="{{ program.learn_more_link }}" target="_blank" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
+                    <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
+                    <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
+                </a>
+                {% if program.supplemental_info %}
+                    <p style = "color:#999999;margin-top:0;text-align: right;" >{{ program.supplemental_info }}</p>
+                {% endif %}
             </div>
         </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/connexion/digital-equity" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
-            </a>
-            <p style = "color:#999999;margin-top:0;text-align: right;" >Applications accepted all year</p>
-        </div>
-    </div>
-
-    <div class="modulequickApply" id="groceryRebate">
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 550; margin: 0">Grocery Tax Rebate </p>
-                <p style = "margin-top:3px;"> Food Assistance </p>
-                <p style = "margin-top:3px;"> The Grocery Rebate Tax is an annual cash payment to low-income individuals and families living in the City of Fort Collins and its Growth Management Area. It provides your family with direct assistance in exchange for the taxes you spend on food.  </p>
-            </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/rebate/" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
-            </a>
-            <p style = "color:#999999;margin-top:0;text-align: right;" >Applications accepted all year</p>
-        </div>
-    </div>
-
-    <div class="modulequickApply" id="SPINRebate">
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 550; margin: 0">SPIN </p>
-                <p style = "margin-top:3px;"> 1 Year of Free SPIN E-bikes & Scooters </p>
-                <p style = "margin-top:3px;"> Receive five (5) free 30-minute rides per day to get to work, go to a job interview, run an errand, or get some fresh air.
-                    75 One-Year Free Spin Passes! Quantities are Limited, so Apply Today.
-                    You must be at least 18 years of age and a resident of Fort Collins to receive the pass. Passes available through the generosity of CDOT.</p>
-            </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/fcmoves/spin" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
-            </a>
-            <p style = "color:#999999;margin-top:0;text-align: right;" >Quantities are limited so apply today!</p>
-        </div>
-    </div>
-
-    <!-- 
-        for loop put up here to be used for when we have more programs
-        can change Grocery Tax Rebate, Food Assistance Line, 4 days left apply from the database (CMS) side
-    -->
-
-
-    <div class="modulequickApply" id="recreationRebate">
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 550; margin: 0">Recreation Reduced Fee </p>
-                <p style = "margin-top:3px;"> Recreation Assistance </p>
-                <p style = "margin-top:3px;"> The Recreation Reduced Fee program provides income-eligible families and residents reduced cost access to recreation programs, classes, and facilities across the community. </p>
-            </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/recreation/reducedfeeprogram" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
-            </a>
-            <p style = "color:#999999;margin-top:0;text-align: right;" >Applications accepted all year</p>
-        </div>
-    </div>
+    {% endfor %}
 </div>
-
-
-<div class="fadeSmall" style="padding-left: 300px;">
-    <div class="modulequickApply" id="connexionRebateDesktop">
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 550; margin: 0">Reduced-Rate Connexion</p>
-                <p style = "margin-top:3px;"> Connexion Assistance </p>
-                <p style = "margin-top:3px;"> As Connexion comes online in neighborhoods across our community, the City of Fort Collins is committed to fast, affordable internet. Digital Access & Equity is an income-qualified rate of $19.95 per month for 1 gig-speed of internet plus wireless </p>
-            </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/connexion/digital-equity" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
-            </a>
-            <p style = "color:#999999;margin-top:0;text-align: right;" >Applications accepted all year</p>
-        </div>
-    </div>
-
-    <div class="modulequickApply" id="groceryRebateDesktop">
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 550; margin: 0">Grocery Tax Rebate </p>
-                <p style = "margin-top:3px;"> Food Assistance </p>
-                <p style = "margin-top:3px;"> The Grocery Rebate Tax is an annual cash payment to low-income individuals and families living in the City of Fort Collins and its Growth Management Area. It provides your family with direct assistance in exchange for the taxes you spend on food.  </p>
-            </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/rebate/" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
-            </a>
-            <p style = "color:#999999;margin-top:0;text-align: right;" >Applications accepted all year</p>
-        </div>
-    </div>
-
-    <!-- 
-        for loop put up here to be used for when we have more programs
-        can change Grocery Tax Rebate, Food Assistance Line, 4 days left apply from the database (CMS) side
-    -->
-
-
-    <div class="modulequickApply" id="recreationRebateDesktop">
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 550; margin: 0">Recreation Reduced Fee </p>
-                <p style = "margin-top:3px;"> Recreation Assistance </p>
-                <p style = "margin-top:3px;"> The Recreation Reduced Fee program provides income-eligible families and residents reduced cost access to recreation programs, classes, and facilities across the community. </p>
-            </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/recreation/reducedfeeprogram" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
-            </a>
-            <p style = "color:#999999;margin-top:0;text-align: right;" >Applications accepted all year</p>
-        </div>
-    </div>
-
-    <div class="modulequickApply" id="SPINRebateDesktop">
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 550; margin: 0">SPIN </p>
-                <p style = "margin-top:3px;"> 1 Year of Free SPIN E-bikes & Scooters </p>
-                <p style = "margin-top:3px;"> Receive five (5) free 30-minute rides per day to get to work, go to a job interview, run an errand, or get some fresh air.
-                    75 One-Year Free Spin Passes! Quantities are Limited, so Apply Today.
-                    You must be at least 18 years of age and a resident of Fort Collins to receive the pass. Passes available through the generosity of CDOT.</p>
-            </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/fcmoves/spin" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
-            </a>
-            <p style = "color:#999999;margin-top:0;text-align: right;" >Quantities are limited so apply today!</p>
-        </div>
-    </div>
-</div>
-
-
 
 <div class="extraspace"></div>
 
+<style>
+    @media screen and (min-width : 768px) {
+        .iq_program_container {
+            padding-left: 300px;
+        }
+    }
+    
+    @media screen and (max-width : 767px) {
+        .iq_program_container {
+            padding-left: 0px;
+        }
+    }
+</style>
 
 {% endblock %}

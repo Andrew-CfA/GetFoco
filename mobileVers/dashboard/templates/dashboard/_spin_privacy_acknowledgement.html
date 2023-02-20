@@ -17,36 +17,13 @@
 </style>
 
 <script>
-    // Get the modal
-    var modalSpin = document.getElementById("modalSpin");
+    $(document).ready(function () {
+        $("#spinPrivacyAcknowledgement").click(function () {
+            $("#modalSpin").css("display", "block");
+        });
 
-
-    // Get the <span> element that closes the modal
-    var spinSpan = document.getElementById("closeSpin");
-
-
-    // When the user clicks on <span> (x), close the modal
-    spinSpan.onclick = function () {
-        modalSpin.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modalSpin) {
-            modalSpin.style.display = "none";
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        try {
-            document.getElementById("spinPrivacyAcknowledgement").addEventListener("click", function() {
-                document.getElementById("modalSpin").style.display = "block";
-            });
-            document.getElementById("spinPrivacyAcknowledgementSm").addEventListener("click", function() {
-                document.getElementById("modalSpin").style.display = "block";
-            });
-        } catch (error) {
-            console.error("Error adding event listener to spinPrivacyAcknowledgement: " + error)
-        }
+        $("#closeSpin").click(function () {
+            $("#modalSpin").css("display", "none");
+        });
     });
 </script>

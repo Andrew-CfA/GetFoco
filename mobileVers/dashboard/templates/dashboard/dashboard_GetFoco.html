@@ -100,84 +100,39 @@ the Free Software Foundation, either version 3 of the License, or
 <!-- content for desktop!-->
 <div class="fadeSmall">
   <div class="container">
+    <!-- START: QUALIFIED IQ PROGRAMS -->
     <div class="item thin">
-      <a style="color:var(--white); font-weight: 800; text-decoration: none;" href="">
+      <a style="color:var(--white); font-weight: 800; text-decoration: none;" href="{% url 'dashboard:qualifiedPrograms' %}">
         <!--CSV HERE-->
         <hprogram style = "color: #4CAD00;margin:0"> {{QProgramNumber}} </hprogram>
       </a>
       <p style = "font-weight: 400; padding-left: 15px;">Programs You May Qualify For </p>
       <button class="button button2" id="toggle-button1"><img src="{% static 'dashboard/images/downArrow.svg' %}" style="position: absolute; bottom: 10px;right: 10px;"> </button>
     </div>
-    
     <div class="item collapsible qualifyfor">
-      <div style="display:{{CONDisplay}}">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 400; margin: 0">Reduced-Rate Connexion </p>
-            </div>
-            <a href="{% url 'application:ConnexionQuickApply' %}" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ConnexionButtonColor}}; color: {{ConnexionButtonTextColor}}; ">{{ ConnexionButtonText }}</div></a> <!--font-size: 13px; height:20px;-->
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-           <a class="row" href="https://www.fcgov.com/connexion/digital-equity" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-            </a>
-        </div>
-      </div>
-
-      <div style="display:{{GRDisplay}}">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 400; margin: 0">Grocery Tax Rebate </p>
-            </div>
-            <a href="{% url 'application:GRQuickApply' %}" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{GRButtonColor}}; color: {{GRButtonTextColor}};">{{ GRButtonText }}</div></a> <!-- font-size: 13px; height:20px;-->
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/rebate/" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-            </a>
-        </div>
-      </div>
-
-      <div style="display:{{RECDisplay}};">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-          <div style="margin:0">
-              <p style ="font-weight: 400; margin: 0">Recreation Reduced Fee </p>
+      {% for program in iq_programs %}
+        {% if program.status_for_user != 'PENDING' and program.status_for_user != 'ACTIVE' and program.status_for_user != 'NOT QUALIFIED'  %}
+        <div style="display:{{ program.visibility }}">
+          <div class="divider"></div>
+          <div class = "row" style="margin:0; width:100%">
+              <div style="margin:0">
+                  <p style ="font-weight: 400; margin: 0">{{ program.title }}</p>
+              </div>
+              <a href="{{ program.quick_apply_link }}" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">{{  program.button.text }}</div></a>
           </div>
-          <a href="{% url 'dashboard:addressVerification' %}" style="text-decoration: none;"> <div class="quickapply linkQA" style="background-color: {{RECButtonColor}}; color: {{RECButtonTextColor}};">{{ RECButtonText }}</div></a> <!--font-size: 13px; height:20px;-->
+          <div class = "row" style="margin:0;width:100%">
+            <a class="row" href="{{ program.learn_more_link }}" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
+                  <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
+                  <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
+              </a>
+          </div>
         </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/recreation/reducedfeeprogram" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-            </a>
-        </div>
-      </div>
-
-      <div style="display:{{SPINDisplay}}">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 400; margin: 0">SPIN </p>
-            </div>
-            <a href="#" onclick="return false;" id="spinPrivacyAcknowledgement" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{SPINButtonColor}}; color: {{SPINButtonTextColor}}; ">{{ SPINButtonText }}</div></a> <!--font-size: 13px; height:20px;-->
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-           <a class="row" href="https://www.fcgov.com/fcmoves/spin" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-            </a>
-        </div>
-      </div>
-
+        {% endif %}
+      {% endfor %}
     </div>
+    <!-- END: QUALIFIED IQ PROGRAMS -->
 
-    
-
+    <!-- START: PENDING IQ PROGRAMS -->
     <div class="item thin" >
       <!--CSV HERE-->
       <hprogram style = "color: var(--darkblue)"> {{PendingNumber}} </hprogram>
@@ -185,56 +140,29 @@ the Free Software Foundation, either version 3 of the License, or
       <button class="button button2" id="toggle-button"><img src="{% static 'dashboard/images/downArrow.svg' %}" style="position: absolute; bottom: 10px;right: 10px;"> </button>
     </div>
     <div class="item collapsible pending">
-
-
-      <div style="display:{{CONDisplayPending}}">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-          <div style="margin:0">
-              <p style ="font-weight: 400; margin: 0">Reduced-Rate Connexion </p>
+      {% for program in iq_programs %}
+        {% if program.status_for_user == 'PENDING' %}
+        <div style="display:{{ program.visibility }}">
+          <div class="divider"></div>
+          <div class = "row" style="margin:0; width:100%">
+              <div style="margin:0">
+                  <p style ="font-weight: 400; margin: 0">{{ program.title }}</p>
+              </div>
+              <a href="{{ program.quick_apply_link }}" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">{{  program.button.text }}</div></a>
+          </div>
+          <div class = "row" style="margin:0;width:100%">
+            <a class="row" href="{{ program.learn_more_link }}" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
+                  <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
+                  <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
+              </a>
           </div>
         </div>
-        <div class = "row" style="margin:0;width:100%">
-          <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> {{RECPendingDate}} </p>
-        </div>
-      </div>
-      <div style="display: {{GRDisplayPending}}">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 400; margin: 0">Grocery Tax Rebate </p>
-            </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-          <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> {{GRPendingDate}} </p>
-        </div>
-      </div>
-      <div style="display:{{RECDisplayPending}};">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-          <div style="margin:0">
-              <p style ="font-weight: 400; margin: 0">Recreation Reduced Fee</p>
-          </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-          <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> {{RECPendingDate}} </p>
-        </div>
-      </div>
-
-      <div style="display:{{SPINDisplayPending}};">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-          <div style="margin:0">
-              <p style ="font-weight: 400; margin: 0">SPIN Program </p>
-          </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-          <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> {{SPINPendingDate}} </p>
-        </div>
-      </div>
-
+        {% endif %}
+      {% endfor %}
     </div>
+    <!-- END: PENDING IQ PROGRAMS -->
 
+    <!-- START: ACTIVE IQ PROGRAMS -->
     <div class="item thin" >
         <!--CSV HERE-->
         <hprogram style = "color: var(--darkblue)"> {{ActiveNumber}} </hprogram>
@@ -242,51 +170,29 @@ the Free Software Foundation, either version 3 of the License, or
         <button class="button button2" id="toggle-button2"><img src="{% static 'dashboard/images/downArrow.svg' %}" style="position: absolute; bottom: 10px;right: 10px;"> </button>
     </div>
     <div class="item collapsible active">
-
       <div id="myDIV">
         <p style="font-size: 15px;">Once your information is reviewed by the Get FoCo team, you will find the programs you are approved for here! Checkback as it gets closer to your application's estimated date and be sure to check your email for communication from us.</p>
       </div>
-      <div style="display:{{CONDisplayActive}};">
-        <div class = "row" style="margin:0; width:100%">
-          <div style="margin:0">
-              <p style ="font-weight: 400; margin: 0">Reduced-Rate Connexion  </p>
+      {% for program in iq_programs %}
+        {% if program.status_for_user == 'ACTIVE' %}
+        <div style="display:{{ program.visibility }}">
+          <div class="divider"></div>
+          <div class = "row" style="margin:0; width:100%">
+              <div style="margin:0">
+                  <p style ="font-weight: 400; margin: 0">{{ program.title }}</p>
+              </div>
+              <a href="{{ program.quick_apply_link }}" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">{{  program.button.text }}</div></a>
+          </div>
+          <div class = "row" style="margin:0;width:100%">
+            <a class="row" href="{{ program.learn_more_link }}" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
+                  <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
+                  <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
+              </a>
           </div>
         </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/recreation/reducedfeeprogram" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-            </a>
-        </div>
-      </div>
-      <div style="display:{{GRDisplayActive}}">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-            <div style="margin:0">
-                <p style ="font-weight: 400; margin: 0">Grocery Tax Rebate </p>
-            </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/rebate/" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-            </a>
-        </div>
-      </div>
-      <div style="display:{{RECDisplayActive}};">
-        <div class="divider"></div>
-        <div class = "row" style="margin:0; width:100%">
-          <div style="margin:0">
-              <p style ="font-weight: 400; margin: 0">Recreation Reduced Fee </p>
-          </div>
-        </div>
-        <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="https://www.fcgov.com/recreation/reducedfeeprogram" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-            </a>
-        </div>
-      </div>
+        {% endif %}
+      {% endfor %}
+      <!-- END: ACTIVE IQ PROGRAMS -->
     </div>
 
 <!-- Start Calendar

@@ -10,13 +10,10 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from application.models import iqProgramQualifications
 from .forms import FileForm, FeedbackForm, TaxForm, addressVerificationForm, AddressForm
-from decimal import Decimal
 from django.conf import settings as django_settings  
-from .models import User, Form
-from application.models import Eligibility, iqProgramQualifications
 
-from .backend import authenticate, files_to_string, what_page, blobStorageUpload
-from django.contrib.auth import get_user_model, login, authenticate, logout
+from .backend import authenticate, files_to_string, get_iq_program, set_users_gr_qualification_status, what_page, blobStorageUpload, build_qualification_button, set_program_visibility
+from django.contrib.auth import get_user_model, login, authenticate
 from application.backend import broadcast_email, broadcast_sms, broadcast_email_pw_reset
 
 from django.db import IntegrityError
@@ -26,18 +23,16 @@ import logging
 
 
 from django.shortcuts import render, redirect
-from django.core.mail import send_mail, BadHeaderError
+from django.core.mail import BadHeaderError
 from django.http import HttpResponse
 from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
-import magic, datetime, re
-from django.core.files.storage import FileSystemStorage
+import magic, datetime
 
 
 #Step 4 of Application Process
@@ -566,124 +561,22 @@ def notifyRemaining(request):
 
 
 def qualifiedPrograms(request):
-    # apply for other dynamic income work etc.
-    # TODO: The 'CallUs' text should no longer be referenced elsewhere - ensure this is true and remove this statement
-    if request.user.eligibility.AmiRange_max == Decimal('0.5') and request.user.eligibility.AmiRange_min == Decimal('0.3'):
-        text ="CallUs"
-        
-    #Logic for AMI and IQ checks to show or hide quick apply programs
-    if (request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='grocery').values('percentAmi').first()['percentAmi']):
-        toggleGrocery = ""
-    else:
-        toggleGrocery = "none"
-
-    if (request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='connexion').values('percentAmi').first()['percentAmi']):
-        toggleConnexion = ""
-    else:
-        toggleConnexion = "none"
-    if ( request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='spin').values('percentAmi').first()['percentAmi']):
-        toggleSPIN = ""
-    else:
-        toggleSPIN = "none"
-    if ( request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='recreation').values('percentAmi').first()['percentAmi']):
-        toggleRecreation = ""
-    else:
-        toggleRecreation = "none"
-
-    #auto apply clients with 30% AMI and below only if snap card / psd is uploaded and below 30% AMI
-    if ((request.user.eligibility.AmiRange_max == Decimal('0.3') and request.user.eligibility.AmiRange_min == Decimal('0.0'))):
-        request.user.eligibility.GRqualified = QualificationStatus.PENDING.name
-        
-    if request.user.eligibility.ConnexionQualified == QualificationStatus.PENDING.name:
-        ConnexionButtonText = "Applied"
-        ConnexionButtonColor = "green"
-        ConnexionButtonTextColor = "White"
-    elif request.user.eligibility.ConnexionQualified == QualificationStatus.ACTIVE.name:
-        ConnexionButtonText = "Enrolled!"
-        ConnexionButtonColor = "blue"
-        ConnexionButtonTextColor = "White"
-    elif request.user.eligibility.ConnexionQualified == QualificationStatus.NOTQUALIFIED.name:
-        ConnexionButtonText = "Can't Enroll"
-        ConnexionButtonColor = "red"
-        ConnexionButtonTextColor = "black"
-    else:
-        ConnexionButtonText = "Quick Apply +"
-        ConnexionButtonColor = ""
-        ConnexionButtonTextColor = ""
-
-    if request.user.eligibility.GRqualified == QualificationStatus.PENDING.name:
-        GRButtonText = "Applied"
-        GRButtonColor = "green"
-        GRButtonTextColor = "White"
-    elif request.user.eligibility.GRqualified == QualificationStatus.ACTIVE.name:
-        GRButtonText = "Enrolled!"
-        GRButtonColor = "blue"
-        GRButtonTextColor = "White"
-    elif request.user.eligibility.GRqualified == QualificationStatus.NOTQUALIFIED.name:
-        GRButtonText = "Can't Enroll"
-        GRButtonColor = "red"
-        GRButtonTextColor = "black"
-    else:
-        GRButtonText = "Quick Apply +"
-        GRButtonColor = ""
-        GRButtonTextColor = ""
-
-    if request.user.eligibility.RecreationQualified == QualificationStatus.PENDING.name:
-        RECButtonText = "Applied"
-        RECButtonColor = "green"
-        RECButtonTextColor = "White"
-    elif request.user.eligibility.RecreationQualified == QualificationStatus.ACTIVE.name:
-        RECButtonText = "Enrolled!" 
-        RECButtonColor = "blue"
-        RECButtonTextColor = "White"
-    elif request.user.eligibility.RecreationQualified == QualificationStatus.NOTQUALIFIED.name:
-        RECButtonText = "Can't Enroll"
-        RECButtonColor = "red"
-        RECButtonTextColor = "black"
-    else:
-        RECButtonText = "Quick Apply +"
-        RECButtonColor = ""
-        RECButtonTextColor = ""
-
-    if request.user.eligibility.RecreationQualified == QualificationStatus.PENDING.name:
-        RECButtonText = "Applied"
-        RECButtonColor = "green"
-        RECButtonTextColor = "White"
-    elif request.user.eligibility.RecreationQualified == QualificationStatus.ACTIVE.name:
-        RECButtonText = "Enrolled!" 
-        RECButtonColor = "blue"
-        RECButtonTextColor = "White"
-    elif request.user.eligibility.RecreationQualified == QualificationStatus.NOTQUALIFIED.name:
-        RECButtonText = "Can't Enroll"
-        RECButtonColor = "red"
-        RECButtonTextColor = "black"
-    else:
-        RECButtonText = "Quick Apply +"
-        RECButtonColor = ""
-        RECButtonTextColor = ""
-
-
-    if request.user.eligibility.SPINQualified == QualificationStatus.PENDING.name:
-        SPINButtonText = "Applied"
-        SPINButtonColor = "green"
-        SPINButtonTextColor = "White"
-    elif request.user.eligibility.SPINQualified == QualificationStatus.ACTIVE.name:
-        SPINButtonText = "Enrolled!" 
-        SPINButtonColor = "blue"
-        SPINButtonTextColor = "White"
-    elif request.user.eligibility.SPINQualified == QualificationStatus.NOTQUALIFIED.name:
-        SPINButtonText = "Can't Enroll"
-        SPINButtonColor = "red"
-        SPINButtonTextColor = "black"
-    else:
-        if (Eligibility.objects.filter(SPINQualified='PENDING').count()) + (Eligibility.objects.filter(SPINQualified='ACTIVE').count()) > 75:
-            SPINButtonText = "Waitlist"
-            SPINButtonColor = ""
-            SPINButtonTextColor = ""
-        else:
-            SPINButtonText = "Quick Apply +"
-            SPINButtonColor = ""
-            SPINButtonTextColor = ""
+    # Query the database for all programs
+    programs = iqProgramQualifications.objects.all()
+    for program in programs:
+        iq_program = get_iq_program(request.user.eligibility, program.name)
+        program.visibility = set_program_visibility(request.user.eligibility, program.name)
+        program.button = build_qualification_button(iq_program['status_for_user'])
+        program.quick_apply_link = iq_program['quick_apply_link']
+        program.learn_more_link = iq_program['learn_more_link']
+        program.title = iq_program['title']
+        program.subtitle = iq_program['subtitle']
+        program.supplemental_info = iq_program['supplemental_info']
+    
+    # NOTE: This same function is called in the dashboardGetFoco view function. To me this logic should be executed a user
+    # has after provides their financial information. This would happen after they initially fill out their application, 
+    # after they updated it from their settings, or when they go through the renewal process.
+    set_users_gr_qualification_status(request)
 
     return render(
         request,
@@ -695,31 +588,10 @@ def qualifiedPrograms(request):
             "FAQ_color": "white",
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
-    
-            "ConnexionButtonText": ConnexionButtonText,
-            "ConnexionButtonColor": ConnexionButtonColor,
-            "ConnexionButtonTextColor": ConnexionButtonTextColor,
-    
-            "GRButtonText": GRButtonText,
-            "GRButtonColor": GRButtonColor,
-            "GRButtonTextColor": GRButtonTextColor,
-    
-            "RECButtonText" : RECButtonText,
-            "RECButtonColor" : RECButtonColor,
-            "RECButtonTextColor" : RECButtonTextColor,
-
-            "SPINButtonText" : SPINButtonText,
-            "SPINButtonColor" : SPINButtonColor,
-            "SPINButtonTextColor" : SPINButtonTextColor,
-            
-            "toggleGrocery": toggleGrocery,
-            "toggleRecreation": toggleRecreation,
-            "toggleSPIN": toggleSPIN,
-            "toggleConnexion": toggleConnexion,
-         
+            "iq_programs": programs,
             'is_prod': django_settings.IS_PROD,
-            },
-        )
+        },
+    )
 
  
 def feedback(request):
@@ -828,205 +700,43 @@ def dashboardGetFoco(request):
     QProgramNumber = 0
     ActiveNumber = 0
     PendingNumber = 0
-    groceryStatus =""
-    recreationStatus =""
-    connexionStatus =""
-    #AMI and requirements logic for Grocery Rebate below
-    if (request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='grocery').values('percentAmi').first()['percentAmi']):
-        QProgramNumber = QProgramNumber + 1
-        GRDisplay = ""
-    else:
-        GRDisplay = "none"
-    #AMI and requirements logic for Connexion below
-    if (request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name)  and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='connexion').values('percentAmi').first()['percentAmi']):
-        QProgramNumber = QProgramNumber + 1
-        CONDisplay = ""
-    else:
-        CONDisplay = "none"
-    #AMI and requirements logic for Recreation Rebate below
-    if ( request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='recreation').values('percentAmi').first()['percentAmi']):
-        QProgramNumber = QProgramNumber + 1
-        RECDisplay = ""
-    else:
-        RECDisplay = "none"
-    #AMI and requirements logic for SPIN Rebate below
-    if ( request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='spin').values('percentAmi').first()['percentAmi']):
-        QProgramNumber = QProgramNumber + 1
-        SPINDisplay = ""
-    else:
-        SPINDisplay = "none"
 
-    # auto apply grocery rebate people if their AMI is <=30%
-    if request.user.eligibility.AmiRange_max <= Decimal('0.3'):
-        # Update the current model so the dashboard displays correctly
-        request.user.eligibility.GRqualified = QualificationStatus.PENDING.name
+    programs = iqProgramQualifications.objects.all()
+    for program in programs:
+        iq_program = get_iq_program(request.user.eligibility, program.name)
+        program.visibility = set_program_visibility(request.user.eligibility, program.name)
+        program.button = build_qualification_button(iq_program['status_for_user'])
+        program.status_for_user = iq_program['status_for_user']
+        program.quick_apply_link = iq_program['quick_apply_link']
+        program.learn_more_link = iq_program['learn_more_link']
+        program.title = iq_program['title']
+        program.description = iq_program['description']
+        program.supplemental_info = iq_program['supplemental_info']
+        program.eligibility_review_status = iq_program['eligibility_review_status']
+        program.eligibility_review_time_period = iq_program['eligibility_review_time_period']
 
-        # Update the database
-        Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.PENDING.name)
-    else:
-        # Update the current model so the dashboard displays correctly
-        request.user.eligibility.GRqualified = QualificationStatus.NOTQUALIFIED.name
-        Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.NOTQUALIFIED.name)
+        # If the program's visibility is 'block', it means the user is eligible for the program
+        # so we'll count it for their total number of programs they qualify for
+        if program.visibility == "block":
+            QProgramNumber += 1
 
-    if request.user.eligibility.ConnexionQualified == QualificationStatus.PENDING.name:
-        ConnexionButtonText = "Applied"
-        ConnexionButtonColor = "green"
-        ConnexionButtonTextColor = "White"
-        PendingNumber = PendingNumber + 1
-        QProgramNumber = QProgramNumber - 1
-        CONDisplayActive = "none"
-        CONDisplayPending = ""
-        CONDisplay = "none"
-        connexionStatus = "We are reviewing your application! Stay tuned here and check your email for updates."
-    elif request.user.eligibility.ConnexionQualified == QualificationStatus.ACTIVE.name:
-        ConnexionButtonText = "Enrolled!"
-        ConnexionButtonColor = "blue"
-        ConnexionButtonTextColor = "White"
-        CONDisplayActive = ""
-        ActiveNumber = ActiveNumber + 1
-        QProgramNumber = QProgramNumber - 1
-        CONDisplayPending = "None"
-        CONDisplay = "none"
-    else:
-        ConnexionButtonText = "Quick Apply +"
-        ConnexionButtonColor = ""
-        ConnexionButtonTextColor = ""
-        CONDisplayActive="none"
-        CONDisplayPending = "none" #TODO WHY ARE YOU DOING THIS TO ME
-        #TODO bug about pending... if set to active pending is what it needs to be for connexion is not set to anything then it shows up on connexion... just changed condisplay pending on line 20 to none to see if it works... test case in this case is too much money is being made for a person so it shouldn't pop up, see what happens if they apply for it?
-        #may have fixed this bug because needed to make line 606 elif!
-    if request.user.eligibility.ConnexionQualified == QualificationStatus.NOTQUALIFIED.name:
-        ConnexionButtonText = "Can't Enroll"
-        ConnexionButtonColor = "red"
-        ConnexionButtonTextColor = "black"
-    else:
-        ConnexionButtonText = "Quick Apply +"
-        ConnexionButtonColor = ""
-        ConnexionButtonTextColor = ""
+    # NOTE: This same function is called in the qualifiedPrograms view function. To me this logic should be executed a user
+    # has after provides their financial information. This would happen after they initially fill out their application, 
+    # after they updated it from their settings, or when they go through the renewal process.
+    set_users_gr_qualification_status(request)
 
-
-    if request.user.eligibility.GRqualified == QualificationStatus.PENDING.name:
-        GRButtonText = "Applied"
-        GRButtonColor = "green"
-        GRButtonTextColor = "White"
-        PendingNumber = PendingNumber + 1
-        QProgramNumber = QProgramNumber - 1
-        GRDisplayActive = "None"
-        GRDisplayPending = ""
-        GRDisplay = "none"
-        GRPendingDate = "Estimated Notification Time: Two Weeks"
-
-        groceryStatus = "We are reviewing your application! Stay tuned here and check your email for updates."
-
-    elif request.user.eligibility.GRqualified == QualificationStatus.ACTIVE.name:
-        GRButtonText = "Enrolled!"
-        GRButtonColor = "blue"
-        GRButtonTextColor = "White"
-        GRDisplayActive = ""
-        ActiveNumber = ActiveNumber + 1
-        QProgramNumber = QProgramNumber - 1
-        GRDisplayPending = "None"
-        GRPendingDate = ""
-        GRDisplay = "none"
-        
-    else:
-        GRButtonText = "Quick Apply +"
-        GRButtonColor = ""
-        GRButtonTextColor = ""
-        GRDisplayActive="none"
-        GRPendingDate = ""
-        GRDisplayPending = "None"
-        
-    if request.user.eligibility.GRqualified == QualificationStatus.NOTQUALIFIED.name:
-        GRButtonText = "Can't Enroll"
-        GRButtonColor = "red"
-        GRButtonTextColor = "black"
-    else:
-        GRButtonText = "Quick Apply +"
-        GRButtonColor = ""
-        GRButtonTextColor = ""
-
-    if request.user.eligibility.RecreationQualified == QualificationStatus.PENDING.name:
-        RECButtonText = "Applied"
-        RECButtonColor = "green"
-        RECButtonTextColor = "White"
-        PendingNumber = PendingNumber + 1
-        QProgramNumber = QProgramNumber - 1
-        RECDisplayActive = "None"
-        RECDisplayPending = ""
-        RECPendingDate = "Estimated Notification Time: Two Weeks"
-        RECDisplay ="none"
-
-        recreationStatus = "We are reviewing your application! Stay tuned here and check your email for updates."
-
-    elif request.user.eligibility.RecreationQualified == QualificationStatus.ACTIVE.name:
-        RECButtonText = "Enrolled!" 
-        RECButtonColor = "blue"
-        RECButtonTextColor = "White"
-        ActiveNumber = ActiveNumber + 1
-        QProgramNumber = QProgramNumber - 1
-        RECDisplayPending = "None"
-        RECDisplayActive = ""
-        RECPendingDate = ""
-        RECDisplay ="none"
-    else:
-        RECButtonText = "Quick Apply +"
-        RECButtonColor = ""
-        RECButtonTextColor = ""
-        RECDisplayActive = "none"
-        RECPendingDate = ""
-        RECDisplayPending = "None"
-        
-    if request.user.eligibility.RecreationQualified == QualificationStatus.NOTQUALIFIED.name:
-        RECButtonText = "Can't Enroll"
-        RECButtonColor = "red"
-        RECButtonTextColor = "black"
-    else:
-        RECButtonText = "Quick Apply +"
-        RECButtonColor = ""
-        RECButtonTextColor = ""
-
-    
-    if request.user.eligibility.SPINQualified == QualificationStatus.PENDING.name:
-        SPINButtonText = "Applied"
-        SPINButtonColor = "green"
-        SPINButtonTextColor = "White"
-        PendingNumber = PendingNumber + 1
-        QProgramNumber = QProgramNumber - 1
-        SPINDisplayActive = "None"
-        SPINDisplayPending = ""
-        SPINPendingDate = "Estimated Notification Time: Two Weeks"
-        SPINDisplay ="none"
-    elif request.user.eligibility.SPINQualified == QualificationStatus.ACTIVE.name:
-        SPINButtonText = "Enrolled!" 
-        SPINButtonColor = "blue"
-        SPINButtonTextColor = "White"
-        ActiveNumber = ActiveNumber + 1
-        QProgramNumber = QProgramNumber - 1
-        SPINDisplayPending = "None"
-        SPINDisplayActive = ""
-        SPINPendingDate = ""
-        SPINDisplay ="none"
-    elif request.user.eligibility.SPINQualified == QualificationStatus.NOTQUALIFIED.name:
-        SPINButtonText = "Can't Enroll"
-        SPINButtonColor = "red"
-        SPINButtonTextColor = "black"
-    else:
-        #if SPIN > 75 have text say waitlist
-        if (Eligibility.objects.filter(SPINQualified='PENDING').count()) + (Eligibility.objects.filter(SPINQualified='ACTIVE').count()) > 75:
-            SPINButtonText = "Waitlist"
-            SPINButtonColor = ""
-            SPINButtonTextColor = ""
-            SPINDisplayActive = "none"
-            SPINPendingDate = ""
-            SPINDisplayPending = "None"
-        else:
-            SPINButtonText = "Quick Apply +"
-            SPINButtonColor = ""
-            SPINButtonTextColor = ""
-            SPINDisplayActive = "none"
-            SPINPendingDate = ""
-            SPINDisplayPending = "None"
+    for program in programs:
+        # If a program's status_for_user is 'PENDING' add 1 to the pending number and subtract 1 from the QProgramNumber
+        if program.status_for_user == 'PENDING':
+            PendingNumber += 1
+            QProgramNumber -= 1
+        # If a program's status_for_user is 'ACTIVE' add 1 to the active number and subtract 1 from the QProgramNumber
+        elif program.status_for_user == 'ACTIVE':
+            ActiveNumber += 1
+            QProgramNumber -= 1
+        # If a program's status_for_user is 'NOT QUALIFIED' subtract 1 to the QProgramNumber
+        elif program.status_for_user == 'NOT QUALIFIED':
+            QProgramNumber -= 1
 
     # By default we assume the user has viewed the dashboard, but if they haven't
     # we set the proxy_viewed_dashboard flag to false and update the user
@@ -1050,61 +760,34 @@ def dashboardGetFoco(request):
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
             "Bag_It_color": "white",
-    
-            "GRButtonText": GRButtonText,
-            "GRButtonColor": GRButtonColor,
-            "GRButtonTextColor": GRButtonTextColor,
-    
-            "RECButtonText" : RECButtonText,
-            "RECButtonColor" : RECButtonColor,
-            "RECButtonTextColor" : RECButtonTextColor,
-    
-            "ConnexionButtonText": ConnexionButtonText,
-            "ConnexionButtonColor": ConnexionButtonColor,
-            "ConnexionButtonTextColor": ConnexionButtonTextColor,
-
-            "SPINButtonText": SPINButtonText,
-            "SPINButtonColor": SPINButtonColor,
-            "SPINButtonTextColor": SPINButtonTextColor,
-            
+            "iq_programs": programs,
             "QProgramNumber":QProgramNumber,
             "PendingNumber":PendingNumber,
             "ActiveNumber":ActiveNumber,
-    
-            "GRDisplay": GRDisplay,
-            "RECDisplay": RECDisplay,
-            "CONDisplay": CONDisplay,
-            "SPINDisplay": SPINDisplay,
-    
-            "GRDisplayActive": GRDisplayActive,
-            "RECDisplayActive": RECDisplayActive,
-            "CONDisplayActive": CONDisplayActive,
-            "SPINDisplayActive": SPINDisplayActive,
-    
-            "GRDisplayPending": GRDisplayPending,
-            "RECDisplayPending": RECDisplayPending,
-            "CONDisplayPending": CONDisplayPending,
-            "SPINDisplayPending": SPINDisplayPending,
-    
-            "RECPendingDate": RECPendingDate,
-            "GRPendingDate": GRPendingDate,
-            "SPINPendingDate": SPINPendingDate,
-            
             "clientName": request.user.first_name,
             "clientEmail": request.user.email,
 
-            "groceryStatus": groceryStatus,
-            "connexionStatus": connexionStatus,
-            "recreationStatus": recreationStatus,
-            
             'is_prod': django_settings.IS_PROD,
             'max_ami': request.user.eligibility.AmiRange_max,
             'eligibility': request.user.eligibility.GenericQualified,
             'proxy_viewed_dashboard': proxy_viewed_dashboard,
-            },
-        )
+        },
+    )
 
 def ProgramsList(request):
+        # Query the database for all programs
+    programs = iqProgramQualifications.objects.all()
+    for program in programs:
+        iq_program = get_iq_program(request.user.eligibility, program.name)
+        program.visibility = set_program_visibility(request.user.eligibility, program.name)
+        program.button = build_qualification_button(iq_program['status_for_user'])
+        program.quick_apply_link = iq_program['quick_apply_link']
+        program.learn_more_link = iq_program['learn_more_link']
+        program.title = iq_program['title']
+        program.subtitle = iq_program['subtitle']
+        program.description = iq_program['description']
+        program.supplemental_info = iq_program['supplemental_info']
+
     return render(
         request,
         'dashboard/ProgramsList.html',
@@ -1118,6 +801,7 @@ def ProgramsList(request):
             "Bag_It_color": "white",
             'Title': "Programs List",
             'is_prod': django_settings.IS_PROD,
+            'iq_programs': programs,
             },
         )
 
