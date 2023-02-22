@@ -12,10 +12,13 @@ the Free Software Foundation, either version 3 of the License, or
 {% block body %}
 
 <!--Back to dashboard button-->
-<a class="row" href="{% url 'dashboard:dashboard' %}" style="text-decoration: none;justify-content: start;align-items: center;">
-    <img src="{% static 'dashboard/images/Path 1083.svg' %}" alt="back" style="height: 3vw; margin-right: 5px;color:black">
-    <p style = "color:var(--lightblue);margin-left: 3%;">Back to Dashboard</p>
-</a>
+<div class="fadeLarge">
+    <a class="row" href="{% url 'dashboard:dashboard' %}" style="text-decoration: none;justify-content: start;align-items: center;">
+        <img src="{% static 'dashboard/images/Path 1083.svg' %}" alt="back" style="height: 3vw; margin-right: 5px;color:black">
+        <p style = "color:var(--lightblue);margin-left: 3%;">Back to Dashboard</p>
+    </a>
+</div>
+
 
 <!-- example of qualified program-->
 <div class="fadeLarge">
@@ -64,7 +67,7 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Recreation Reduced Fee </p>
                 <p style = "margin-top:3px;"> Recreation Assistance </p>
             </div>
-            <a href="{% url 'dashboard:addressVerification' %}" style="text-decoration: none"> <div class="quickapply link" style="background-color: {{RECButtonColor}}; color: {{RECButtonTextColor}}">{{ RECButtonText }}</div></a> 
+            <a href="{% url 'application:RecreationQuickApply' %}" style="text-decoration: none"> <div class="quickapply link" style="background-color: {{RECButtonColor}}; color: {{RECButtonTextColor}}">{{ RECButtonText }}</div></a> 
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/recreation/reducedfeeprogram" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
@@ -138,7 +141,7 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Recreation Reduced Fee </p>
                 <p style = "margin-top:3px;"> Recreation Assistance </p>
             </div>
-            <a href="{% url 'dashboard:addressVerification' %}" style="text-decoration: none"> <div class="quickapply link" style="background-color: {{RECButtonColor}}; color: {{RECButtonTextColor}}">{{ RECButtonText }}</div></a> 
+            <a href="{% url 'application:RecreationQuickApply' %}" style="text-decoration: none"> <div class="quickapply link" style="background-color: {{RECButtonColor}}; color: {{RECButtonTextColor}}">{{ RECButtonText }}</div></a> 
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/recreation/reducedfeeprogram" style="text-decoration: none;justify-content: start;align-items: center;margin:0">

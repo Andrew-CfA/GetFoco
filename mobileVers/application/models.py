@@ -194,7 +194,6 @@ class Eligibility(TimeStampedModel):
     spin_privacy_acknowledgement = models.BooleanField(default=False)
 
 
-
 class MoreInfo(TimeStampedModel):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     dependentInformation = JSONField(null=True,blank=True)
@@ -226,7 +225,8 @@ class attestations(TimeStampedModel):
     completeAttestation = models.BooleanField(default=False)
     localAttestation = models.BooleanField(default=False)
 
-
+# TODO: Should be deleted, but might need to ETL the data
+# before the model is deleted
 class addressVerification(TimeStampedModel):
     user_id = models.OneToOneField(
         User,

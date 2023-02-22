@@ -18,16 +18,6 @@ class TestUrls(SimpleTestCase):
         print("Test - files url")
         self.assertEquals(resolve(url).func, files)
 
-    def test_filesContinued_resolved(self):
-        url = reverse("dashboard:filesContinued")
-        print("Test - filesContinued url")
-        self.assertEquals(resolve(url).func, filesContinued)
-
-    def test_addressVerification_resolved(self):
-        url = reverse("dashboard:addressVerification")
-        print("Test - addressVerification url")
-        self.assertEquals(resolve(url).func, addressVerification)
-
     def test_login_resolved(self):
         url = reverse("dashboard:login")
         print("Test - login url")

@@ -6,7 +6,6 @@ the Free Software Foundation, either version 3 of the License, or
 """
 from django import forms
 from .models import Form, Feedback, TaxInformation, residencyForm
-from application.models import addressVerification
 from django.forms import ClearableFileInput
 
  
@@ -36,21 +35,6 @@ class AddressForm(forms.ModelForm):
         }
 
 
-
-# identification forms that they have currently
-class addressVerificationForm(forms.ModelForm):
-    class Meta:
-        model = addressVerification
-        fields = ['Utility']#'Identification','freeReducedLunch'
-        labels  = { 
-            'Utility':'Utility Bill',
-            #'Identification':'Identification Card',
-            #'freeReducedLunch':'Free and Reduced Lunch',
-        } 
-        
-
-
-
 class TaxForm(forms.ModelForm):
     class Meta:
         model = TaxInformation
@@ -58,7 +42,6 @@ class TaxForm(forms.ModelForm):
         labels  = { 
             'TaxBoxAmount':'Amount of Box 11',
         }
-
 
 
 '''need to complete below , tie this and models.py to index.html stars rating and also bug when star is pressed twice...'''

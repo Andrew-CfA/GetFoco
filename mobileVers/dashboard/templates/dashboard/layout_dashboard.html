@@ -36,9 +36,10 @@ the Free Software Foundation, either version 3 of the License, or
         </script>
         
         <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-        <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/e9a96b76c2.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     </head>
 
     <body>
@@ -138,12 +139,8 @@ the Free Software Foundation, either version 3 of the License, or
           </div>
         </div>
         <script>
-          var today = new Date();
-          var date = today.getDate();
-          var month = today.getMonth() + 1; // Note that JavaScript months are zero-indexed
-          var year = today.getFullYear();
-
-          var fullDate = `${year}-${month}-${date}`;
+          var now = moment();
+          var formattedDateTime = now.format('MMMM D, YYYY');
           // Show the sweet alert when the Badge anchor tage is clicked.
           // with a customer colored confirm button using jQuery
           $('.badge').click(function(){
@@ -152,7 +149,7 @@ the Free Software Foundation, either version 3 of the License, or
               imageWidth: 250,
               imageHeight: 250,
               imageAlt: "Get FoCo Badge",
-              text: fullDate,
+              text: formattedDateTime,
               confirmButtonColor: "#13467D",
               confirmButtonText: "Close"
             });

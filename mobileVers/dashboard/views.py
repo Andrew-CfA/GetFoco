@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, reverse
 from django.core.serializers.json import DjangoJSONEncoder
 
 from application.models import iqProgramQualifications
-from .forms import FileForm, FeedbackForm, TaxForm, addressVerificationForm, AddressForm
+from .forms import FileForm, FeedbackForm, TaxForm, AddressForm
 from decimal import Decimal
 from django.conf import settings as django_settings  
 from .models import User, Form
@@ -412,7 +412,7 @@ def qualifiedPrograms(request):
         toggleRecreation = "none"
 
     #auto apply clients with 30% AMI and below only if snap card / psd is uploaded and below 30% AMI
-    if ((request.user.eligibility.AmiRange_max == Decimal('0.3') and request.user.eligibility.AmiRange_min == Decimal('0.0'))):
+    if ((request.user.eligibility.AmiRange_max <= Decimal('0.3') and request.user.eligibility.GRqualified != QualificationStatus.ACTIVE.name)):
         request.user.eligibility.GRqualified = QualificationStatus.PENDING.name
         
     if request.user.eligibility.ConnexionQualified == QualificationStatus.PENDING.name:
@@ -651,6 +651,15 @@ def dashboardGetFoco(request):
     groceryStatus =""
     recreationStatus =""
     connexionStatus =""
+
+    # auto apply grocery rebate people if their AMI is <=30%
+    if ((request.user.eligibility.AmiRange_max <= Decimal('0.3') and request.user.eligibility.GRqualified != QualificationStatus.ACTIVE.name)):
+        # Update the current model so the dashboard displays correctly
+        request.user.eligibility.GRqualified = QualificationStatus.PENDING.name
+
+        # Update the database
+        Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.PENDING.name)
+
     #AMI and requirements logic for Grocery Rebate below
     if (request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name or request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (request.user.eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name='grocery').values('percentAmi').first()['percentAmi']):
         QProgramNumber = QProgramNumber + 1
@@ -675,18 +684,6 @@ def dashboardGetFoco(request):
         SPINDisplay = ""
     else:
         SPINDisplay = "none"
-
-    # auto apply grocery rebate people if their AMI is <=30%
-    if request.user.eligibility.AmiRange_max <= Decimal('0.3'):
-        # Update the current model so the dashboard displays correctly
-        request.user.eligibility.GRqualified = QualificationStatus.PENDING.name
-
-        # Update the database
-        Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.PENDING.name)
-    else:
-        # Update the current model so the dashboard displays correctly
-        request.user.eligibility.GRqualified = QualificationStatus.NOTQUALIFIED.name
-        Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.NOTQUALIFIED.name)
 
     if request.user.eligibility.ConnexionQualified == QualificationStatus.PENDING.name:
         ConnexionButtonText = "Applied"
