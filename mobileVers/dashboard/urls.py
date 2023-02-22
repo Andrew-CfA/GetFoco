@@ -28,7 +28,6 @@ urlpatterns = [
     path('GetFOCO', views.dashboardGetFoco, name='dashboard'),
     path('qualifiedPrograms', views.qualifiedPrograms, name='qualifiedPrograms'),
     path('ProgramsList', views.ProgramsList, name='ProgramsList'),
-    path('BagIt', views.BagIt, name='BagIt'),
     path('settings', views.settings, name='settings'),
 
     path("password_reset", views.password_reset_request, name="password_reset")
