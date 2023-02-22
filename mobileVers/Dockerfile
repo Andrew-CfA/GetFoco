@@ -47,22 +47,13 @@ RUN pip install whitenoise
 RUN python manage.py collectstatic --noinput --settings=mobileVers.settings.dev
 #--settings=mobileVers.settings.production
 
-
-#SSH
-ENV SSH_PASSWD "root:Docker!"
-RUN apt-get update \
-	&& apt-get install -y --no-install-recommends openssh-server \
-	&& echo "$SSH_PASSWD" | chpasswd 
-# Copy the sshd_config file to the /etc/ssh/ directory
-COPY sshd_config /etc/ssh/
 COPY init.sh /usr/local/bin/
 
 RUN chmod u+x /usr/local/bin/init.sh
 
 #Layer for exposing the app through
-EXPOSE 8000 2222
+EXPOSE 8000
 
-#COPY entrypoint.sh /code/ commented this out because .yml can't find it for some reason, also entrypoint wasn't working to begin with hence commented out entrypoint below
 WORKDIR /code
-#ENTRYPOINT ["sh", "entrypoint.sh"]
+
 ENTRYPOINT [ "init.sh" ]
