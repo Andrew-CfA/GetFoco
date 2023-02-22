@@ -33,7 +33,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # JSON-based secrets module
-with open('secrets.json') as f:
+with open('secrets_dev.json') as f:
     secrets = json.loads(f.read())
 def get_secret(setting, secrets=secrets):
     '''Get the secret variable or return explicit exception.'''
@@ -48,6 +48,7 @@ TWILIO_ACCOUNT_SID = get_secret('TWILIO_ACCOUNT_SID') #os.getenv("TWILIO_ACCOUNT
 TWILIO_AUTH_TOKEN = get_secret('TWILIO_AUTH_TOKEN') #os.getenv("TWILIO_AUTH_TOKEN") 
 TWILIO_NUMBER = get_secret('TWILIO_NUMBER') #os.getenv("TWILIO_NUMBER")
 USPS_SID = get_secret('USPS_SID') #os.getenv("USPS_ACCOUNT_SID") 
+DB_USER = get_secret('DB_USER') #os.getenv("DB_USER")
 DB_PASS = get_secret('DB_PASS') #os.getenv("DB_PASS")
 SENDGRID_API_KEY = get_secret('SENDGRID_API_KEY')
 TEMPLATE_ID = get_secret("TEMPLATE_ID")
@@ -127,7 +128,7 @@ DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.postgresql',
          'NAME': 'getfoco_dev',
-         'USER': 'getfocodevadmin',
+         'USER': DB_USER,
          'PASSWORD': DB_PASS,
          'HOST': 'getfoco-postgres-dev.postgres.database.usgovcloudapi.net'
          }

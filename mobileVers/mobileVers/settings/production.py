@@ -51,6 +51,7 @@ TWILIO_ACCOUNT_SID = env("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = env("TWILIO_AUTH_TOKEN") 
 TWILIO_NUMBER = env("TWILIO_NUMBER")
 USPS_SID = env("USPS_SID") 
+DB_USER = env("DB_USER")
 DB_PASS = env("DB_PASS")
 SENDGRID_API_KEY = env('SENDGRID_API_KEY')
 TEMPLATE_ID = env("TEMPLATE_ID")
@@ -129,7 +130,7 @@ DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.postgresql',
          'NAME': 'getfoco_prod',
-         'USER': 'getfocoadmin',
+         'USER': DB_USER,
          'PASSWORD': DB_PASS,
          'HOST': 'getfoco-postgres-no-vnet.postgres.database.usgovcloudapi.net'
          }
