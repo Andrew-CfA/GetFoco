@@ -17,21 +17,15 @@ the Free Software Foundation, either version 3 of the License, or
 </div>
 <div class=fadeLarge><h2 style="font-weight: 700; margin:5vh 0"> Please share basic information about your income </h2></div>
 
-
 <form action="{% url 'application:moreInfoNeeded' %}" method="post" autocomplete="false">
     {% csrf_token %}
     
-    <div class="input" style="padding-top:0">
+    <div >
         <label class="labelword">You indicated you had {{ dependent }} individual(s) in your household, what are their names and birthdates?</label>
     </div>
+
     {% for number in list %}
-        <br>
-        <br>
         {{form}}
-        <br>
-        <br>
-        <br>
-        <Br>
     {% endfor %}
 
     <div class="footer">
@@ -42,8 +36,13 @@ the Free Software Foundation, either version 3 of the License, or
             <button type ="submit" > CONTINUE </button>
         {% endif %}
     </div>
-    
 </form>
+
+<style>
+    label[for="id_dependentsName"] {
+        margin-top: 35px;
+    }
+</style>
 
 <script>
     var update_mode = {{ update_mode|yesno:"true,false" }};
@@ -61,6 +60,19 @@ the Free Software Foundation, either version 3 of the License, or
         // Long term solution is an entire overhaul the entire form
         var dependentInformation = document.getElementsByName("dependentInformation");
         // fill in the input fields with the data from the formData object
+        
+        // Check if the new number of household members is different from the old number of household members
+        // If it is let the user know to check over the names and birthdates
+        if (dependentsName.length !== formData.dependentsName.length) {
+            Swal.fire({
+                title: 'Household Information',
+                text: 'The members of your household have changed since you last submitted your application. Please make sure their names and birthdays are up to date.',
+                icon: 'info',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#13467D'
+            });
+        }
+        
         for (var i = 0; i < dependentsName.length; i++) {
             if (formData.dependentsName[i]) {
                 dependentsName[i].value = formData.dependentsName[i];
