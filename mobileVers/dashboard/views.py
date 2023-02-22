@@ -1098,7 +1098,6 @@ def dashboardGetFoco(request):
             "recreationStatus": recreationStatus,
             
             'is_prod': django_settings.IS_PROD,
-            'max_ami': request.user.eligibility.AmiRange_max,
             'eligibility': request.user.eligibility.GenericQualified,
             'proxy_viewed_dashboard': proxy_viewed_dashboard,
             },

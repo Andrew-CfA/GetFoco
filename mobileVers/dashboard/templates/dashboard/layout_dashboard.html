@@ -82,7 +82,7 @@ the Free Software Foundation, either version 3 of the License, or
                   <p> <img src="{% static 'dashboard/images/Dashboard.svg' %}">  <a style="color: {{ dashboard_color }}; text-decoration:none; " href="{% url 'dashboard:dashboard' %}">Dashboard</a></p>
                   <p> <img src="{% static 'dashboard/images/ProgramList.svg' %}"> <a style="color:{{ program_list_color }}; text-decoration:none;" href="{% url 'dashboard:ProgramsList' %}">Programs</a></p>
                   <p> <img src="{% static 'dashboard/images/Settings.svg' %}">  <a style="color:{{ Settings_color }};text-decoration:none; " href="{% url 'dashboard:settings' %}">Settings</a></p>
-                  {% if max_ami <= 0.6 and eligibility == 'ACTIVE' %}
+                  {% if eligibility == 'ACTIVE' %}
                   <p class="badge">  <i class="fa-solid fa-certificate"></i><a style="color:white;text-decoration:none;padding-left:10px;" href="#">Badge</a></p>
                   {% endif %}
                   <p> <img src="{% static 'dashboard/images/PrivacyPolicy.svg' %}">  <a style="color:{{ Privacy_Policy_color }};text-decoration:none; " href="{% url 'application:privacyPolicy' %}">Privacy Policy</a></p>
@@ -138,6 +138,12 @@ the Free Software Foundation, either version 3 of the License, or
           </div>
         </div>
         <script>
+          var today = new Date();
+          var date = today.getDate();
+          var month = today.getMonth() + 1; // Note that JavaScript months are zero-indexed
+          var year = today.getFullYear();
+
+          var fullDate = `${year}-${month}-${date}`;
           // Show the sweet alert when the Badge anchor tage is clicked.
           // with a customer colored confirm button using jQuery
           $('.badge').click(function(){
@@ -146,6 +152,7 @@ the Free Software Foundation, either version 3 of the License, or
               imageWidth: 250,
               imageHeight: 250,
               imageAlt: "Get FoCo Badge",
+              text: fullDate,
               confirmButtonColor: "#13467D",
               confirmButtonText: "Close"
             });
