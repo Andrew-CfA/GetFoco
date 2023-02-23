@@ -62,7 +62,7 @@ db.sqlite3
 db.sqlite3-journal
 
 *settings.json
-*secrets.json
+*secrets*.json
 *sshd_config
 
 # Flask stuff:
