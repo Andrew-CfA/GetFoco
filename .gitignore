@@ -60,6 +60,8 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+# Ignore any variation of manage.py except the base (negated at the end of this file)
+**/*manage*.py
 
 *settings.json
 *secrets*.json
@@ -140,3 +142,6 @@ dmypy.json
 
 # Mac OS File System
 .DS_Store
+
+# Add back in the base manage.py
+!**/manage.py
