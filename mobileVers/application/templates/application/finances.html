@@ -68,8 +68,12 @@ the Free Software Foundation, either version 3 of the License, or
 
         <div class="input">
             <label class="labelword"style="position:relative">How many individuals are in your household?</label>  <a href="{% url 'application:dependentInfo' %}"><img src="{% static 'application/images/clipart249308.png' %}" alt="info" style="width:min(4.5vw,20px);"></a>
+            {% if update_mode is True %}
             <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}" value="{{ form.dependents.value }}" style="height: 3vh;">
-        </div>
+            {% else %}
+            <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}" style="height: 3vh;">
+            {% endif %}
+          </div>
         {% else %}
         <div class="input">
             <label class="labelword" style="position:relative">How much is your gross annual household income? <buttonQuestion  id="myBtn"><img id src="{% static 'application/images/clipart249308.png' %}" alt="back" style="width:min(4.5vw,20px); display: inline;"></buttonQuestion></label>
