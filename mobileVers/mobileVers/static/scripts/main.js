@@ -29,3 +29,29 @@ $(document).on('submit','#account-form',function(e){
     })
 })
 
+// Check for when the document is ready
+$(document).ready(function() {
+    // Check if any of the input[type=checkbox] are checked when the page
+    // is ready.
+    toggleBtnState();
+
+    // When a checkbox is clicked, call the toggleBtnState() function
+    $("input[type=checkbox]").click(function() {
+        toggleBtnState();
+    });
+});
+
+// toggleBtnState() is called when a checkbox is clicked
+function toggleBtnState() {
+    // Check if any of the input[type=checkbox] are checked, except for the
+    // one with the id of "id_Identification"
+    // If they are, enable the button and change the text to "Continue"
+    // If they are not, disable the button and change the text to "Select a Program"
+    if ($("input[type=checkbox]:checked").not("#id_Identification").length > 0) {
+        $("#btnContinue").prop("disabled", false);
+        $("#btnContinue").html("CONTINUE");
+    } else {
+        $("#btnContinue").prop("disabled", true);
+        $("#btnContinue").html("SELECT A PROGRAM");
+    }
+}
