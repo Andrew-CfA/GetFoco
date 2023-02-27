@@ -816,16 +816,30 @@ def finances(request):
             Decimal(x) for x in form.cleaned_data['grossAnnualHouseholdIncome'].split('^')
             ]
         
+        # Loop through all of the attributes in the request.user.eligibility object
+        # and set them to "" if they contain the word "Qualified" (e.g. GRqualified)
+        for attr in dir(request.user.eligibility):
+            if "qualified" in attr.lower():
+                setattr(request.user.eligibility, attr, "")  
+        
         # Ensure AmiRange_max < 1 (that's all we need for GenericQualified)
         if instance.AmiRange_max < Decimal('1'):
             print("GAHI is below program AMI ranges")
             instance.GenericQualified = QualificationStatus.PENDING.name
         else:
             print("GAHI is greater than program AMI ranges")
-            instance.GenericQualified = QualificationStatus.NOTQUALIFIED.name                  
+            instance.GenericQualified = QualificationStatus.NOTQUALIFIED.name             
             
         print("SAVING")
         instance.save()
+
+        # auto apply grocery rebate people if their AMI is <=30%
+        if ((request.user.eligibility.AmiRange_max <= Decimal('0.3') and request.user.eligibility.GRqualified != QualificationStatus.ACTIVE.name)):
+            # Update the current model so the dashboard displays correctly
+            request.user.eligibility.GRqualified = QualificationStatus.PENDING.name
+
+            # Update the database
+            Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.PENDING.name)
 
         if update_mode:
             return redirect(f'{reverse("application:moreInfoNeeded")}?update_mode=1')
