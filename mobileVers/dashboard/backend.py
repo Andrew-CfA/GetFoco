@@ -248,7 +248,7 @@ def get_iq_program(users_iq_program_status, program):
         },
         'recreation': {
             'status_for_user': users_iq_program_status.RecreationQualified,
-            'quick_apply_link': reverse('dashboard:addressVerification'),
+            'quick_apply_link': reverse('application:RecreationQuickApply'),
             'learn_more_link': 'https://www.fcgov.com/recreation/reducedfeeprogram',
             'title': 'Recreation Reduced Fee',
             'subtitle': 'Recreation Assistance',
@@ -259,7 +259,7 @@ def get_iq_program(users_iq_program_status, program):
         },
         'spin': {
             'status_for_user': users_iq_program_status.SPINQualified,
-            'quick_apply_link': reverse('dashboard:addressVerification'),
+            'quick_apply_link': "#",
             'learn_more_link': 'https://www.fcgov.com/fcmoves/spin',
             'title': 'Spin Access',
             'subtitle': 'Spin is Fort Collins’ e-bike and e-scooter share provider',

@@ -118,7 +118,11 @@ the Free Software Foundation, either version 3 of the License, or
               <div style="margin:0">
                   <p style ="font-weight: 400; margin: 0">{{ program.title }}</p>
               </div>
-              <a href="{{ program.quick_apply_link }}" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">{{  program.button.text }}</div></a>
+              {% if program.name == 'spin'%}
+                  <a href="#" onclick="return false;" id="spinPrivacyAcknowledgement" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}">{{ program.button.text }}</div></a>
+              {% else %}
+                  <a href="{{ program.quick_apply_link }}" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">{{  program.button.text }}</div></a>
+              {% endif %}
           </div>
           <div class = "row" style="margin:0;width:100%">
             <a class="row" href="{{ program.learn_more_link }}" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
