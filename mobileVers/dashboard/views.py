@@ -567,16 +567,23 @@ def qualifiedPrograms(request):
         iq_program = get_iq_program(request.user.eligibility, program.name)
         program.visibility = set_program_visibility(request.user.eligibility, program.name)
         program.button = build_qualification_button(iq_program['status_for_user'])
+        program.status_for_user = iq_program['status_for_user']
         program.quick_apply_link = iq_program['quick_apply_link']
         program.learn_more_link = iq_program['learn_more_link']
         program.title = iq_program['title']
         program.subtitle = iq_program['subtitle']
         program.supplemental_info = iq_program['supplemental_info']
-    
+
     # NOTE: This same function is called in the dashboardGetFoco view function. To me this logic should be executed a user
     # has after provides their financial information. This would happen after they initially fill out their application, 
     # after they updated it from their settings, or when they go through the renewal process.
     set_users_gr_qualification_status(request)
+
+    order_by = request.GET.get('order_by')
+    if order_by and order_by == 'eligible':
+        programs = sorted(programs, key=lambda x: (x.status_for_user, x.status_for_user))
+    elif order_by:
+        programs = sorted(programs, key=lambda x: (x.status_for_user.lower() != order_by, x.status_for_user))
 
     return render(
         request,
@@ -781,6 +788,7 @@ def ProgramsList(request):
         iq_program = get_iq_program(request.user.eligibility, program.name)
         program.visibility = set_program_visibility(request.user.eligibility, program.name)
         program.button = build_qualification_button(iq_program['status_for_user'])
+        program.status_for_user = iq_program['status_for_user']
         program.quick_apply_link = iq_program['quick_apply_link']
         program.learn_more_link = iq_program['learn_more_link']
         program.title = iq_program['title']

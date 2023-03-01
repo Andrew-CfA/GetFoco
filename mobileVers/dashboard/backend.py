@@ -262,7 +262,7 @@ def get_iq_program(users_iq_program_status, program):
             'quick_apply_link': "#",
             'learn_more_link': 'https://www.fcgov.com/fcmoves/spin',
             'title': 'Spin Access',
-            'subtitle': 'Spin is Fort Collins’ e-bike and e-scooter share provider',
+            'subtitle': 'Spin is Fort Collins\' e-bike and e-scooter share provider',
             'description': 'Through Spin Access, people with low income receive a discount for Spin rentals. No smartphone? With Spin Access, you can rent a Spin bike or scooter with text messaging. No credit/debit card? Contact FC Moves at rruhlen@fcgov.com or (970) 416-2040 to purchase Spin Cash cards.',
             'supplemental_info': 'Applications accepted all year',
             'eligibility_review_status': "We are reviewing your application! Stay tuned here and check your email for updates." if users_iq_program_status.SPINQualified == 'PENDING' else "",
