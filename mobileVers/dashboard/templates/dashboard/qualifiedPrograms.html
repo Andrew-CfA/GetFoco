@@ -28,7 +28,11 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Reduced-Rate Connexion</p>
                 <p style = "margin-top:3px;"> Connexion Assistance </p>
             </div>
+            {% if ConnexionButtonText != 'Quick Apply +' %}
+            <a style="text-decoration: none"> <div class="quickapply link" style="background-color: {{ConnexionButtonColor}}; color: {{ConnexionButtonTextColor}}">{{ ConnexionButtonText }}</div></a> 
+            {% else %}
             <a href="{% url 'application:ConnexionQuickApply' %}" style="text-decoration: none"> <div class="quickapply link" style="background-color: {{ConnexionButtonColor}}; color: {{ConnexionButtonTextColor}}">{{ ConnexionButtonText }}</div></a> 
+            {% endif %}
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/connexion/digital-equity" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
@@ -44,7 +48,11 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Grocery Tax Rebate </p>
                 <p style = "margin-top:3px;"> Food Assistance </p>
             </div>
+            {% if GRButtonText != 'Quick Apply +' %}
+            <a style="text-decoration: none"> <div class="quickapply link"  style="background-color: {{GRButtonColor}}; color: {{GRButtonTextColor}}">{{ GRButtonText }}</div></a>
+            {% else %}
             <a href="{% url 'application:GRQuickApply' %}" style="text-decoration: none"> <div class="quickapply link"  style="background-color: {{GRButtonColor}}; color: {{GRButtonTextColor}}">{{ GRButtonText }}</div></a>
+            {% endif %}
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/rebate/" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
@@ -67,7 +75,11 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Recreation Reduced Fee </p>
                 <p style = "margin-top:3px;"> Recreation Assistance </p>
             </div>
+            {% if RECButtonText != 'Quick Apply +' %}
+            <a style="text-decoration: none"> <div class="quickapply link" style="background-color: {{RECButtonColor}}; color: {{RECButtonTextColor}}">{{ RECButtonText }}</div></a> 
+            {% else %}
             <a href="{% url 'application:RecreationQuickApply' %}" style="text-decoration: none"> <div class="quickapply link" style="background-color: {{RECButtonColor}}; color: {{RECButtonTextColor}}">{{ RECButtonText }}</div></a> 
+            {% endif %}
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/recreation/reducedfeeprogram" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
@@ -83,7 +95,11 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Spin Access </p>
                 <p style = "margin-top:3px;">Spin is Fort Collins' e-bike and e-scooter share provider </p>
             </div>
+            {% if SPINButtonText != 'Quick Apply +' %}
+            <a style="text-decoration: none; text-align: center;"> <div class="quickapply link"  style="background-color: {{SPINButtonColor}}; color: {{SPINButtonTextColor}}; ">{{ SPINButtonText }}</div></a> <!--font-size: 13px; height:20px;-->
+            {% else %}
             <a href="#" onclick="return false;" id="spinPrivacyAcknowledgement" style="text-decoration: none; text-align: center;"> <div class="quickapply link"  style="background-color: {{SPINButtonColor}}; color: {{SPINButtonTextColor}}; ">{{ SPINButtonText }}</div></a> <!--font-size: 13px; height:20px;-->
+            {% endif %}
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/fcmoves/spin" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
@@ -102,7 +118,11 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Reduced-Rate Connexion</p>
                 <p style = "margin-top:3px;"> Connexion Assistance </p>
             </div>
+            {% if ConnexionButtonText != 'Quick Apply +' %}
+            <a style="text-decoration: none"> <div class="quickapply link" style="background-color: {{ConnexionButtonColor}}; color: {{ConnexionButtonTextColor}}">{{ ConnexionButtonText }}</div></a> 
+            {% else %}
             <a href="{% url 'application:ConnexionQuickApply' %}" style="text-decoration: none"> <div class="quickapply link" style="background-color: {{ConnexionButtonColor}}; color: {{ConnexionButtonTextColor}}">{{ ConnexionButtonText }}</div></a> 
+            {% endif %}
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/connexion/digital-equity" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
@@ -118,7 +138,11 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Grocery Tax Rebate </p>
                 <p style = "margin-top:3px;"> Food Assistance </p>
             </div>
+            {% if GRButtonText != 'Quick Apply +' %}
+            <a style="text-decoration: none"> <div class="quickapply link"  style="background-color: {{GRButtonColor}}; color: {{GRButtonTextColor}};">{{ GRButtonText }}</div></a>
+            {% else %}
             <a href="{% url 'application:GRQuickApply' %}" style="text-decoration: none"> <div class="quickapply link"  style="background-color: {{GRButtonColor}}; color: {{GRButtonTextColor}};">{{ GRButtonText }}</div></a>
+            {% endif %}
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/rebate/" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
@@ -141,7 +165,11 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Recreation Reduced Fee </p>
                 <p style = "margin-top:3px;"> Recreation Assistance </p>
             </div>
+            {% if RECButtonText != 'Quick Apply +' %}
+            <a style="text-decoration: none"> <div class="quickapply link" style="background-color: {{RECButtonColor}}; color: {{RECButtonTextColor}}">{{ RECButtonText }}</div></a> 
+            {% else %}
             <a href="{% url 'application:RecreationQuickApply' %}" style="text-decoration: none"> <div class="quickapply link" style="background-color: {{RECButtonColor}}; color: {{RECButtonTextColor}}">{{ RECButtonText }}</div></a> 
+            {% endif %}
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/recreation/reducedfeeprogram" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
@@ -157,7 +185,11 @@ the Free Software Foundation, either version 3 of the License, or
                 <p style ="font-weight: 550; margin: 0">Spin Access </p>
                 <p style = "margin-top:3px;">Spin is Fort Collins' e-bike and e-scooter share provider </p>
             </div>
+            {% if SPINButtonText != 'Quick Apply +' %}
+            <a style="text-decoration: none; text-align: center;"> <div class="quickapply link"  style="background-color: {{SPINButtonColor}}; color: {{SPINButtonTextColor}}; ">{{ SPINButtonText }}</div></a> <!--font-size: 13px; height:20px;-->
+            {% else %}
             <a href="#" onclick="return false;" id="spinPrivacyAcknowledgementSm" style="text-decoration: none; text-align: center;"> <div class="quickapply link"  style="background-color: {{SPINButtonColor}}; color: {{SPINButtonTextColor}}; ">{{ SPINButtonText }}</div></a> <!--font-size: 13px; height:20px;-->
+            {% endif %}
         </div>
         <div class = "row" style="margin:0;width:100%">
             <a class="row" href="https://www.fcgov.com/fcmoves/spin" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
