@@ -1287,19 +1287,6 @@ def dependentInfo(request):
             },
         )
 
-def mayQualify(request):
-    return render(
-        request,
-        'application/mayQualify.html',
-        {
-            'step':3,
-            'formPageNum':formPageNum,
-            'Title': "May Qualify for Programs",
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
-
-
 def getReady(request):
      return render(
          request,
