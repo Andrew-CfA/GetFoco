@@ -28,6 +28,7 @@ import usaddress
 from decimal import Decimal
 
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from py_models.decorators import set_update_mode
 
 
 
@@ -594,7 +595,7 @@ def inServiceArea(request):
         print("address not in GMA")
         return redirect(reverse("application:notAvailable")) 
 
-
+@set_update_mode
 def account(request):
     if request.method == "POST": 
         # maybe also do some password requirements here too
@@ -657,19 +658,12 @@ def account(request):
                     }
             return JsonResponse(data)
     else:
-        # We're only checking if the query parameter even exists, not its value
-        # if there is a query parameter, we're in update mode and we want to show the form
-        # with user's existing data. If there is no query parameter, the user is just now
-        # starting the application.
-        update_mode = request.GET.get('update_mode')
-        if update_mode:
+        if request.session.get('update_mode'):
             # Query the users table for the user's data
             user = User.objects.get(id=request.user.id)
             form = UserUpdateForm(instance=user)
-            update_mode = True
         else:
             form = UserForm()
-            update_mode = False
 
     return render(
         request,
@@ -680,7 +674,7 @@ def account(request):
             'formPageNum':formPageNum,
             'Title': "Account",
             'is_prod': django_settings.IS_PROD,
-            'update_mode': update_mode,
+            'update_mode': request.session.get('update_mode'),
             },
         )
 def filesInfoNeeded(request):
@@ -721,7 +715,7 @@ def filesInfoNeeded(request):
             },
         )
      
-
+@set_update_mode
 def moreInfoNeeded(request):
     if request.method =="POST":
         # Check if the update_mode exists in the POST data.
@@ -753,16 +747,13 @@ def moreInfoNeeded(request):
         # if there is a query parameter, we're in update mode and we want to show the form
         # with user's existing data. If there is no query parameter, the user is just now
         # starting the application.
-        update_mode = request.GET.get('update_mode')
-        if update_mode:
+        if request.session.get('update_mode'):
             # Query the users table for the user's data
             more_info = MoreInfo.objects.get(user_id=request.user.id)
             dependant_info = get_dependant_info(more_info)
             form = MoreInfoForm(instance=more_info)
-            update_mode = True
         else:
             form = MoreInfoForm()
-            update_mode = False
      
         return render(
             request,
@@ -775,7 +766,7 @@ def moreInfoNeeded(request):
                 'formPageNum':6,
                 'Title': "More Info Needed",
                 'is_prod': django_settings.IS_PROD,
-                'update_mode': update_mode,
+                'update_mode': request.session.get('update_mode'),
                 'form_data': json.dumps(dependant_info) if dependant_info else None,
                 },
             )
@@ -795,6 +786,7 @@ def load_gahi_selector(request):
             },
         )
 
+@set_update_mode
 def finances(request):
     if request.method == "POST":
         # Check if the update_mode exists in the POST data.
@@ -847,15 +839,12 @@ def finances(request):
             return redirect(reverse("application:moreInfoNeeded"))
 
     else:
-        update_mode = request.GET.get('update_mode')
-        if update_mode:
+        if request.session.get('update_mode'):
             # Query the users table for the user's data
             eligibility = Eligibility.objects.get(user_id=request.user.id)
             form = EligibilityUpdateForm(instance=eligibility)
-            update_mode = True
         else:
             form = EligibilityForm()
-            update_mode = False
 
     return render(
         request,
@@ -866,7 +855,7 @@ def finances(request):
             'formPageNum':formPageNum,
             'Title': "Finances",
             'is_prod': django_settings.IS_PROD,
-            'update_mode': update_mode,
+            'update_mode': request.session.get('update_mode'),
             },
         )
 

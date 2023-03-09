@@ -22,6 +22,7 @@ from application.backend import broadcast_email, broadcast_sms, broadcast_email_
 from django.db import IntegrityError
 
 from py_models.qualification_status import QualificationStatus
+from py_models.decorators import set_update_mode
 import logging
 
 
@@ -41,6 +42,7 @@ from django.core.files.storage import FileSystemStorage
 
 
 #Step 4 of Application Process
+@set_update_mode
 def files(request):
     file_list = {
         "Affordable Connectivity Program": request.user.programs.ebb_acf,
@@ -249,6 +251,7 @@ def index(request):
 
 
 def settings(request):
+    request.session['update_mode'] = False
     # Get the success query string parameter
     page_updated = request.GET.get('page_updated')
     if page_updated:
@@ -645,6 +648,7 @@ def underConstruction(request):
 
 # Everything under here is for new dashboard
 def dashboardGetFoco(request):
+    request.session['update_mode'] = False
     QProgramNumber = 0
     ActiveNumber = 0
     PendingNumber = 0

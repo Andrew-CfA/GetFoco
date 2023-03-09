@@ -151,15 +151,16 @@ the Free Software Foundation, either version 3 of the License, or
 
 <!-- Password Server Side Check -->
 <script>
-    var myInput = document.getElementById("password");
-    var myInput2 = document.getElementById("password2");
-
     var letter = document.getElementById("letter");
     var capital = document.getElementById("capital");
     var number = document.getElementById("number");
     var length = document.getElementById("length");
     var same = document.getElementById("same");
     var complex = document.getElementById("complex");
+
+    {% if update_mode is None %}
+    var myInput = document.getElementById("password");
+    var myInput2 = document.getElementById("password2");
 
     
     // When the user clicks on the password field, show the message box
@@ -248,6 +249,7 @@ the Free Software Foundation, either version 3 of the License, or
         same.classList.add("invalid");
       }
     }
+    {% endif %}
 
     document.getElementById('phone_number').addEventListener('input', function (e) {
     var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
