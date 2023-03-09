@@ -807,20 +807,31 @@ def finances(request):
         instance.AmiRange_min, instance.AmiRange_max = [
             Decimal(x) for x in form.cleaned_data['grossAnnualHouseholdIncome'].split('^')
             ]
-        
-        # Loop through all of the attributes in the request.user.eligibility object
-        # and set them to "" if they contain the word "Qualified" (e.g. GRqualified)
-        for attr in dir(request.user.eligibility):
-            if "qualified" in attr.lower():
-                setattr(request.user.eligibility, attr, "")  
-        
-        # Ensure AmiRange_max < 1 (that's all we need for GenericQualified)
-        if instance.AmiRange_max < Decimal('1'):
-            print("GAHI is below program AMI ranges")
-            instance.GenericQualified = QualificationStatus.PENDING.name
+
+        # The gist of this if/else block is that we want to keep a user's program
+        # statuses the same if they are in a PENDING or ACTIVE state. However, if
+        # they are NOTQUALIFIED, we want to set them to an empty string so that they 
+        # can enroll in programs again.
+        if update_mode:
+            # Loop through all of the attributes in the request.user.eligibility object
+            # and set them to "" if they contain the word "Qualified" (e.g. GRqualified)
+            for attr in dir(request.user.eligibility):
+                if "GenericQualified" == attr and instance.AmiRange_max < Decimal('1'):
+                    if request.user.eligibility.GenericQualified == QualificationStatus.NOTQUALIFIED.name:
+                        print("GAHI is below program AMI ranges")
+                        instance.GenericQualified = QualificationStatus.PENDING.name
+                    continue
+                elif "qualified" in attr.lower():
+                    if getattr(request.user.eligibility, attr) == QualificationStatus.NOTQUALIFIED.name:
+                        setattr(request.user.eligibility, attr, "")
         else:
-            print("GAHI is greater than program AMI ranges")
-            instance.GenericQualified = QualificationStatus.NOTQUALIFIED.name             
+            # Ensure AmiRange_max < 1 (that's all we need for GenericQualified)
+            if instance.AmiRange_max < Decimal('1'):
+                print("GAHI is below program AMI ranges")
+                instance.GenericQualified = QualificationStatus.PENDING.name
+            else:
+                print("GAHI is greater than program AMI ranges")
+                instance.GenericQualified = QualificationStatus.NOTQUALIFIED.name             
             
         print("SAVING")
         instance.save()
