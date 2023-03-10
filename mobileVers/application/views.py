@@ -826,16 +826,14 @@ def finances(request):
             eligibility_history.save()
 
             # Loop through all of the attributes in the request.user.eligibility object
-            # and set them to "" if they contain the word "Qualified" (e.g. GRqualified)
-            for attr in dir(request.user.eligibility):
-                if "GenericQualified" == attr and instance.AmiRange_max < Decimal('1'):
-                    if request.user.eligibility.GenericQualified == QualificationStatus.NOTQUALIFIED.name:
-                        print("GAHI is below program AMI ranges")
-                        instance.GenericQualified = QualificationStatus.PENDING.name
-                    continue
-                elif "qualified" in attr.lower():
-                    if getattr(request.user.eligibility, attr) == QualificationStatus.NOTQUALIFIED.name:
-                        setattr(request.user.eligibility, attr, "")
+            # and set them to "" if they contain the word "Qualified" and have a NOTQUALIFED
+            # status (e.g. GRqualified)
+            if instance.AmiRange_max < request.user.eligibility.AmiRange_max:
+                instance.GenericQualified = QualificationStatus.PENDING.name
+                for attr in dir(request.user.eligibility):
+                    if "qualified" in attr.lower() and "GenericQualified" != attr:
+                        if getattr(request.user.eligibility, attr) == QualificationStatus.NOTQUALIFIED.name:
+                            setattr(request.user.eligibility, attr, "")
         else:
             # Ensure AmiRange_max < 1 (that's all we need for GenericQualified)
             if instance.AmiRange_max < Decimal('1'):
