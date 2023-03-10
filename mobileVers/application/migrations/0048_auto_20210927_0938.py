@@ -21,6 +21,7 @@ def add_iq_data(apps, schema_editor):
     IQ.objects.create(name='connexion', percentAmi=0.3)
     IQ.objects.create(name='grocery', percentAmi=0.5)
     IQ.objects.create(name='recreation', percentAmi=0.3)
+    IQ.objects.create(name='spin', percentAmi=0.6)
 
 
 class Migration(migrations.Migration):
