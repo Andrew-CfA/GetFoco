@@ -6,6 +6,7 @@ the Free Software Foundation, either version 3 of the License, or
 """
 from concurrent.futures.process import _python_exit
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 from multiprocessing.sharedctypes import Value
 from django.conf import settings as django_settings
 from django.shortcuts import render, redirect, reverse
@@ -18,8 +19,8 @@ from django.http import QueryDict
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, attestationForm, UserUpdateForm, EligibilityUpdateForm
-from .backend import addressCheck, validateUSPS, enroll_connexion_updates, get_dependant_info
-from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility
+from .backend import addressCheck, validateUSPS, enroll_connexion_updates, get_dependant_info, model_to_dict
+from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility, EligibilityHistory
 
 from py_models.qualification_status import QualificationStatus
 
@@ -813,6 +814,17 @@ def finances(request):
         # they are NOTQUALIFIED, we want to set them to an empty string so that they 
         # can enroll in programs again.
         if update_mode:
+            # Save the user's current eligibility data to the database in the
+            # eligibility history table.
+            users_eligibility = model_to_dict(Eligibility.objects.get(user_id=request.user.id))
+            eligibility_history = EligibilityHistory.objects.create(
+                user_id=request.user,
+                # Convert the eligibility object to a dictionary and then to a JSON string
+                # and set it to the historical_eligibility field
+                historical_eligibility=json.dumps(users_eligibility, cls=DjangoJSONEncoder)                                
+            )
+            eligibility_history.save()
+
             # Loop through all of the attributes in the request.user.eligibility object
             # and set them to "" if they contain the word "Qualified" (e.g. GRqualified)
             for attr in dir(request.user.eligibility):

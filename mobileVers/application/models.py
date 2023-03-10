@@ -244,3 +244,8 @@ class futureEmails(TimeStampedModel):
     connexionCommunication = models.BooleanField(default=True, blank=True)
 
 
+class EligibilityHistory(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    historical_eligibility = JSONField(null=True,blank=True)

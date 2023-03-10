@@ -482,4 +482,21 @@ def get_dependant_info(more_info):
         return dependant_info
     except Exception as exception:
         print(exception)
-    
+
+
+def model_to_dict(model):
+    """
+    Convert a model object to a dictionary. If a property is a datetime object,
+    it will be converted to a string. If there is a nested model, it will be
+    excluded from the dictionary.
+    :param model: model object
+    """
+    model_dict = {}
+    for field in model._meta.get_fields():
+        if field.is_relation:
+            continue
+        value = getattr(model, field.name)
+        if isinstance(value, datetime.datetime):
+            value = value.strftime('%Y-%m-%d %H:%M:%S')
+        model_dict[field.name] = value
+    return model_dict
