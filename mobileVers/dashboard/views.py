@@ -722,9 +722,9 @@ def dashboardGetFoco(request):
         program.eligibility_review_status = iq_program['eligibility_review_status']
         program.eligibility_review_time_period = iq_program['eligibility_review_time_period']
 
-        # If the program's visibility is 'block', it means the user is eligible for the program
+        # If the program's visibility is 'block' or the status is `ACTIVE` or `PENDING`, it means the user is eligible for the program
         # so we'll count it for their total number of programs they qualify for
-        if program.visibility == "block":
+        if program.visibility == "block" or program.status_for_user == 'ACTIVE' or program.status_for_user == 'PENDING':
             QProgramNumber += 1
 
     # NOTE: This same function is called in the qualifiedPrograms view function. To me this logic should be executed a user
