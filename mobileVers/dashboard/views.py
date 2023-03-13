@@ -584,7 +584,6 @@ def dashboardGetFoco(request):
             "program_list_color": "white",
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
-            "Bag_It_color": "white",
             "iq_programs": programs,
             "QProgramNumber":QProgramNumber,
             "PendingNumber":PendingNumber,

@@ -795,6 +795,7 @@ def finances(request):
         try:
             existing = request.user.eligibility
             if update_mode:
+                previous_max_ami = existing.AmiRange_max
                 form = EligibilityUpdateForm(request.POST,instance = existing)
             else:
                 form = EligibilityForm(request.POST,instance = existing)
@@ -826,9 +827,9 @@ def finances(request):
             eligibility_history.save()
 
             # Loop through all of the attributes in the request.user.eligibility object
-            # and set them to "" if they contain the word "Qualified" and have a NOTQUALIFED
-            # status (e.g. GRqualified)
-            if instance.AmiRange_max < request.user.eligibility.AmiRange_max:
+            # and set them to "" if they contain the word "Qualified", have a NOTQUALIFED
+            # status and the new AmiRange_max is less than the old AmiRange_max.
+            if instance.AmiRange_max < previous_max_ami:
                 instance.GenericQualified = QualificationStatus.PENDING.name
                 for attr in dir(request.user.eligibility):
                     if "qualified" in attr.lower() and "GenericQualified" != attr:
