@@ -10,26 +10,30 @@ the Free Software Foundation, either version 3 of the License, or
 
 {% block body %}
 
-    <!--NOTE: For the future have numbers change based on database-->
-    <h2 style=" margin-bottom: 0;">We found this address for you, please click it to confirm.</h1>
+<!--NOTE: For the future have numbers change based on database-->
+<h2 style=" margin-bottom: 0;">We found this address for you, please click it to confirm.</h1>
     <br>
     <!-- NOTE GRACE START HERE-->
     <div class=fadeSmall>
-        <button class="buttonAddress" style="color:#13467D; font-weight: 400; margin-bottom: 0;" onclick="location.href='{% url 'application:takeUSPSaddress' %}'"> 
+        <button class="buttonAddress" style="color:#13467D; font-weight: 400; margin-bottom: 0;"
+            onclick="location.href='{% url 'application:takeUSPSaddress' %}'">
             {% for i in program_string_2 %}
-                {{ i }} <br>
+            {{ i }} <br>
             {% endfor %}
         </button>
     </div>
     <div class=fadeLarge>
-        <button class="buttonAddress" style="color:#white; font-weight: 400; margin-bottom: 0;" onclick="location.href='{% url 'application:takeUSPSaddress' %}'"> 
+        <button class="buttonAddress" style="color:#white; font-weight: 400; margin-bottom: 0;"
+            onclick="location.href='{% url 'application:takeUSPSaddress' %}'">
             {% for i in program_string_2 %}
-                {{ i }} <br>
+            {{ i }} <br>
             {% endfor %}
         </button>
     </div>
     <br>
-    <h2 style="margin-bottom: 0;"> If you think this is an error, please <a href="mailto: GetFoCo@fcgov.com?subject=Street Address Clarification for Get FoCo&body=Hi Get FoCo Team, I seem to be having issues finding my address, can you help me?" style="font-style: none;">contact us</a> or press the back button to re-enter your address.</h2>
+    <h2 style="margin-bottom: 0;"> If you think this is an error, please <a
+            href="mailto: GetFoCo@fcgov.com?subject=Street Address Clarification for Get FoCo&body=Hi Get FoCo Team, I seem to be having issues finding my address, can you help me?"
+            style="font-style: none;">contact us</a> or press the back button to re-enter your address.</h2>
 
     <br>
 
@@ -40,7 +44,7 @@ the Free Software Foundation, either version 3 of the License, or
     </button>
     -->
 
-        <!--Whatever I need in the other pages, I can enter it here-->
+    <!--Whatever I need in the other pages, I can enter it here-->
 
 
-{% endblock %}
+    {% endblock %}

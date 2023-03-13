@@ -11,149 +11,196 @@ the Free Software Foundation, either version 3 of the License, or
 <!DOCTYPE html>
 <html lang="en">
 
-    <!--Get the various stylesheets I need like my fonts and CSS-->
-    <head>
-        <title>{{ Title }}</title>
-        <link href="{% static 'dashboard/styles.css' %}" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--Get the various stylesheets I need like my fonts and CSS-->
 
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
-        <script>
+<head>
+    <title>{{ Title }}</title>
+    <link href="{% static 'dashboard/styles.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
+    <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-SL59NNQRH0');
-        </script>
-        <script type="text/javascript">
+    </script>
+    <script type="text/javascript">
         function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages : 'ar,es,fr,pt,zh-CN,zh-TW,tl,eo,de,ht,hi,hmn,id,ja,jv,ko,rw,ko,ms,my,mi,pt,pa,ru,so,sw,uk,vi,xh,yo,zu', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'ar,es,fr,pt,zh-CN,zh-TW,tl,eo,de,ht,hi,hmn,id,ja,jv,ko,rw,ko,ms,my,mi,pt,pa,ru,so,sw,uk,vi,xh,yo,zu', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
         }
-        </script>
-        
-        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-        <script src="https://kit.fontawesome.com/e9a96b76c2.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    </head>
+    </script>
 
-    <body>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/e9a96b76c2.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
 
-      {% if is_prod is False %}
-          <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
-      {% endif %}
-      
-      <div style="display: flex; justify-content: flex-end;padding: 10px; " id="google_translate_element"></div>
-      <!-- Top Navigation Row-->
-      <div class="topNavRow" style="text-align: center; position:fixed; background-color: white;z-index: 99;">
-          <nav role="navigation" style="width: 3vh;">
+<body>
+
+    {% if is_prod is False %}
+    <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING
+        ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com"
+            target="_blank">https://getfoco.fcgov.com</a> instead</div>
+    {% endif %}
+
+    <div style="display: flex; justify-content: flex-end;padding: 10px; " id="google_translate_element"></div>
+    <!-- Top Navigation Row-->
+    <div class="topNavRow" style="text-align: center; position:fixed; background-color: white;z-index: 99;">
+        <nav role="navigation" style="width: 3vh;">
             <div class="fadeLarge">
-              <div id="menuToggle" class="icon" style="position: fixed;">
-                <input type="checkbox" />
-                
-                <!--Some spans to act as a hamburger.-->
-                <span></span>
-                <span></span>
-                <span></span>
-                
-                <ul id="menu">
-                  <a style="color: {{ dashboard_color }} ; " href="{% url 'dashboard:dashboard' %}"><li>Dashboard</li></a>
-                  <a style="color:{{ program_list_color }}; " href="{% url 'dashboard:ProgramsList' %}"><li>Program List</li></a>
-                  <a style="color:{{ Settings_color }}; " href="{% url 'dashboard:settings' %}"><li>Settings</li></a>
-                  {% if max_ami <= 0.6 and eligibility == 'ACTIVE' %}
-                  <a class="badge" style="color:{{ Settings_color }}; " href="#"><li>Badge</li></a>
-                  {% endif %}
-                  <a style="color:{{ Privacy_Policy_color }}; " href="{% url 'application:privacyPolicy' %}"><li>Privacy Policy</li></a>
-                  <a style="color:white; " href="{% url 'application:index' %}"><li>Log Out</li></a>
-                
-                </ul>
-              </div>
+                <div id="menuToggle" class="icon" style="position: fixed;">
+                    <input type="checkbox" />
+
+                    <!--Some spans to act as a hamburger.-->
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                    <ul id="menu">
+                        <a style="color: {{ dashboard_color }} ; " href="{% url 'dashboard:dashboard' %}">
+                            <li>Dashboard</li>
+                        </a>
+                        <a style="color:{{ program_list_color }}; " href="{% url 'dashboard:ProgramsList' %}">
+                            <li>Program List</li>
+                        </a>
+                        <a style="color:{{ Settings_color }}; " href="{% url 'dashboard:settings' %}">
+                            <li>Settings</li>
+                        </a>
+                        {% if max_ami <= 0.6 and eligibility=='ACTIVE' %} <a class="badge"
+                            style="color:{{ Settings_color }}; " href="#">
+                            <li>Badge</li></a>
+                            {% endif %}
+                            <a style="color:{{ Privacy_Policy_color }}; " href="{% url 'application:privacyPolicy' %}">
+                                <li>Privacy Policy</li>
+                            </a>
+                            <a style="color:white; " href="{% url 'application:index' %}">
+                                <li>Log Out</li>
+                            </a>
+
+                    </ul>
+                </div>
             </div>
             <!--Side Navigation Column, for desktops and larger than phone devices-->
             <div class="fadeSmall">
-              <div class=sideNav style="padding-left: 0;">
-                
-                <ul>
-                  <p style="color: var(--yellow); font-weight: 700; font-size: 25px;">Get <p.1 style="color: white">FoCo</p></p>
-                  <p> <img src="{% static 'dashboard/images/Dashboard.svg' %}">  <a style="color: {{ dashboard_color }}; text-decoration:none; " href="{% url 'dashboard:dashboard' %}">Dashboard</a></p>
-                  <p> <img src="{% static 'dashboard/images/ProgramList.svg' %}"> <a style="color:{{ program_list_color }}; text-decoration:none;" href="{% url 'dashboard:ProgramsList' %}">Programs</a></p>
-                  <p> <img src="{% static 'dashboard/images/Settings.svg' %}">  <a style="color:{{ Settings_color }};text-decoration:none; " href="{% url 'dashboard:settings' %}">Settings</a></p>
-                  {% if eligibility == 'ACTIVE' %}
-                  <p class="badge">  <i class="fa-solid fa-certificate"></i><a style="color:white;text-decoration:none;padding-left:10px;" href="#">Badge</a></p>
-                  {% endif %}
-                  <p> <img src="{% static 'dashboard/images/PrivacyPolicy.svg' %}">  <a style="color:{{ Privacy_Policy_color }};text-decoration:none; " href="{% url 'application:privacyPolicy' %}">Privacy Policy</a></p>
-                  <p> <img src="{% static 'dashboard/images/LogOut.svg' %}">  <a style="color:white;text-decoration:none; " href="{% url 'application:index' %}">Log Out</a></p>
-                  <p style="font-size: 15px; text-align: center;"> {{clientEmail}}</p>
-                  <p style="position: absolute; bottom: 5px; font-size: 15px; left: 0px; right: 0px; display: block; margin-left: auto; margin-right: auto;"> Service brought to you by the City of Fort Collins.</p>
-                  <img style="align-items:center; position:absolute; bottom: 80px; left: 0px; right: 0px; display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
-                </ul>
-                <div>
-                  
+                <div class=sideNav style="padding-left: 0;">
+
+                    <ul>
+                        <p style="color: var(--yellow); font-weight: 700; font-size: 25px;">Get <p.1
+                                style="color: white">FoCo</p>
+                        </p>
+                        <p> <img src="{% static 'dashboard/images/Dashboard.svg' %}"> <a
+                                style="color: {{ dashboard_color }}; text-decoration:none; "
+                                href="{% url 'dashboard:dashboard' %}">Dashboard</a></p>
+                        <p> <img src="{% static 'dashboard/images/ProgramList.svg' %}"> <a
+                                style="color:{{ program_list_color }}; text-decoration:none;"
+                                href="{% url 'dashboard:ProgramsList' %}">Programs</a></p>
+                        <p> <img src="{% static 'dashboard/images/Settings.svg' %}"> <a
+                                style="color:{{ Settings_color }};text-decoration:none; "
+                                href="{% url 'dashboard:settings' %}">Settings</a></p>
+                        {% if eligibility == 'ACTIVE' %}
+                        <p class="badge"> <i class="fa-solid fa-certificate"></i><a
+                                style="color:white;text-decoration:none;padding-left:10px;" href="#">Badge</a></p>
+                        {% endif %}
+                        <p> <img src="{% static 'dashboard/images/PrivacyPolicy.svg' %}"> <a
+                                style="color:{{ Privacy_Policy_color }};text-decoration:none; "
+                                href="{% url 'application:privacyPolicy' %}">Privacy Policy</a></p>
+                        <p> <img src="{% static 'dashboard/images/LogOut.svg' %}"> <a
+                                style="color:white;text-decoration:none; " href="{% url 'application:index' %}">Log
+                                Out</a></p>
+                        <p style="font-size: 15px; text-align: center;"> {{clientEmail}}</p>
+                        <p
+                            style="position: absolute; bottom: 5px; font-size: 15px; left: 0px; right: 0px; display: block; margin-left: auto; margin-right: auto;">
+                            Service brought to you by the City of Fort Collins.</p>
+                        <img style="align-items:center; position:absolute; bottom: 80px; left: 0px; right: 0px; display: block; margin-left: auto; margin-right: auto; width: 50%;"
+                            src="{% static 'application/images/CityLogoWhite-01.png' %}">
+                    </ul>
+                    <div>
+
+                    </div>
+
                 </div>
-                
-              </div>
             </div>
-          </nav>
-            <p style="font-weight: 400; color:var(--darkblue);">{{ page_title }}</p>
-            <img src="{% static 'dashboard/images/AlertBell.svg' %}" alt="back" style="width:min(4.5vw,30px)">
-      </div>
-      <div class="extraspace">
-      </div>
-        <div class="">
-          {% block body %}
-          
-          {% endblock %}
-          <div class=fadeLarge>
-            <div class="module" >
+        </nav>
+        <p style="font-weight: 400; color:var(--darkblue);">{{ page_title }}</p>
+        <img src="{% static 'dashboard/images/AlertBell.svg' %}" alt="back" style="width:min(4.5vw,30px)">
+    </div>
+    <div class="extraspace">
+    </div>
+    <div class="">
+        {% block body %}
+
+        {% endblock %}
+        <div class=fadeLarge>
+            <div class="module">
                 <form action="{% url 'dashboard:index' %}" method="post">
-                  {% csrf_token %}
+                    {% csrf_token %}
                     <p>Feedback</p>
                     <div class="column" style="margin:0; width:100%;">
-                      <p style="font-weight: 800;">How would you rate your experience so far using the Get FoCo portal? </p>
-                      <div class="column" style="margin:0; width:100%;">
-                        <clearButton name="starRating" value="1" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star1" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
-                        <clearButton name="starRating" value="2" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star2" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
-                        <clearButton name="starRating" value="3" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star3" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
-                        <clearButton name="starRating" value="4" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star4" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
-                        <clearButton name="starRating" value="5" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star5" style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
-                      </div>
-                  </div>
-                  <div class="column" style="width:100%; margin:0; justify-content: flex-start;">
-                        <p style="font-weight: 800; margin-top: 25px;">How can we do better? Don't worry, your feedback is anonymous!</p> 
-                        <textarea class="feedback" placeholder="Tell us how we're doing!"id="" name="feedbackComments" maxlength="500" style="border-radius: 2vh;"></textarea>
-                      <button name="starRating" value = "" id="submit" style="width:100%"> <b>Share Feedback</b> </button>
-                      <br>
-                      <br>
-                  </div>
+                        <p style="font-weight: 800;">How would you rate your experience so far using the Get FoCo
+                            portal? </p>
+                        <div class="column" style="margin:0; width:100%;">
+                            <clearButton name="starRating" value="1" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star1"
+                                    style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
+                            <clearButton name="starRating" value="2" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star2"
+                                    style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
+                            <clearButton name="starRating" value="3" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star3"
+                                    style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
+                            <clearButton name="starRating" value="4" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star4"
+                                    style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
+                            <clearButton name="starRating" value="5" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star5"
+                                    style="width:min(10vw, 50px);margin-right: 3vw;"> </clearButton>
+                        </div>
+                    </div>
+                    <div class="column" style="width:100%; margin:0; justify-content: flex-start;">
+                        <p style="font-weight: 800; margin-top: 25px;">How can we do better? Don't worry, your feedback
+                            is anonymous!</p>
+                        <textarea class="feedback" placeholder="Tell us how we're doing!" id="" name="feedbackComments"
+                            maxlength="500" style="border-radius: 2vh;"></textarea>
+                        <button name="starRating" value="" id="submit" style="width:100%"> <b>Share Feedback</b>
+                        </button>
+                        <br>
+                        <br>
+                    </div>
                 </form>
-              </div>
-          </div>
-            <div class="extraspace">
-          </div>
-          </div>
-          </div>
+            </div>
         </div>
-        <script>
-          var now = moment();
-          var formattedDateTime = now.format('MMMM D, YYYY');
-          // Show the sweet alert when the Badge anchor tage is clicked.
-          // with a customer colored confirm button using jQuery
-          $('.badge').click(function(){
+        <div class="extraspace">
+        </div>
+    </div>
+    </div>
+    </div>
+    <script>
+        var now = moment();
+        var formattedDateTime = now.format('MMMM D, YYYY');
+        // Show the sweet alert when the Badge anchor tage is clicked.
+        // with a customer colored confirm button using jQuery
+        $('.badge').click(function () {
             Swal.fire({
-              imageUrl: "{% static 'dashboard/images/GetFOCObadge.png' %}",
-              imageWidth: 250,
-              imageHeight: 250,
-              imageAlt: "Get FoCo Badge",
-              text: formattedDateTime,
-              confirmButtonColor: "#13467D",
-              confirmButtonText: "Close"
+                imageUrl: "{% static 'dashboard/images/GetFOCObadge.png' %}",
+                imageWidth: 250,
+                imageHeight: 250,
+                imageAlt: "Get FoCo Badge",
+                text: formattedDateTime,
+                confirmButtonColor: "#13467D",
+                confirmButtonText: "Close"
             });
-          });
-        </script>
-      </body>
-  </html>
+        });
+    </script>
+</body>
+
+</html>

@@ -5,16 +5,16 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version
 -->
 {% if valid is True %}
-    <select name="grossAnnualHouseholdIncome" id="id_grossAnnualHouseholdIncome">
-        <option value="">---------</option>
-        {% for gahi in gahiList %}
-            <option value="{{ gahi.val }}">{{ gahi.text }}</option>
-        {% endfor %}
-    </select>
-{% else %}
+<select name="grossAnnualHouseholdIncome" id="id_grossAnnualHouseholdIncome">
+    <option value="">---------</option>
     {% for gahi in gahiList %}
-        <div class="alert alert-danger">
-            <strong>{{ gahi.text }}</strong>
-        </div>
+    <option value="{{ gahi.val }}">{{ gahi.text }}</option>
     {% endfor %}
+</select>
+{% else %}
+{% for gahi in gahiList %}
+<div class="alert alert-danger">
+    <strong>{{ gahi.text }}</strong>
+</div>
+{% endfor %}
 {% endif %}

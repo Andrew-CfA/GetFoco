@@ -14,124 +14,138 @@
 }
 
 table {
-    width:auto;
+    width: auto;
     display: grid;
     place-items: center;
     padding-bottom: 5px;
 }
 
 td {
-	padding: 0;
+    padding: 0;
 }
 
 .calendar-container {
-    position: absolute; top: 0;
+    position: absolute;
+    top: 0;
 }
 
 .calendar-container header {
-	background: transparent;
-	color: #13467D;
-	padding: 1em 1em;
+    background: transparent;
+    color: #13467D;
+    padding: 1em 1em;
     text-align: center;
 }
 
 .day {
-	font-size: 25px;
-	font-weight: 600;
-	line-height: 1em;
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 1em;
 }
 
 .month {
-	font-size: 30px;
-	line-height: 1em;
-	text-transform: lowercase;
+    font-size: 30px;
+    line-height: 1em;
+    text-transform: lowercase;
 }
 
 .calendar {
-	border-radius: 0 0 1em 1em;
+    border-radius: 0 0 1em 1em;
 
-	color: #555;
-	display: inline-block;
-	
+    color: #555;
+    display: inline-block;
+
 }
 
 .calendar thead {
-	color: #e66b6b;
-	font-weight: 500;
-	text-transform:capitalize;
+    color: #e66b6b;
+    font-weight: 500;
+    text-transform: capitalize;
 }
 
 .calendar td {
-	padding-left: 9px;
+    padding-left: 9px;
     padding-top: 9px;
     padding-bottom: 9px;
     padding-right: 9px;
-	text-align: center;
+    text-align: center;
 }
 
 .calendar tbody td:hover {
-	background: #cacaca;
-	color: #fff;
+    background: #cacaca;
+    color: #fff;
 }
 
 .current-day {
-	color: #e66b6b;
+    color: #e66b6b;
 }
 
 .prev-month,
 .next-month {
-	color: #cacaca;
+    color: #cacaca;
 }
 
 
 @media screen and (min-width : 768px) {
-    .fadeLarge{
-        display:none;
+    .fadeLarge {
+        display: none;
     }
+
     body::-webkit-scrollbar-track {
-        background-color: none; 
-        background:blue;
+        background-color: none;
+        background: blue;
     }
+
     body::-webkit-scrollbar {
         width: 0px;
-        border-radius:10px;
+        border-radius: 10px;
         background: none;
-      }
+    }
 
     div::-webkit-scrollbar-track {
-        background-color: none; 
-        background:none;
+        background-color: none;
+        background: none;
     }
+
     div::-webkit-scrollbar {
         width: 7px;
         background: none;
-      }
+    }
+
     div::-webkit-scrollbar-thumb {
-        border-radius:15px;
+        border-radius: 15px;
         background: rgba(84, 160, 210, 0.6);
-      }
-    div::-webkit-scrollbar-track-piece{
+    }
+
+    div::-webkit-scrollbar-track-piece {
         background: none;
-        margin:20px;
-    } 
+        margin: 20px;
+    }
 
     .modal {
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        padding-top: 100px;
+        /* Location of the box */
         padding-left: 300px;
         left: 0;
         top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
 
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-      }
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
 
-      /* Modal Content */
-        .modal-content {
+    /* Modal Content */
+    .modal-content {
         display: block;
         background-color: #fefefe;
         margin: auto;
@@ -147,7 +161,7 @@ td {
         font-size: 28px;
         font-weight: bold;
     }
-    
+
     .close:hover,
     .close:focus {
         color: #000;
@@ -162,30 +176,32 @@ td {
         font-size: 22px;
         font-family: "Helvetica", sans-serif;
         /*color: #333333;*/
-      }
-      
-      .container {
+    }
+
+    .container {
         background-color: #FFFFFF;
-        padding:10px;
+        padding: 10px;
         /*border: 2px solid #CCCCCC;*/
         width: 74%;
         margin-left: 400px;
         height: 41vw;
         display: flex;
-        flex-flow: column wrap; /* Shorthand – you could use ‘flex-direction: column’ and ‘flex-wrap: wrap’ instead */
+        flex-flow: column wrap;
+        /* Shorthand – you could use ‘flex-direction: column’ and ‘flex-wrap: wrap’ instead */
         justify-content: flex-start;
         align-items: flex-start;
         overflow-x: scroll;
-      }
-      .divider{
-        border-top-style: solid; 
-        color:rgba(85, 161, 211, 0.3); 
-        border-top-width: thin; 
-        margin-top:20px; 
+    }
+
+    .divider {
+        border-top-style: solid;
+        color: rgba(85, 161, 211, 0.3);
+        border-top-width: thin;
+        margin-top: 20px;
         margin-bottom: 20px;
-      }
-      
-      .item {
+    }
+
+    .item {
         background-color: white;
         border-radius: 10px;
         border: 1px solid rgba(85, 161, 211, 0.3);
@@ -193,40 +209,40 @@ td {
         width: 31%;
         margin: 1%;
         padding: 10px;
-      }
-      
-      .item.extraLarge {
-       /* background-color: yellow;*/
+    }
+
+    .item.extraLarge {
+        /* background-color: yellow;*/
         height: 500px;
     }
-    
+
     .item.large {
-    /*background-color: red;*/
-    height: fit-content;
+        /*background-color: red;*/
+        height: fit-content;
     }
 
     .item.medium {
-    /* background-color: aqua;*/
-    height: 220px;
-    overflow:hidden;
-    display: flex;
-    justify-content: left;
-    align-items: top;
+        /* background-color: aqua;*/
+        height: 220px;
+        overflow: hidden;
+        display: flex;
+        justify-content: left;
+        align-items: top;
     }
 
 
 
 
     .item.small {
-    /*background-color: violet;*/
-    height:auto;
-    max-height: 150px;
-    overflow:hidden;
-    display: flex;
-    justify-content: left;
-    align-items: top;
-    margin-bottom: -1%;
-    } 
+        /*background-color: violet;*/
+        height: auto;
+        max-height: 150px;
+        overflow: hidden;
+        display: flex;
+        justify-content: left;
+        align-items: top;
+        margin-bottom: -1%;
+    }
 
 
 
@@ -234,80 +250,84 @@ td {
 
 
     .item.thin {
-    /*background-color: green;*/
-    height:auto;
-    max-height: 150px;
-    overflow:hidden;
-    display: flex;
-    justify-content: left;
-    align-items: top;
-    transition: max-height 5s ease-out;
-    margin-bottom:1%;
-    } 
+        /*background-color: green;*/
+        height: auto;
+        max-height: 150px;
+        overflow: hidden;
+        display: flex;
+        justify-content: left;
+        align-items: top;
+        transition: max-height 5s ease-out;
+        margin-bottom: 1%;
+    }
 
     .item.collapsed {
-    max-height:0px;
-    margin-top:0;
-    display:none;
+        max-height: 0px;
+        margin-top: 0;
+        display: none;
     }
-    .item.collapsible{
-    border-top-left-radius: 0px;  
-    border-top-right-radius: 0px;        
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border: 1px solid rgba(85, 161, 211, 0.3);
-    border-top: none;
-    height: auto;
-    width: 31%;
-    margin-top: -1.75%;
-    padding: 10px;
+
+    .item.collapsible {
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border: 1px solid rgba(85, 161, 211, 0.3);
+        border-top: none;
+        height: auto;
+        width: 31%;
+        margin-top: -1.75%;
+        padding: 10px;
     }
 
     #myDIV {
-        display:none;
+        display: none;
     }
 
 
-      
+
     .column {
         float: left;
         width: 50%
     }
+
     .row {
-        display:flex;
+        display: flex;
         justify-content: space-around;
         width: 100%;
         padding: 10% 0%;
-    }  
+    }
 
-    .img{
-        display:inline-block;
-        width:30%;
-        height:100%;
+    .img {
+        display: inline-block;
+        width: 30%;
+        height: 100%;
         vertical-align: middle;
         line-height: normal;
     }
 
     /*@media (max-width: 1000px) {*/
-        .column {
-            float: none;
-            width: 100%
-        }
+    .column {
+        float: none;
+        width: 100%
+    }
+
     /*}*/
     /*Like the Montserrat font*/
-    html,body {
+    html,
+    body {
         font-family: Montserrat;
-        font-style: normal; 
+        font-style: normal;
         width: 100%;
         box-sizing: border-box;
         position: relative;
-        margin:0;
-        padding:0;
+        margin: 0;
+        padding: 0;
         overflow-y: auto;
     }
 
     /*Keep floating contents inside respective parents*/
-    div{
+    div {
         position: relative;
     }
 
@@ -317,26 +337,32 @@ td {
         font-family: Montserrat;
         font-weight: 500
     }
+
     /*Set up font sizes*/
     h1 {
         font-size: max(5vw, 30px);
-        margin-bottom:1px;
+        margin-bottom: 1px;
         margin-top: 0px;
         font-family: Montserrat;
         font-weight: 400;
     }
-    .yellow{
+
+    .yellow {
         color: var(--yellow)
     }
+
     h2 {
         font-size: max(3.8vw, 20px);
     }
+
     h3 {
         font-size: max(3vw, 16px);
     }
+
     h4 {
         font-size: 25px;
     }
+
     h5 {
         font-size: 20px;
     }
@@ -351,24 +377,25 @@ td {
         background-color: var(--lightblue);
         border-radius: 3vh;
         padding: 5px 40px;
-        border:none;
+        border: none;
         outline: none;
         box-shadow: none;
-        color:white;
+        color: white;
         height: 55px;
         font-size: max(2vw, 14px);
     }
 
-    .button2{
+    .button2 {
         background-color: transparent;
         background-image: url('/static/dashboard/images/downArrow.svg') no-repeat;
         border-radius: none;
-        border:none;
+        border: none;
         outline: none;
         box-shadow: none;
-        color:white;
+        color: white;
         height: 5px;
     }
+
     .desktop {
         width: 50%;
         margin-left: auto;
@@ -380,30 +407,32 @@ td {
         border-radius: 3vw;
         border: 1px solid var(--darkblue);
         padding: 2px 15px;
-        color:var(--darkblue);
+        color: var(--darkblue);
         text-align: center;
-        height:fit-content;
+        height: fit-content;
         font-size: max(3vw, 12px);
         overflow: hidden;
     }
-    .linkQA{
-        font-size:13px;
+
+    .linkQA {
+        font-size: 13px;
         display: block;
         text-align: center;
         text-decoration: none;
     }
 
     /*Backgrounds for homepage*/
-    .bluemain{
+    .bluemain {
         background-color: var(--darkblue);
         /*padding takes some of the width, this ensures nothing overflows*/
         width: 90% !important;
         flex-direction: column;
         padding: 20% 5%;
         justify-content: center;
-        margin:0;
+        margin: 0;
     }
-    .whitemain{
+
+    .whitemain {
         background-color: white;
         width: 84% !important;
         flex-direction: column;
@@ -411,38 +440,40 @@ td {
         justify-content: center;
     }
 
-    .wordblock{
-        display:inline-block;
+    .wordblock {
+        display: inline-block;
         width: 60%;
     }
 
-    .intrigued{
+    .intrigued {
         background-color: var(--lightblue);
         /*padding takes some of the width, this ensures nothing overflows*/
         width: 80% !important;
         flex-direction: column;
         padding: 10%;
         justify-content: center;
-        margin:0;
+        margin: 0;
     }
 
-    .content{
-        width:100%;
-        height:100vh;
+    .content {
+        width: 100%;
+        height: 100vh;
     }
+
     /*Every styling feature below is for the navigation bar --------------------------*/
 
     /*whenever i need to make a row*/
-    .row{
+    .row {
         display: flex;
         justify-content: space-between;
         flex-direction: row;
         width: 30%;
         padding: 0;
         margin: 0 5%;
-        
+
     }
-    .sideNav{
+
+    .sideNav {
         height: 100%;
         width: 20vw;
         position: fixed;
@@ -452,27 +483,28 @@ td {
         background-color: var(--darkblue);
         overflow-x: hidden;
         padding-top: 20px;
-        padding-left:30px;
+        padding-left: 30px;
     }
-    .sideNav h1{
+
+    .sideNav h1 {
         color: white;
         font-size: 40px;
         display: block;
-        padding-top:200px;
-        padding-left:50px;
+        padding-top: 200px;
+        padding-left: 50px;
         padding-right: 50px;
     }
 
-    .sideNav p{
+    .sideNav p {
         color: white;
         font-size: 20px;
         display: block;
-        padding-top:15px;
-        padding-left:50px;
+        padding-top: 15px;
+        padding-left: 50px;
         padding-right: 50px;
     }
 
-    .topNavRow{
+    .topNavRow {
         display: flex;
         justify-content: space-between;
         flex-direction: row;
@@ -481,228 +513,224 @@ td {
         margin: 0 5%;
     }
 
-    nav{
-        
-        margin:0;
+    nav {
+
+        margin: 0;
         flex-direction: column;
-        display:flex;
+        display: flex;
         justify-content: space-around;
     }
 
-    #menuToggle
-    {
-    display: block;
-    position: relative;
-    
-    z-index: 1;
-    
-    -webkit-user-select: none;
-    user-select: none;
+    #menuToggle {
+        display: block;
+        position: relative;
+
+        z-index: 1;
+
+        -webkit-user-select: none;
+        user-select: none;
     }
 
-    #menuToggle a
-    {
-    text-decoration: none;
-    color: #232323;
-    
-    transition: color 0.3s ease;
+    #menuToggle a {
+        text-decoration: none;
+        color: #232323;
+
+        transition: color 0.3s ease;
     }
 
 
-    #menuToggle input
-    {
-    display: block;
-    width: 6vw;
-    height: 6vw;
-    position: absolute;
-    top: -7px;
-    left: -5px;
-    
-    cursor: pointer;
-    
-    opacity: 0; /* hide this */
-    z-index: 2; /* and place it over the hamburger */
-    
-    -webkit-touch-callout: none;
+    #menuToggle input {
+        display: block;
+        width: 6vw;
+        height: 6vw;
+        position: absolute;
+        top: -7px;
+        left: -5px;
+
+        cursor: pointer;
+
+        opacity: 0;
+        /* hide this */
+        z-index: 2;
+        /* and place it over the hamburger */
+
+        -webkit-touch-callout: none;
     }
 
     /*
     * Just a quick hamburger
     */
-    #menuToggle span
-    {
-    display: block;
-    width: min(6vw,30px);
-    height: 0.35vh;
-    margin-bottom: 0.35vh;
-    position: relative;
-    
-    background: var(--darkblue);
-    border-radius: 3px;
-    
-    z-index: 1;
-    
-    transform-origin: 4px 0px;
-    
-    transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-                background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-                opacity 0.55s ease;
+    #menuToggle span {
+        display: block;
+        width: min(6vw, 30px);
+        height: 0.35vh;
+        margin-bottom: 0.35vh;
+        position: relative;
+
+        background: var(--darkblue);
+        border-radius: 3px;
+
+        z-index: 1;
+
+        transform-origin: 4px 0px;
+
+        transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
+            background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
+            opacity 0.55s ease;
     }
 
-    #menuToggle span:first-child
-    {
-    transform-origin: 0% 0%;
+    #menuToggle span:first-child {
+        transform-origin: 0% 0%;
     }
 
-    #menuToggle span:nth-last-child(2)
-    {
-    transform-origin: 0% 100%;
+    #menuToggle span:nth-last-child(2) {
+        transform-origin: 0% 100%;
     }
 
     /* 
     * Transform all the slices of hamburger
     * into a crossmark.
     */
-    #menuToggle input:checked ~ span
-    {
-    opacity: 1;
-    transform: rotate(45deg) translate(0, 0);
-    width: 3vh;
-    background: white;
+    #menuToggle input:checked~span {
+        opacity: 1;
+        transform: rotate(45deg) translate(0, 0);
+        width: 3vh;
+        background: white;
     }
 
     /*
     * But let's hide the middle one.
     */
-    #menuToggle input:checked ~ span:nth-last-child(3)
-    {
-    opacity: 0;
-    width:  3vh;
-    transform: rotate(0deg) scale(0.2, 0.2);
+    #menuToggle input:checked~span:nth-last-child(3) {
+        opacity: 0;
+        width: 3vh;
+        transform: rotate(0deg) scale(0.2, 0.2);
     }
 
     /*
     * Ohyeah and the last one should go the other direction
     */
-    #menuToggle input:checked ~ span:nth-last-child(2)
-    {
-    transform: rotate(-45deg) translate(0,0.175vh);
+    #menuToggle input:checked~span:nth-last-child(2) {
+        transform: rotate(-45deg) translate(0, 0.175vh);
     }
 
     /*
     * Make this absolute positioned
     * at the top left of the screen
     */
-    #menu
-    {
-    position: absolute;
-    width: min(60vw,300px);
-    height:100vh;
-    min-height: -webkit-fill-available;
-    margin: -8vw 0 0 -8vw;
-    padding: 5vw;
-    border-radius: 3vw;
-    padding-top: 125px;
-    color:white;
-    background: var(--darkblue);
-    list-style-type: none;
-    -webkit-font-smoothing: antialiased;
-    /* to stop flickering of text in safari */
-    
-    transform-origin: 0% 0%;
-    transform: translate(-100%, 0);
-    
-    transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+    #menu {
+        position: absolute;
+        width: min(60vw, 300px);
+        height: 100vh;
+        min-height: -webkit-fill-available;
+        margin: -8vw 0 0 -8vw;
+        padding: 5vw;
+        border-radius: 3vw;
+        padding-top: 125px;
+        color: white;
+        background: var(--darkblue);
+        list-style-type: none;
+        -webkit-font-smoothing: antialiased;
+        /* to stop flickering of text in safari */
+
+        transform-origin: 0% 0%;
+        transform: translate(-100%, 0);
+
+        transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
     }
 
-    #menu li
-    {
-    padding: 10px 0;
-    font-size: 22px;
+    #menu li {
+        padding: 10px 0;
+        font-size: 22px;
     }
 
     /*
     * And let's slide it in from the left
     */
-    #menuToggle input:checked ~ ul
-    {
-    transform: none;
+    #menuToggle input:checked~ul {
+        transform: none;
     }
+
     .module {
         margin: 5vw;
-        padding: 0 5vw ;
-        border: 2px solid rgba(99,99,99,0.1);
+        padding: 0 5vw;
+        border: 2px solid rgba(99, 99, 99, 0.1);
         border-radius: 3vw;
     }
+
     .modulequickApply {
         margin: 5vw 8vw;
         border-bottom: 1px solid rgba(153, 153, 153, 0.47);
     }
 
     .feedback {
-        border: 2px solid rgba(99,99,99,0.25);
+        border: 2px solid rgba(99, 99, 99, 0.25);
         width: 100%;
-        max-width:90%;
-        height:100px;
-        padding:5%;
+        max-width: 90%;
+        height: 100px;
+        padding: 5%;
         font-family: Montserrat;
         text-align: justify;
         text-justify: center;
         resize: none;
     }
-    .link{
-        font-size:max(2vw, 14px);
+
+    .link {
+        font-size: max(2vw, 14px);
         display: block;
         text-align: center;
         text-decoration: none;
         margin-right: 20px;
     }
 }
-    
+
 @media screen and (max-width : 767px) {
-    .fadeSmall{
-        display:none;
+    .fadeSmall {
+        display: none;
     }
 
     .column {
         float: left;
         width: 50%
     }
+
     .row {
-        display:flex;
+        display: flex;
         justify-content: space-around;
         width: 100%;
         padding: 10% 0%;
-    }  
+    }
 
-    .img{
-        display:inline-block;
-        width:30%;
-        height:100%;
+    .img {
+        display: inline-block;
+        width: 30%;
+        height: 100%;
         vertical-align: middle;
         line-height: normal;
     }
 
     /*@media (max-width: 1000px) {*/
-        .column {
-            float: none;
-            width: 100%
-        }
+    .column {
+        float: none;
+        width: 100%
+    }
+
     /*}*/
     /*Like the Montserrat font*/
-    html,body {
+    html,
+    body {
         font-family: Montserrat;
         font-style: normal;
-        overflow-x: hidden; 
+        overflow-x: hidden;
         width: 100%;
         box-sizing: border-box;
         position: relative;
-        margin:0;
-        padding:0;
+        margin: 0;
+        padding: 0;
     }
 
     /*Keep floating contents inside respective parents*/
-    div{
+    div {
         position: relative;
     }
 
@@ -712,27 +740,33 @@ td {
         font-family: Montserrat;
         font-weight: 500
     }
+
     /*Set up font sizes*/
     h1 {
         font-size: max(5.9vw, 30px);
-        margin-bottom:1px;
+        margin-bottom: 1px;
         margin-top: 0px;
         font-family: Montserrat;
         font-weight: 400;
     }
-    .yellow{
+
+    .yellow {
         color: var(--yellow)
     }
+
     h2 {
         font-size: max(5vw, 24px);
-        margin:0;
+        margin: 0;
     }
+
     h3 {
         font-size: max(4vw, 20px);
     }
+
     h4 {
         font-size: 25px;
     }
+
     h5 {
         font-size: 20px;
     }
@@ -743,21 +777,29 @@ td {
     }
 
     .modal {
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        padding-top: 100px;
+        /* Location of the box */
         left: 0;
         top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
 
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-      }
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
 
-      /* Modal Content */
-        .modal-content {
+    /* Modal Content */
+    .modal-content {
         display: block;
         background-color: #fefefe;
         margin: auto;
@@ -773,7 +815,7 @@ td {
         font-size: 28px;
         font-weight: bold;
     }
-    
+
     .close:hover,
     .close:focus {
         color: #000;
@@ -786,10 +828,10 @@ td {
         background-color: var(--lightblue);
         border-radius: 3vh;
         padding: 5px 40px;
-        border:none;
+        border: none;
         outline: none;
         box-shadow: none;
-        color:white;
+        color: white;
         height: 45px;
         font-size: max(3.8vw, 16px);
     }
@@ -799,25 +841,26 @@ td {
         border-radius: 3vw;
         border: 1px solid var(--darkblue);
         padding: 5px 10px;
-        color:var(--darkblue);
+        color: var(--darkblue);
         text-align: center;
-        height:max(3.2vw, 16px);
-        width:max-content;
+        height: max(3.2vw, 16px);
+        width: max-content;
         font-size: max(3vw, 12px);
         overflow: hidden;
     }
 
     /*Backgrounds for homepage*/
-    .bluemain{
+    .bluemain {
         background-color: var(--darkblue);
         /*padding takes some of the width, this ensures nothing overflows*/
         width: 90% !important;
         flex-direction: column;
         padding: 20% 5%;
         justify-content: center;
-        margin:0;
+        margin: 0;
     }
-    .whitemain{
+
+    .whitemain {
         background-color: white;
         width: 84% !important;
         flex-direction: column;
@@ -825,38 +868,30 @@ td {
         justify-content: center;
     }
 
-    .wordblock{
-        display:inline-block;
+    .wordblock {
+        display: inline-block;
         width: 60%;
     }
 
-    .intrigued{
+    .intrigued {
         background-color: var(--lightblue);
         /*padding takes some of the width, this ensures nothing overflows*/
         width: 80% !important;
         flex-direction: column;
         padding: 10%;
         justify-content: center;
-        margin:0;
+        margin: 0;
     }
 
-    .content{
-        width:100%;
-        height:100vh;
+    .content {
+        width: 100%;
+        height: 100vh;
     }
+
     /*Every styling feature below is for the navigation bar --------------------------*/
 
     /*whenever i need to make a row*/
-    .row{
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        width: 90%;
-        padding: 0;
-        margin: 0 5%;
-    }
-    
-    .topNavRow{
+    .row {
         display: flex;
         justify-content: space-between;
         flex-direction: row;
@@ -865,175 +900,177 @@ td {
         margin: 0 5%;
     }
 
-    nav{
-        margin:0;
+    .topNavRow {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        width: 90%;
+        padding: 0;
+        margin: 0 5%;
+    }
+
+    nav {
+        margin: 0;
         flex-direction: column;
-        display:flex;
+        display: flex;
         justify-content: space-around;
     }
 
-    #menuToggle
-    {
-    display: block;
-    position: relative;
-    
-    z-index: 1;
-    
-    -webkit-user-select: none;
-    user-select: none;
+    #menuToggle {
+        display: block;
+        position: relative;
+
+        z-index: 1;
+
+        -webkit-user-select: none;
+        user-select: none;
     }
 
-    #menuToggle a
-    {
-    text-decoration: none;
-    color: #232323;
-    
-    transition: color 0.3s ease;
+    #menuToggle a {
+        text-decoration: none;
+        color: #232323;
+
+        transition: color 0.3s ease;
     }
 
 
-    #menuToggle input
-    {
-    display: block;
-    width: 6vw;
-    height: 6vw;
-    position: absolute;
-    top: -7px;
-    left: -5px;
-    
-    cursor: pointer;
-    
-    opacity: 0; /* hide this */
-    z-index: 2; /* and place it over the hamburger */
-    
-    -webkit-touch-callout: none;
+    #menuToggle input {
+        display: block;
+        width: 6vw;
+        height: 6vw;
+        position: absolute;
+        top: -7px;
+        left: -5px;
+
+        cursor: pointer;
+
+        opacity: 0;
+        /* hide this */
+        z-index: 2;
+        /* and place it over the hamburger */
+
+        -webkit-touch-callout: none;
     }
 
     /*
     * Just a quick hamburger
     */
-    #menuToggle span
-    {
-    display: block;
-    width: 6vw;
-    height: 0.35vh;
-    margin-bottom: 0.35vh;
-    position: relative;
-    
-    background: var(--darkblue);
-    border-radius: 3px;
-    
-    z-index: 1;
-    
-    transform-origin: 4px 0px;
-    
-    transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-                background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-                opacity 0.55s ease;
+    #menuToggle span {
+        display: block;
+        width: 6vw;
+        height: 0.35vh;
+        margin-bottom: 0.35vh;
+        position: relative;
+
+        background: var(--darkblue);
+        border-radius: 3px;
+
+        z-index: 1;
+
+        transform-origin: 4px 0px;
+
+        transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
+            background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
+            opacity 0.55s ease;
     }
 
-    #menuToggle span:first-child
-    {
-    transform-origin: 0% 0%;
+    #menuToggle span:first-child {
+        transform-origin: 0% 0%;
     }
 
-    #menuToggle span:nth-last-child(2)
-    {
-    transform-origin: 0% 100%;
+    #menuToggle span:nth-last-child(2) {
+        transform-origin: 0% 100%;
     }
 
     /* 
     * Transform all the slices of hamburger
     * into a crossmark.
     */
-    #menuToggle input:checked ~ span
-    {
-    opacity: 1;
-    transform: rotate(45deg) translate(0, 0);
-    width: 3vh;
-    background: white;
+    #menuToggle input:checked~span {
+        opacity: 1;
+        transform: rotate(45deg) translate(0, 0);
+        width: 3vh;
+        background: white;
     }
 
     /*
     * But let's hide the middle one.
     */
-    #menuToggle input:checked ~ span:nth-last-child(3)
-    {
-    opacity: 0;
-    width:  3vh;
-    transform: rotate(0deg) scale(0.2, 0.2);
+    #menuToggle input:checked~span:nth-last-child(3) {
+        opacity: 0;
+        width: 3vh;
+        transform: rotate(0deg) scale(0.2, 0.2);
     }
 
     /*
     * Ohyeah and the last one should go the other direction
     */
-    #menuToggle input:checked ~ span:nth-last-child(2)
-    {
-    transform: rotate(-45deg) translate(0,0.175vh);
+    #menuToggle input:checked~span:nth-last-child(2) {
+        transform: rotate(-45deg) translate(0, 0.175vh);
     }
 
     /*
     * Make this absolute positioned
     * at the top left of the screen
     */
-    #menu
-    {
-    position: absolute;
-    width: 60vw;
-    height:100vh;
-    min-height: -webkit-fill-available;
-    margin: -8vw 0 0 -8vw;
-    padding: 5vw;
-    border-radius: 3vw;
-    padding-top: 125px;
-    color:white;
-    background: var(--darkblue);
-    list-style-type: none;
-    -webkit-font-smoothing: antialiased;
-    /* to stop flickering of text in safari */
-    
-    transform-origin: 0% 0%;
-    transform: translate(-100%, 0);
-    
-    transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+    #menu {
+        position: absolute;
+        width: 60vw;
+        height: 100vh;
+        min-height: -webkit-fill-available;
+        margin: -8vw 0 0 -8vw;
+        padding: 5vw;
+        border-radius: 3vw;
+        padding-top: 125px;
+        color: white;
+        background: var(--darkblue);
+        list-style-type: none;
+        -webkit-font-smoothing: antialiased;
+        /* to stop flickering of text in safari */
+
+        transform-origin: 0% 0%;
+        transform: translate(-100%, 0);
+
+        transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
     }
 
-    #menu li
-    {
-    padding: 10px 0;
-    font-size: 22px;
+    #menu li {
+        padding: 10px 0;
+        font-size: 22px;
     }
 
     /*
     * And let's slide it in from the left
     */
-    #menuToggle input:checked ~ ul
-    {
-    transform: none;
+    #menuToggle input:checked~ul {
+        transform: none;
     }
+
     .module {
         margin: 5vw;
-        padding: 0 5vw ;
-        border: 2px solid rgba(99,99,99,0.1);
+        padding: 0 5vw;
+        border: 2px solid rgba(99, 99, 99, 0.1);
         border-radius: 3vw;
     }
+
     .modulequickApply {
         margin: 5vw 8vw;
         border-bottom: 1px solid rgba(153, 153, 153, 0.47);
     }
 
     .feedback {
-        border: 2px solid rgba(99,99,99,0.25);
+        border: 2px solid rgba(99, 99, 99, 0.25);
         width: 100%;
-        max-width:90%;
-        height:100px;
-        padding:5%;
+        max-width: 90%;
+        height: 100px;
+        padding: 5%;
         font-family: Montserrat;
         text-align: justify;
         text-justify: center;
         resize: none;
     }
-    .link{
+
+    .link {
         font-size: max(3.8vw, 16px);
         display: block;
         text-align: center;
@@ -1042,7 +1079,7 @@ td {
     }
 }
 
-.extraspace{
-    width:100%;
-    height:50px;
+.extraspace {
+    width: 100%;
+    height: 50px;
 }

@@ -9,62 +9,75 @@ the Free Software Foundation, either version 3 of the License, or
 
 <!DOCTYPE html>
 <html lang="en">
-    <!--Get the various stylesheets I need like my fonts and CSS-->
-    <head>
-        <title>Dependent Information</title>
-        <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
-        <script>
+<!--Get the various stylesheets I need like my fonts and CSS-->
+
+<head>
+    <title>Dependent Information</title>
+    <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
+    <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-SL59NNQRH0');
-        </script>
-    </head>
+    </script>
+</head>
 
-    <body>
+<body>
 
-        {% if is_prod is False %}
-            <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
-        {% endif %}
-        
-        <div class=fadeLarge>
-            <div class=nav>
-                <a class="row" onClick="window.history.back();return false;">
-                    <div class="fadeLarge"><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back" style="width:8vw; margin-right: 5px;"></div>
-                    <div class="fadeSmall"><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back" style="width:8vw; margin-right: 5px;"></div>
-                    <p style = "font-weight: 700;">BACK</p>
-                </a>
-                
-            </div>
+    {% if is_prod is False %}
+    <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING
+        ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com"
+            target="_blank">https://getfoco.fcgov.com</a> instead</div>
+    {% endif %}
+
+    <div class=fadeLarge>
+        <div class=nav>
+            <a class="row" onClick="window.history.back();return false;">
+                <div class="fadeLarge"><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back"
+                        style="width:8vw; margin-right: 5px;"></div>
+                <div class="fadeSmall"><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back"
+                        style="width:8vw; margin-right: 5px;"></div>
+                <p style="font-weight: 700;">BACK</p>
+            </a>
+
         </div>
+    </div>
 
-        <div class=fadeSmall>
-            <div class=navClean>
-                <a class="row" onClick="window.history.back();return false;">
-                    <div class="fadeLarge"><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back" style="width:8vw; margin-right: 5px;"></div>
-                    <div class="fadeSmall"><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back" style="width:8vw; margin-right: 5px;"></div>
-                    <p style = "font-weight: 700;">BACK</p>
-                </a>
-            </div>
+    <div class=fadeSmall>
+        <div class=navClean>
+            <a class="row" onClick="window.history.back();return false;">
+                <div class="fadeLarge"><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back"
+                        style="width:8vw; margin-right: 5px;"></div>
+                <div class="fadeSmall"><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back"
+                        style="width:8vw; margin-right: 5px;"></div>
+                <p style="font-weight: 700;">BACK</p>
+            </a>
         </div>
+    </div>
 
-        <div class="content spaceAround" style="padding: 0 0 0 3vw;">
-            <!--NOTE: For the future have numbers change based on database-->
-            <!-- NOTE:  Old "household" definition found commented here, commented out due to perhaps being a bit too legal-eezey, will keep here for legacy purposes
+    <div class="content spaceAround" style="padding: 0 0 0 3vw;">
+        <!--NOTE: For the future have numbers change based on database-->
+        <!-- NOTE:  Old "household" definition found commented here, commented out due to perhaps being a bit too legal-eezey, will keep here for legacy purposes
             <div class="fadeSmall"><p style="color:#55A1D3;"><b>Household shall mean collectively the applicant and any other person claimed as a dependent on the applicant’s federal income tax return. This may include the applicant's spouse, and applicant's children by birth or adoption, step children, foster children and children under legal guardianship who reside with the applicant in the taxed dwelling unit.</b></p></div>
             <div class="fadeLarge"><p style="color:white;"><b>Household shall mean collectively the applicant and any other person claimed as a dependent on the applicant’s federal income tax return. This may include the applicant's spouse, and applicant's children by birth or adoption, step children, foster children and children under legal guardianship who reside with the applicant in the taxed dwelling unit.</b></p></div>
             -->
-            <div><p><b>"Household" means the applicant and any other people claimed on your federal tax return. This could include your spouse, and your children by birth or adoption, step children, foster children and children under legal guardianship who live with you in your home as submitted on your federal income tax return. </b></p></div>
-                <!--Whatever I need in the other pages, I can enter it here-->
-
+        <div>
+            <p><b>"Household" means the applicant and any other people claimed on your federal tax return. This could
+                    include your spouse, and your children by birth or adoption, step children, foster children and
+                    children under legal guardianship who live with you in your home as submitted on your federal income
+                    tax return. </b></p>
         </div>
+        <!--Whatever I need in the other pages, I can enter it here-->
 
-    </body>
+    </div>
+
+</body>
+
 </html>

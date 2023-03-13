@@ -11,507 +11,564 @@ the Free Software Foundation, either version 3 of the License, or
 {% block body %}
 <!-- The Modal -->
 <div id="modalDashboard" class="modal Dashboard">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    {% if  QProgramNumber == 0 and PendingNumber == 0 and ActiveNumber == 0 %}
-      <p>We're sorry, currently you do not qualify for any programs. If you think this is an error please <a href="mailto: GetFoCo@fcgov.com?subject=Income Qualification Question - Get FoCo&body=Hello Get FoCo team, I seem to be having an issue with qualification, can you help clarify the qualifications for the available progrms?" style="font-style: none;">contact us</a>. <br> <br> Furthermore, you may click on <a style = "display: inline;" href="{% url 'dashboard:ProgramsList' %}">Programs</a> to view our available programs and their qualifications. </p>
-    {% else %}
-      <p>Congrats on creating an account! <br> <br> With the information you provided we gathered all the programs you may qualify for! All you need to do now is to click on Quick Apply + for programs you may be interested in to apply.</p>
-    {% endif %}
-  </div>
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        {% if QProgramNumber == 0 and PendingNumber == 0 and ActiveNumber == 0 %}
+        <p>We're sorry, currently you do not qualify for any programs. If you think this is an error please <a
+                href="mailto: GetFoCo@fcgov.com?subject=Income Qualification Question - Get FoCo&body=Hello Get FoCo team, I seem to be having an issue with qualification, can you help clarify the qualifications for the available progrms?"
+                style="font-style: none;">contact us</a>. <br> <br> Furthermore, you may click on <a
+                style="display: inline;" href="{% url 'dashboard:ProgramsList' %}">Programs</a> to view our available
+            programs and their qualifications. </p>
+        {% else %}
+        <p>Congrats on creating an account! <br> <br> With the information you provided we gathered all the programs you
+            may qualify for! All you need to do now is to click on Quick Apply + for programs you may be interested in
+            to apply.</p>
+        {% endif %}
+    </div>
 </div>
 
 <div class="content">
-  <div class=fadeLarge>
-  <!--Program number blocks - information section-->
-    <div class="row">
-      <a style="color:var(--white); font-weight: 800; text-decoration: none;" href="{% url 'dashboard:qualifiedPrograms' %}?order_by=active">
-        <div class="module" style="margin-left: 0;margin-right:1.5vw;padding: 1vw ;">
-            
-            <!--CSV HERE-->
-            <hprogram style = "color: var(--darkblue)"> {{ActiveNumber}} </hprogram>
-            <h3 style = "font-weight: 400; margin: 0; ">Programs Active </h3>
-            
+    <div class=fadeLarge>
+        <!--Program number blocks - information section-->
+        <div class="row">
+            <a style="color:var(--white); font-weight: 800; text-decoration: none;"
+                href="{% url 'dashboard:qualifiedPrograms' %}?order_by=active">
+                <div class="module" style="margin-left: 0;margin-right:1.5vw;padding: 1vw ;">
+
+                    <!--CSV HERE-->
+                    <hprogram style="color: var(--darkblue)"> {{ActiveNumber}} </hprogram>
+                    <h3 style="font-weight: 400; margin: 0; ">Programs Active </h3>
+
+                </div>
+            </a>
+            <a style="color:var(--white); font-weight: 800; text-decoration: none;"
+                href="{% url 'dashboard:qualifiedPrograms' %}?order_by=pending">
+                <div class="module" style="margin-left: 1.5vw;margin-right:0;padding: 1vw ;">
+
+                    <!--CSV HERE-->
+                    <hprogram style="color: var(--darkblue)"> {{PendingNumber}} </hprogram>
+                    <h3 style="font-weight: 400; margin: 0;">Pending Approval </h3>
+                </div>
+            </a>
         </div>
-      </a>
-      <a style="color:var(--white); font-weight: 800; text-decoration: none;" href="{% url 'dashboard:qualifiedPrograms' %}?order_by=pending">
-        <div class="module" style="margin-left: 1.5vw;margin-right:0;padding: 1vw ;">
-            
-            <!--CSV HERE-->
-            <hprogram style = "color: var(--darkblue)"> {{PendingNumber}} </hprogram>
-            <h3 style = "font-weight: 400; margin: 0;">Pending Approval </h3>
+        <div class="row">
+            <a style="color:var(--white); font-weight: 800; text-decoration: none;"
+                href="{% url 'dashboard:qualifiedPrograms' %}?order_by=eligible">
+                <div class="module" style="padding: 1vw ;margin:0 5vw;">
+                    <div class="row" style="align-items: center;">
+                        <!--CSV HERE-->
+                        <hprogram style="color: #4CAD00;margin:0"> {{QProgramNumber}} </hprogram>
+                        <h3 style="font-weight: 400; margin: 0 0 0 5vw ;">Programs You May Qualify For </h3>
+                    </div>
+                </div>
+            </a>
         </div>
-      </a>
-    </div>
-    <div class="row">
-    <a style="color:var(--white); font-weight: 800; text-decoration: none;" href="{% url 'dashboard:qualifiedPrograms' %}?order_by=eligible">
-      <div class="module" style="padding: 1vw ;margin:0 5vw;">
-        <div class="row" style="align-items: center;">
-            <!--CSV HERE-->
-            <hprogram style = "color: #4CAD00;margin:0"> {{QProgramNumber}} </hprogram>
-            <h3 style = "font-weight: 400; margin: 0 0 0 5vw ;" >Programs You May Qualify For </h3>
+
+        <div class="module">
+            <p style="color: #999999">Upcoming Program Updates </p>
+
+            <!--CSV HERE / Also template for printing out all updates-->
+            <div>
+                <p style="font-weight: 550;margin-bottom:0">Stay Tuned for Updates Here! </p>
+                <div class="row" style="margin:0;">
+                    <p style="margin-top:0;"> Grocery Rebate </p>
+                    <p style="color:#999999;margin-top:0;"> </p>
+                </div>
+            </div>
+            <div>
+                <p style="font-weight: 550;margin-bottom:0">Stay Tuned for Updates Here! </p>
+                <div class="row" style="margin:0;">
+                    <p style="margin-top:0;"> Connexion </p>
+                    <p style="color:#999999;margin-top:0;"> </p>
+                </div>
+            </div>
+
+
         </div>
-      </div>
-    </a>
-    </div>
+        <div class="module">
+            <p style="color: #999999">City News </p>
 
-    <div class="module" >
-      <p style = "color: #999999">Upcoming Program Updates </p>
+            <!--CSV HERE / Also template for printing out all updates-->
+            <div>
+                <p style="margin-bottom:0;">Utility Affordability Programs</p>
+                <p style="font-weight: 550; margin: 5px 0">Check out Utility programs that can reduce your monthly
+                    expenses.
+                    https://www.fcgov.com/utilities/manage-your-account/payment-options/utilities-affordability-portfolio/
+                </p>
+                <p style="color:#999999;margin-top:0;">April 2022</p>
+            </div>
 
-    <!--CSV HERE / Also template for printing out all updates-->
-      <div>
-          <p style="font-weight: 550;margin-bottom:0">Stay Tuned for Updates Here! </p>
-          <div class="row" style="margin:0;">
-              <p style = "margin-top:0;"> Grocery Rebate </p>
-              <p style = "color:#999999;margin-top:0;" > </p>
-          </div>
-      </div>
-      <div>
-          <p style="font-weight: 550;margin-bottom:0">Stay Tuned for Updates Here! </p>
-          <div class="row" style="margin:0;">
-              <p style = "margin-top:0;"> Connexion </p>
-              <p style = "color:#999999;margin-top:0;" > </p>
-          </div>
-      </div>
+            <div>
+                <p style="margin-bottom:0;">United Way of Larimer County</p>
+                <p style="font-weight: 550; margin: 5px 0">Information is available for Larimer County residents in need
+                    of rent, food or utilities assistance.
+                    Also includes resources for seniors, small business, mental health support, families, unemployment
+                    and medical needs.
+                    <a href="https://uwaylc.org/Get-Help/" target="_blank">uwaylc.org/Get-Help/</a>
 
-
-    </div>
-    <div class="module" >
-      <p style = "color: #999999">City News  </p>
-
-    <!--CSV HERE / Also template for printing out all updates-->
-      <div>
-        <p style = "margin-bottom:0;">Utility Affordability Programs</p>
-        <p style="font-weight: 550; margin: 5px 0">Check out Utility programs that can reduce your monthly expenses.
-          https://www.fcgov.com/utilities/manage-your-account/payment-options/utilities-affordability-portfolio/          
-          </p>
-        <p style = "color:#999999;margin-top:0;" >April 2022</p>
-      </div>
-
-      <div>
-        <p style = "margin-bottom:0;">United Way of Larimer County</p>
-        <p style="font-weight: 550; margin: 5px 0">Information is available for Larimer County residents in need of rent, food or utilities assistance.
-          Also includes resources for seniors, small business, mental health support, families, unemployment and medical needs.
-          <a href="https://uwaylc.org/Get-Help/" target="_blank">uwaylc.org/Get-Help/</a>
-          
-          </p>
-        <p style = "color:#999999;margin-top:0;" >April 2022</p>
-      </div>
-  </div>
-</div>
-
-<!-- content for desktop!-->
-<div class="fadeSmall">
-  <div class="container">
-    <!-- START: QUALIFIED IQ PROGRAMS -->
-    <div class="item thin">
-      <a style="color:var(--white); font-weight: 800; text-decoration: none;" href="{% url 'dashboard:qualifiedPrograms' %}">
-        <!--CSV HERE-->
-        <hprogram style = "color: #4CAD00;margin:0"> {{QProgramNumber}} </hprogram>
-      </a>
-      <p style = "font-weight: 400; padding-left: 15px;">Programs You May Qualify For </p>
-      <button class="button button2" id="toggle-button1"><img src="{% static 'dashboard/images/downArrow.svg' %}" style="position: absolute; bottom: 10px;right: 10px;"> </button>
-    </div>
-    <div class="item collapsible qualifyfor">
-      {% for program in iq_programs %}
-        {% if program.status_for_user != 'PENDING' and program.status_for_user != 'ACTIVE' and program.status_for_user != 'NOT QUALIFIED'  %}
-        <div style="display:{{ program.visibility }}">
-          <div class="divider"></div>
-          <div class = "row" style="margin:0; width:100%">
-              <div style="margin:0">
-                  <p style ="font-weight: 400; margin: 0">{{ program.title }}</p>
-              </div>
-              {% if program.name == 'spin'%}
-                  <a href="#" onclick="return false;" id="spinPrivacyAcknowledgement" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}">{{ program.button.text }}</div></a>
-              {% else %}
-                  <a href="{{ program.quick_apply_link }}" style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">{{  program.button.text }}</div></a>
-              {% endif %}
-          </div>
-          <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="{{ program.learn_more_link }}" target="_blank" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                  <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                  <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-              </a>
-          </div>
-        </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-    <!-- END: QUALIFIED IQ PROGRAMS -->
-
-    <!-- START: PENDING IQ PROGRAMS -->
-    <div class="item thin" >
-      <!--CSV HERE-->
-      <hprogram style = "color: var(--darkblue)"> {{PendingNumber}} </hprogram>
-      <p style = "font-weight: 400; padding-left: 20px;  ">Pending Approval</p>
-      <button class="button button2" id="toggle-button"><img src="{% static 'dashboard/images/downArrow.svg' %}" style="position: absolute; bottom: 10px;right: 10px;"> </button>
-    </div>
-    <div class="item collapsible pending">
-      {% for program in iq_programs %}
-        {% if program.status_for_user == 'PENDING' %}
-        <div style="display:{{ program.visibility }}">
-          <div class="divider"></div>
-          <div class = "row" style="margin:0; width:100%">
-              <div style="margin:0">
-                  <p style ="font-weight: 400; margin: 0">{{ program.title }}</p>
-              </div>
-              <a style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">{{  program.button.text }}</div></a>
-          </div>
-          <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="{{ program.learn_more_link }}" target="_blank" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                  <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                  <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-              </a>
-          </div>
-        </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-    <!-- END: PENDING IQ PROGRAMS -->
-
-    <!-- START: ACTIVE IQ PROGRAMS -->
-    <div class="item thin" >
-        <!--CSV HERE-->
-        <hprogram style = "color: var(--darkblue)"> {{ActiveNumber}} </hprogram>
-        <p style = "font-weight: 400; padding-left: 20px; ">Programs Active </p> <button class="button button2" onclick="myFunction()"><img src="{% static 'application/images/clipart249308.png' %}" alt="back" style="width:min(4.5vw,20px);"></button>
-        <button class="button button2" id="toggle-button2"><img src="{% static 'dashboard/images/downArrow.svg' %}" style="position: absolute; bottom: 10px;right: 10px;"> </button>
-    </div>
-    <div class="item collapsible active">
-      <div id="myDIV">
-        <p style="font-size: 15px;">Once your information is reviewed by the Get FoCo team, you will find the programs you are approved for here! Checkback as it gets closer to your application's estimated date and be sure to check your email for communication from us.</p>
-      </div>
-      {% for program in iq_programs %}
-        {% if program.status_for_user == 'ACTIVE' %}
-        <div style="display:{{ program.visibility }}">
-          <div class="divider"></div>
-          <div class = "row" style="margin:0; width:100%">
-              <div style="margin:0">
-                  <p style ="font-weight: 400; margin: 0">{{ program.title }}</p>
-              </div>
-              <a style="text-decoration: none; text-align: center;"> <div class="quickapply linkQA"  style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">{{  program.button.text }}</div></a>
-          </div>
-          <div class = "row" style="margin:0;width:100%">
-            <a class="row" href="{{ program.learn_more_link }}" target="_blank" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                  <p style = "margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
-                  <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 1vw; margin-left: 5px;color:black">
-              </a>
-          </div>
-        </div>
-        {% endif %}
-      {% endfor %}
-      <!-- END: ACTIVE IQ PROGRAMS -->
-    </div>
-    
-    <div class="item large" style="align-content:flex-end">
-      <p style = "color: #999999">Upcoming Program Updates </p>
-    <!--CSV HERE / Also template for printing out all updates-->
-      <p style="font-weight: 550;">Stay Tuned for Updates! </p>
-      <p> Grocery Rebate</p>
-        <p>{{groceryStatus}}</p>
-      <p> Connexion</p>
-        <p>{{connexionStatus}}</p>
-      <p> Recreation</p>
-        <p>{{recreationStatus}}</p>
-    </div>
-
-    <!-- News Section -->
-    <div class="item large">
-      <p style = "color: #999999">City News & Events </p>
-
-      <!--CSV HERE / Also template for printing out all updates-->
-      <div>
-        <p style = "margin-bottom:0;"> Larimer County COVID-19 Information Center</p>
-        <p style="font-weight: 550; margin: 5px 0"> <ul>Call: 970-498-5500: Open Monday - Friday, 9:00 am - 4:30 pm</ul>
-        </p>
-        <p style="font-weight: 550; margin: 5px 0"> <ul>Text questions: 970-999-1770: response within 4 hours during the day
-          </ul>
-          <a href="https://www.larimer.org/health/communicable-disease/coronavirus-covid-19" target="_blank" style="font-weight: 550; margin: 5px 0"> <ul>More Information Here</ul>
-          </a>
-        </p>
-        <p style = "color:#999999;margin-top:0;" >April 2022</p>
-      </div>
-
-      <div>
-        <p style = "margin-bottom:0;">Need Help?</p>
-        <p style="font-weight: 550; margin: 5px 0">Information is available for Larimer County residents in need of rent, food or utilities assistance.
-          Also includes resources for seniors, small business, mental health support, families, unemployment and medical needs.
-          <a href="https://uwaylc.org/Get-Help/" target="_blank">uwaylc.org/Get-Help/</a></p>
-        <p style = "color:#999999;margin-top:0;" >April 2022</p>
-      </div>
-    </div>
-    
-
-    <!-- Feedback section -->
-    <div class="item extraLarge" style="padding-left: 3%;">
-      <form action="{% url 'dashboard:index' %}" method="post">
-        {% csrf_token %}
-          <p>Feedback</p>
-          <div class="column" style="margin:0; width:100%;">
-            <p style="font-weight: 600;">How would you rate your experience so far using the Get FoCo portal? </p>
-            <div class="column" style="margin:0; width:100%;">
-              <clearButton name="starRating" value="1" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star1D" style="width:min(10vw, 50px);" onclick="fillStarD(1)"> </clearButton>
-              <clearButton name="starRating" value="2" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star2D" style="width:min(10vw, 50px);" onclick="fillStarD(2)"> </clearButton>
-              <clearButton name="starRating" value="3" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star3D" style="width:min(10vw, 50px);" onclick="fillStarD(3)"> </clearButton>
-              <clearButton name="starRating" value="4" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star4D" style="width:min(10vw, 50px);" onclick="fillStarD(4)"> </clearButton>
-              <clearButton name="starRating" value="5" type ="button"> <img src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star5D" style="width:min(10vw, 50px);" onclick="fillStarD(5)"> </clearButton>
+                </p>
+                <p style="color:#999999;margin-top:0;">April 2022</p>
             </div>
         </div>
-        <div class="column" style="width:100%; margin:0; justify-content: flex-start;">
-              <p style="font-weight: 800; margin-top: 25px;">How can we do better? Don't worry, your feedback is anonymous!</p> 
-              <textarea class="feedback" placeholder="Tell us how we're doing!"id="" name="feedbackComments" maxlength="500" style="border-radius: 2vh;"></textarea>
-            <button name="starRating" value = "" id="submitD" style="width:90%"> <b>Share Feedback</b> </button>
+    </div>
+
+    <!-- content for desktop!-->
+    <div class="fadeSmall">
+        <div class="container">
+            <!-- START: QUALIFIED IQ PROGRAMS -->
+            <div class="item thin">
+                <a style="color:var(--white); font-weight: 800; text-decoration: none;"
+                    href="{% url 'dashboard:qualifiedPrograms' %}">
+                    <!--CSV HERE-->
+                    <hprogram style="color: #4CAD00;margin:0"> {{QProgramNumber}} </hprogram>
+                </a>
+                <p style="font-weight: 400; padding-left: 15px;">Programs You May Qualify For </p>
+                <button class="button button2" id="toggle-button1"><img
+                        src="{% static 'dashboard/images/downArrow.svg' %}"
+                        style="position: absolute; bottom: 10px;right: 10px;"> </button>
+            </div>
+            <div class="item collapsible qualifyfor">
+                {% for program in iq_programs %}
+                {% if program.status_for_user != 'PENDING' and program.status_for_user != 'ACTIVE' and
+                program.status_for_user != 'NOT QUALIFIED' %}
+                <div style="display:{{ program.visibility }}">
+                    <div class="divider"></div>
+                    <div class="row" style="margin:0; width:100%">
+                        <div style="margin:0">
+                            <p style="font-weight: 400; margin: 0">{{ program.title }}</p>
+                        </div>
+                        {% if program.name == 'spin'%}
+                        <a href="#" onclick="return false;" id="spinPrivacyAcknowledgement"
+                            style="text-decoration: none; text-align: center;">
+                            <div class="quickapply linkQA"
+                                style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}">
+                                {{ program.button.text }}</div>
+                        </a>
+                        {% else %}
+                        <a href="{{ program.quick_apply_link }}" style="text-decoration: none; text-align: center;">
+                            <div class="quickapply linkQA"
+                                style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">
+                                {{ program.button.text }}</div>
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="row" style="margin:0;width:100%">
+                        <a class="row" href="{{ program.learn_more_link }}" target="_blank"
+                            style="text-decoration: none;justify-content: start;align-items: center;margin:0">
+                            <p style="margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
+                            <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back"
+                                style="height: 1vw; margin-left: 5px;color:black">
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <!-- END: QUALIFIED IQ PROGRAMS -->
+
+            <!-- START: PENDING IQ PROGRAMS -->
+            <div class="item thin">
+                <!--CSV HERE-->
+                <hprogram style="color: var(--darkblue)"> {{PendingNumber}} </hprogram>
+                <p style="font-weight: 400; padding-left: 20px;  ">Pending Approval</p>
+                <button class="button button2" id="toggle-button"><img
+                        src="{% static 'dashboard/images/downArrow.svg' %}"
+                        style="position: absolute; bottom: 10px;right: 10px;"> </button>
+            </div>
+            <div class="item collapsible pending">
+                {% for program in iq_programs %}
+                {% if program.status_for_user == 'PENDING' %}
+                <div style="display:{{ program.visibility }}">
+                    <div class="divider"></div>
+                    <div class="row" style="margin:0; width:100%">
+                        <div style="margin:0">
+                            <p style="font-weight: 400; margin: 0">{{ program.title }}</p>
+                        </div>
+                        <a style="text-decoration: none; text-align: center;">
+                            <div class="quickapply linkQA"
+                                style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">
+                                {{ program.button.text }}</div>
+                        </a>
+                    </div>
+                    <div class="row" style="margin:0;width:100%">
+                        <a class="row" href="{{ program.learn_more_link }}" target="_blank"
+                            style="text-decoration: none;justify-content: start;align-items: center;margin:0">
+                            <p style="margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
+                            <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back"
+                                style="height: 1vw; margin-left: 5px;color:black">
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <!-- END: PENDING IQ PROGRAMS -->
+
+            <!-- START: ACTIVE IQ PROGRAMS -->
+            <div class="item thin">
+                <!--CSV HERE-->
+                <hprogram style="color: var(--darkblue)"> {{ActiveNumber}} </hprogram>
+                <p style="font-weight: 400; padding-left: 20px; ">Programs Active </p> <button class="button button2"
+                    onclick="myFunction()"><img src="{% static 'application/images/clipart249308.png' %}" alt="back"
+                        style="width:min(4.5vw,20px);"></button>
+                <button class="button button2" id="toggle-button2"><img
+                        src="{% static 'dashboard/images/downArrow.svg' %}"
+                        style="position: absolute; bottom: 10px;right: 10px;"> </button>
+            </div>
+            <div class="item collapsible active">
+                <div id="myDIV">
+                    <p style="font-size: 15px;">Once your information is reviewed by the Get FoCo team, you will find
+                        the programs you are approved for here! Checkback as it gets closer to your application's
+                        estimated date and be sure to check your email for communication from us.</p>
+                </div>
+                {% for program in iq_programs %}
+                {% if program.status_for_user == 'ACTIVE' %}
+                <div style="display:{{ program.visibility }}">
+                    <div class="divider"></div>
+                    <div class="row" style="margin:0; width:100%">
+                        <div style="margin:0">
+                            <p style="font-weight: 400; margin: 0">{{ program.title }}</p>
+                        </div>
+                        <a style="text-decoration: none; text-align: center;">
+                            <div class="quickapply linkQA"
+                                style="background-color: {{ program.button.color }}; color: {{ program.button.textColor }}; ">
+                                {{ program.button.text }}</div>
+                        </a>
+                    </div>
+                    <div class="row" style="margin:0;width:100%">
+                        <a class="row" href="{{ program.learn_more_link }}" target="_blank"
+                            style="text-decoration: none;justify-content: start;align-items: center;margin:0">
+                            <p style="margin: 0;color:var(--lightblue); font-size: 15px;"> Learn More </p>
+                            <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back"
+                                style="height: 1vw; margin-left: 5px;color:black">
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                <!-- END: ACTIVE IQ PROGRAMS -->
+            </div>
+
+            <div class="item large" style="align-content:flex-end">
+                <p style="color: #999999">Upcoming Program Updates </p>
+                <!--CSV HERE / Also template for printing out all updates-->
+                <p style="font-weight: 550;">Stay Tuned for Updates! </p>
+                <p> Grocery Rebate</p>
+                <p>{{groceryStatus}}</p>
+                <p> Connexion</p>
+                <p>{{connexionStatus}}</p>
+                <p> Recreation</p>
+                <p>{{recreationStatus}}</p>
+            </div>
+
+            <!-- News Section -->
+            <div class="item large">
+                <p style="color: #999999">City News & Events </p>
+
+                <!--CSV HERE / Also template for printing out all updates-->
+                <div>
+                    <p style="margin-bottom:0;"> Larimer County COVID-19 Information Center</p>
+                    <p style="font-weight: 550; margin: 5px 0">
+                    <ul>Call: 970-498-5500: Open Monday - Friday, 9:00 am - 4:30 pm</ul>
+                    </p>
+                    <p style="font-weight: 550; margin: 5px 0">
+                    <ul>Text questions: 970-999-1770: response within 4 hours during the day
+                    </ul>
+                    <a href="https://www.larimer.org/health/communicable-disease/coronavirus-covid-19" target="_blank"
+                        style="font-weight: 550; margin: 5px 0">
+                        <ul>More Information Here</ul>
+                    </a>
+                    </p>
+                    <p style="color:#999999;margin-top:0;">April 2022</p>
+                </div>
+
+                <div>
+                    <p style="margin-bottom:0;">Need Help?</p>
+                    <p style="font-weight: 550; margin: 5px 0">Information is available for Larimer County residents in
+                        need of rent, food or utilities assistance.
+                        Also includes resources for seniors, small business, mental health support, families,
+                        unemployment and medical needs.
+                        <a href="https://uwaylc.org/Get-Help/" target="_blank">uwaylc.org/Get-Help/</a>
+                    </p>
+                    <p style="color:#999999;margin-top:0;">April 2022</p>
+                </div>
+            </div>
+
+
+            <!-- Feedback section -->
+            <div class="item extraLarge" style="padding-left: 3%;">
+                <form action="{% url 'dashboard:index' %}" method="post">
+                    {% csrf_token %}
+                    <p>Feedback</p>
+                    <div class="column" style="margin:0; width:100%;">
+                        <p style="font-weight: 600;">How would you rate your experience so far using the Get FoCo
+                            portal? </p>
+                        <div class="column" style="margin:0; width:100%;">
+                            <clearButton name="starRating" value="1" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star1D"
+                                    style="width:min(10vw, 50px);" onclick="fillStarD(1)"> </clearButton>
+                            <clearButton name="starRating" value="2" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star2D"
+                                    style="width:min(10vw, 50px);" onclick="fillStarD(2)"> </clearButton>
+                            <clearButton name="starRating" value="3" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star3D"
+                                    style="width:min(10vw, 50px);" onclick="fillStarD(3)"> </clearButton>
+                            <clearButton name="starRating" value="4" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star4D"
+                                    style="width:min(10vw, 50px);" onclick="fillStarD(4)"> </clearButton>
+                            <clearButton name="starRating" value="5" type="button"> <img
+                                    src="{% static 'dashboard/images/reviewStarUnfilled.svg' %}" id="star5D"
+                                    style="width:min(10vw, 50px);" onclick="fillStarD(5)"> </clearButton>
+                        </div>
+                    </div>
+                    <div class="column" style="width:100%; margin:0; justify-content: flex-start;">
+                        <p style="font-weight: 800; margin-top: 25px;">How can we do better? Don't worry, your feedback
+                            is anonymous!</p>
+                        <textarea class="feedback" placeholder="Tell us how we're doing!" id="" name="feedbackComments"
+                            maxlength="500" style="border-radius: 2vh;"></textarea>
+                        <button name="starRating" value="" id="submitD" style="width:90%"> <b>Share Feedback</b>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
         </div>
-      </form> 
-    </div>
+        <div class="item" style="border: white;"></div>
 
     </div>
-    <div class="item" style="border: white;"></div>
 
-  </div>
+    {% include "dashboard/_spin_privacy_acknowledgement.html" %}
 
-  {% include "dashboard/_spin_privacy_acknowledgement.html" %}
+    <script>
+        document.querySelector('#toggle-button').addEventListener('click', function () {
+            document.querySelector('.item.collapsible.pending').classList.toggle('collapsed');
+        });
+    </script>
 
-<script>
-  document.querySelector('#toggle-button').addEventListener('click', function() {
-    document.querySelector('.item.collapsible.pending').classList.toggle('collapsed');
-  });
-</script>
+    <script>
+        document.querySelector('#toggle-button2').addEventListener('click', function () {
+            document.querySelector('.item.collapsible.active').classList.toggle('collapsed');
+        });
+    </script>
 
-<script>
-  document.querySelector('#toggle-button2').addEventListener('click', function() {
-    document.querySelector('.item.collapsible.active').classList.toggle('collapsed');
-  });
-</script>
-
-<script>
-  document.querySelector('#toggle-button1').addEventListener('click', function() {
-    document.querySelector('.item.collapsible.qualifyfor').classList.toggle('collapsed');
-  });
-</script>
+    <script>
+        document.querySelector('#toggle-button1').addEventListener('click', function () {
+            document.querySelector('.item.collapsible.qualifyfor').classList.toggle('collapsed');
+        });
+    </script>
 
 
-<script>
-  function myFunction() {
-    var x = document.getElementById("myDIV");
-    if (x.style.display === "block") {
-      x.style.display = "none";
-    } else {
-      x.style.display = "block";
-    }
-  }
-</script>
-
-<script>
-  today = new Date();
-  currentMonth = today.getMonth();
-  currentYear = today.getFullYear();
-  selectYear = document.getElementById("year");
-  selectMonth = document.getElementById("month");
-
-  months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  monthAndYear = document.getElementById("monthAndYear");
-  // showCalendar(currentMonth, currentYear);
-
-
-  function next() {
-      currentYear = (currentMonth === 11) ? currentYear + 1 : currentYear;
-      currentMonth = (currentMonth + 1) % 12;
-      // showCalendar(currentMonth, currentYear);
-  }
-
-  function previous() {
-      currentYear = (currentMonth === 0) ? currentYear - 1 : currentYear;
-      currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
-      // showCalendar(currentMonth, currentYear);
-  }
-
-  function jump() {
-      currentYear = parseInt(selectYear.value);
-      currentMonth = parseInt(selectMonth.value);
-      // showCalendar(currentMonth, currentYear);
-  }
-
-  function showCalendar(month, year) {
-
-      let firstDay = (new Date(year, month)).getDay();
-
-      tbl = document.getElementById("calendar-body"); // body of the calendar
-
-      // clearing all previous cells
-      tbl.innerHTML = "";
-
-      // filing data about month and in the page via DOM.
-      monthAndYear.innerHTML = months[month] + " " + year;
-      selectYear.value = year;
-      selectMonth.value = month;
-
-      // creating all cells
-      let date = 1;
-      for (let i = 0; i < 6; i++) {
-          // creates a table row
-          let row = document.createElement("tr");
-
-          //creating individual cells, filing them up with data.
-          for (let j = 0; j < 7; j++) {
-              if (i === 0 && j < firstDay) {
-                  cell = document.createElement("td");
-                  cellText = document.createTextNode("");
-                  cell.appendChild(cellText);
-                  row.appendChild(cell);
-              }
-              else if (date > daysInMonth(month, year)) {
-                  break;
-              }
-
-              else {
-                  cell = document.createElement("td");
-                  cellText = document.createTextNode(date);
-                  if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
-                      cell.classList.add("bg-info");
-                  } // color today's date
-                  cell.appendChild(cellText);
-                  row.appendChild(cell);
-                  date++;
-              }
-
-
-          }
-
-          tbl.appendChild(row); // appending each row into calendar body.
-      }
-
-  }
-
-
-  // check how many days in a month code from https://dzone.com/articles/determining-number-days-month
-  function daysInMonth(iMonth, iYear) {
-      return 32 - new Date(iYear, iMonth, 32).getDate();
-  }
-</script>
-
-
-<script>
-  var image6 =  document.getElementById("star1D");
-  var image7 =  document.getElementById("star2D");
-  var image8 =  document.getElementById("star3D");
-  var image9 =  document.getElementById("star4D");
-  var image10 =  document.getElementById("star5D");
-  function fillStarD(value)
-  {
-    switch (value)
-    {
-        case 1:
-        if (image6.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-        {
-          image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          document.getElementById("submitD").value = value;
-          return value;
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myDIV");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
         }
-        else if((image7.getAttribute('src') || image8.getAttribute('src') || image9.getAttribute('src') || image10.getAttribute('src')) == "{% static 'dashboard/images/reviewStarFilled.svg' %}")
-        {
-          image10.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-          image9.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-          image8.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-          image7.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-        }
-        break;
+    </script>
 
-        case 2: 
-          if (image7.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-          {
-            image7.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-            image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-            document.getElementById("submitD").value = value;
-            return value;
-            
-          }
-          else if((image8.getAttribute('src') || image9.getAttribute('src') || image10.getAttribute('src')) == "{% static 'dashboard/images/reviewStarFilled.svg' %}")
-          {
-            image10.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-            image9.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-            image8.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-          }
+    <script>
+        today = new Date();
+        currentMonth = today.getMonth();
+        currentYear = today.getFullYear();
+        selectYear = document.getElementById("year");
+        selectMonth = document.getElementById("month");
 
-        break;
-      
+        months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-        case 3: 
-        if (image8.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-        {
-          image8.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          image7.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          document.getElementById("submitD").value = value;
-          return value;
-        }
-        else if((image9.getAttribute('src') || image10.getAttribute('src')) == "{% static 'dashboard/images/reviewStarFilled.svg' %}")
-        {
-          image10.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
-          image9.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+        monthAndYear = document.getElementById("monthAndYear");
+        // showCalendar(currentMonth, currentYear);
+
+
+        function next() {
+            currentYear = (currentMonth === 11) ? currentYear + 1 : currentYear;
+            currentMonth = (currentMonth + 1) % 12;
+            // showCalendar(currentMonth, currentYear);
         }
 
-        break;
-
-        case 4: 
-        if (image9.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-        {
-          image9.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          image8.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          image7.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          document.getElementById("submitD").value = value;
-          return value;
-        }
-        else if(image10.getAttribute('src') == "{% static 'dashboard/images/reviewStarFilled.svg' %}")
-        {
-          image10.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+        function previous() {
+            currentYear = (currentMonth === 0) ? currentYear - 1 : currentYear;
+            currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+            // showCalendar(currentMonth, currentYear);
         }
 
-        break;
-
-        case 5: 
-        if (image10.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}")
-        {
-          image10.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          image9.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          image8.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          image7.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
-          document.getElementById("submitD").value = value;
-          return value;
+        function jump() {
+            currentYear = parseInt(selectYear.value);
+            currentMonth = parseInt(selectMonth.value);
+            // showCalendar(currentMonth, currentYear);
         }
 
-        break;
-      } 
-  }
+        function showCalendar(month, year) {
 
-    // Get the modal
-    var modal = document.getElementById("modalDashboard");
-  
+            let firstDay = (new Date(year, month)).getDay();
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-    
+            tbl = document.getElementById("calendar-body"); // body of the calendar
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-    
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
+            // clearing all previous cells
+            tbl.innerHTML = "";
 
-    // Get the has_viewed_dashboard value of the user
-    var has_viewed_dashboard = {{ proxy_viewed_dashboard|yesno:"true,false" }};
-    // If the user has viewed the dashboard, do not show the modal
-    if (has_viewed_dashboard) {
-      modal.style.display = "none";
-    }
-</script>
-{% endblock %}
+            // filing data about month and in the page via DOM.
+            monthAndYear.innerHTML = months[month] + " " + year;
+            selectYear.value = year;
+            selectMonth.value = month;
+
+            // creating all cells
+            let date = 1;
+            for (let i = 0; i < 6; i++) {
+                // creates a table row
+                let row = document.createElement("tr");
+
+                //creating individual cells, filing them up with data.
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDay) {
+                        cell = document.createElement("td");
+                        cellText = document.createTextNode("");
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                    }
+                    else if (date > daysInMonth(month, year)) {
+                        break;
+                    }
+
+                    else {
+                        cell = document.createElement("td");
+                        cellText = document.createTextNode(date);
+                        if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
+                            cell.classList.add("bg-info");
+                        } // color today's date
+                        cell.appendChild(cellText);
+                        row.appendChild(cell);
+                        date++;
+                    }
+
+
+                }
+
+                tbl.appendChild(row); // appending each row into calendar body.
+            }
+
+        }
+
+
+        // check how many days in a month code from https://dzone.com/articles/determining-number-days-month
+        function daysInMonth(iMonth, iYear) {
+            return 32 - new Date(iYear, iMonth, 32).getDate();
+        }
+    </script>
+
+
+    <script>
+        var image6 = document.getElementById("star1D");
+        var image7 = document.getElementById("star2D");
+        var image8 = document.getElementById("star3D");
+        var image9 = document.getElementById("star4D");
+        var image10 = document.getElementById("star5D");
+        function fillStarD(value) {
+            switch (value) {
+                case 1:
+                    if (image6.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}") {
+                        image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        document.getElementById("submitD").value = value;
+                        return value;
+                    }
+                    else if ((image7.getAttribute('src') || image8.getAttribute('src') || image9.getAttribute('src') || image10.getAttribute('src')) == "{% static 'dashboard/images/reviewStarFilled.svg' %}") {
+                        image10.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                        image9.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                        image8.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                        image7.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                    }
+                    break;
+
+                case 2:
+                    if (image7.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}") {
+                        image7.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        document.getElementById("submitD").value = value;
+                        return value;
+
+                    }
+                    else if ((image8.getAttribute('src') || image9.getAttribute('src') || image10.getAttribute('src')) == "{% static 'dashboard/images/reviewStarFilled.svg' %}") {
+                        image10.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                        image9.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                        image8.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                    }
+
+                    break;
+
+
+                case 3:
+                    if (image8.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}") {
+                        image8.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image7.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        document.getElementById("submitD").value = value;
+                        return value;
+                    }
+                    else if ((image9.getAttribute('src') || image10.getAttribute('src')) == "{% static 'dashboard/images/reviewStarFilled.svg' %}") {
+                        image10.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                        image9.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                    }
+
+                    break;
+
+                case 4:
+                    if (image9.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}") {
+                        image9.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image8.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image7.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        document.getElementById("submitD").value = value;
+                        return value;
+                    }
+                    else if (image10.getAttribute('src') == "{% static 'dashboard/images/reviewStarFilled.svg' %}") {
+                        image10.src = "{% static 'dashboard/images/reviewStarUnfilled.svg' %}";
+                    }
+
+                    break;
+
+                case 5:
+                    if (image10.getAttribute('src') == "{% static 'dashboard/images/reviewStarUnfilled.svg' %}") {
+                        image10.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image9.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image8.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image7.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        image6.src = "{% static 'dashboard/images/reviewStarFilled.svg' %}";
+                        document.getElementById("submitD").value = value;
+                        return value;
+                    }
+
+                    break;
+            }
+        }
+
+        // Get the modal
+        var modal = document.getElementById("modalDashboard");
+
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Get the has_viewed_dashboard value of the user
+        var has_viewed_dashboard = {{ proxy_viewed_dashboard| yesno: "true,false" }};
+        // If the user has viewed the dashboard, do not show the modal
+        if (has_viewed_dashboard) {
+            modal.style.display = "none";
+        }
+    </script>
+    {% endblock %}

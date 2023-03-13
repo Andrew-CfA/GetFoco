@@ -2,6 +2,7 @@ from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from dashboard.views import *
 
+
 class TestUrls(SimpleTestCase):
 
     def test_index_resolved(self):
@@ -22,7 +23,7 @@ class TestUrls(SimpleTestCase):
         url = reverse("dashboard:login")
         print("Test - login url")
         self.assertEquals(resolve(url).func, login_user)
-    
+
     def test_broadcast_resolved(self):
         url = reverse("dashboard:broadcast")
         print("Test - broadcast url")
@@ -62,4 +63,3 @@ class TestUrls(SimpleTestCase):
         url = reverse("dashboard:ProgramsList")
         print("Test - ProgramsList url")
         self.assertEquals(resolve(url).func, ProgramsList)
-        

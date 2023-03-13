@@ -10,7 +10,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from application.models import iqProgramQualifications
 from .forms import FileForm, FeedbackForm, TaxForm, AddressForm
-from django.conf import settings as django_settings  
+from django.conf import settings as django_settings
 
 from .backend import authenticate, files_to_string, get_iq_program, what_page, blobStorageUpload, build_qualification_button, set_program_visibility
 from django.contrib.auth import get_user_model, login, authenticate
@@ -33,10 +33,11 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
-import magic, datetime
+import magic
+import datetime
 
 
-#Step 4 of Application Process
+# Step 4 of Application Process
 @set_update_mode
 def files(request):
     file_list = {
@@ -53,7 +54,7 @@ def files(request):
     fileAmount - number of file uploads per income verified documentation
     '''
     if request.method == "POST":
-         # Check the user's session variables to see if they have a first_time_file_upload variable
+        # Check the user's session variables to see if they have a first_time_file_upload variable
         # If they don't have it, create the variable and set it to True
         if 'first_time_file_upload' not in request.session:
             request.session['first_time_file_upload'] = True
@@ -65,21 +66,21 @@ def files(request):
             if request.user.is_authenticated:
                 instance = form.save(commit=False)
                 instance.user_id = request.user
-                fileNames=[]
+                fileNames = []
                 fileAmount = 0
-                #process is as follows:
+                # process is as follows:
                 # 1) file is physically saved from the buffer
                 # 2) file is then SCANNED using magic
                 # 3) file is then deleted or nothing happens if magic sees it's ok
 
-                #update, magic no longer needs to scan from saved file, can now scan from buffer! so with this in mind
+                # update, magic no longer needs to scan from saved file, can now scan from buffer! so with this in mind
                 '''
                 1) For loop #1 file(s) scanned first
                 2) For Loop #2 file saved if file(s) are valid
                 '''
                 for f in request.FILES.getlist('document'):
-                    #fileValidation found below
-                    #filetype = magic.from_file("mobileVers/" + instance.document.url)
+                    # fileValidation found below
+                    # filetype = magic.from_file("mobileVers/" + instance.document.url)
                     filetype = magic.from_buffer(f.read())
                     logging.info(filetype)
                     if "PNG" in filetype:
@@ -91,7 +92,8 @@ def files(request):
                     elif "PDF" in filetype:
                         pass
                     else:
-                        logging.error("File is not a valid file type. file is: " + filetype)
+                        logging.error(
+                            "File is not a valid file type. file is: " + filetype)
                         if instance.document_title == "LEAP Letter":
                             file_list = "LEAP Letter"
                         if instance.document_title == "SNAP":
@@ -109,35 +111,37 @@ def files(request):
                             'dashboard/files.html',
                             {
                                 "message": "File is not a valid file type. Please upload either  JPG, PNG, OR PDF.",
-                                'form':form,
+                                'form': form,
                                 'programs': file_list,
                                 'program_string': file_list,
-                                'step':5,
-                                'formPageNum':6,
+                                'step': 5,
+                                'formPageNum': 6,
                                 'Title': "Files",
                                 'file_upload': json.dumps({'success_status': False}),
                                 'is_prod': django_settings.IS_PROD,
-                                },
-                            )
-                    
+                            },
+                        )
+
                 for f in request.FILES.getlist('document'):
                     fileAmount += 1
-                    instance.document.save( datetime.datetime.now().isoformat() + "_" + str(fileAmount) + "_" + str(f),f) # this line allows us to save multiple files: format = iso format (f,f) = (name of file, actual file)
+                    # this line allows us to save multiple files: format = iso format (f,f) = (name of file, actual file)
+                    instance.document.save(datetime.datetime.now(
+                    ).isoformat() + "_" + str(fileAmount) + "_" + str(f), f)
                     fileNames.append(str(instance.document))
                     file_upload = request.user
                     file_upload.files.add(instance)
-                    #Below is blob / storage code for Azure! Files automatically uploaded to the storage
+                    # Below is blob / storage code for Azure! Files automatically uploaded to the storage
                     f.seek(0)
                     blobStorageUpload(str(instance.document.url), f)
-            
-                #below the code to update the database to allow for MULTIPLE files AND change the name of the database upload!
+
+                # below the code to update the database to allow for MULTIPLE files AND change the name of the database upload!
                 instance.document = str(fileNames)
                 instance.save()
-                
-                
+
                 # Check if the user needs to upload another form
                 Forms = request.user.files
-                checkAllForms = [not(request.user.programs.snap),not(request.user.programs.freeReducedLunch),not(request.user.programs.ebb_acf),not(request.user.programs.Identification),not(request.user.programs.leap),not(request.user.programs.medicaid),]
+                checkAllForms = [not (request.user.programs.snap), not (request.user.programs.freeReducedLunch), not (request.user.programs.ebb_acf), not (
+                    request.user.programs.Identification), not (request.user.programs.leap), not (request.user.programs.medicaid),]
                 for group in Forms.all():
                     if group.document_title == "SNAP":
                         checkAllForms[0] = True
@@ -162,22 +166,22 @@ def files(request):
                         request,
                         'dashboard/files.html',
                         {
-                            'form':form,
+                            'form': form,
                             'programs': file_list,
                             'program_string': files_to_string(file_list),
-                            'step':5,
-                            'formPageNum':6,
+                            'step': 5,
+                            'formPageNum': 6,
                             'Title': "Files",
                             'file_upload': json.dumps({'success_status': True}),
                             'is_prod': django_settings.IS_PROD,
-                            },
-                        )
-                
+                        },
+                    )
+
                 # if affordable connectivity program is chosen
                 elif request.user.programs.ebb_acf == True:
                     return redirect(reverse("application:filesInfoNeeded"))
                 else:
-                    return redirect(reverse("dashboard:broadcast")) 
+                    return redirect(reverse("dashboard:broadcast"))
             else:
                 print("notautnehticated")
                 # TODO: Change this link
@@ -186,8 +190,8 @@ def files(request):
                     'dashboard/layout.html',
                     {
                         'is_prod': django_settings.IS_PROD,
-                        },
-                    )
+                    },
+                )
     else:
         print(request.user)
         # Check the user's session variables to see if they have a first_time_file_upload variable
@@ -202,43 +206,43 @@ def files(request):
         request,
         'dashboard/files.html',
         {
-            'form':form,
+            'form': form,
             'programs': file_list,
             'program_string': files_to_string(file_list),
-            'step':5,
-            'formPageNum':6,
+            'step': 5,
+            'formPageNum': 6,
             'Title': "Files",
             'file_upload': json.dumps({'success_status': None}),
             'is_prod': django_settings.IS_PROD,
-            },
-        )
+        },
+    )
 
 
 def broadcast(request):
     print(request.user.files.all()[0])
     current_user = request.user
-    try:    
+    try:
         broadcast_email(current_user.email)
     except:
         logging.error("there was a problem with sending the email / sendgrid")
-        #TODO store / save for later: client getting feedback that SendGrid may be down 
+        # TODO store / save for later: client getting feedback that SendGrid may be down
     phone = str(current_user.phone_number)
     try:
         broadcast_sms(phone)
     except:
         logging.error("Twilio servers may be down")
-        #TODO store / save for later: client getting feedback that twilio may be down 
+        # TODO store / save for later: client getting feedback that twilio may be down
     return render(
         request,
         'dashboard/broadcast.html',
         {
             'program_string': current_user.email,
-            'step':6,
-            'formPageNum':6,
+            'step': 6,
+            'formPageNum': 6,
             'Title': "Broadcast",
             'is_prod': django_settings.IS_PROD,
-            },
-        )
+        },
+    )
 
 
 def index(request):
@@ -274,12 +278,12 @@ def settings(request):
             "phoneNumber": request.user.phone_number,
             'is_prod': django_settings.IS_PROD,
             "routes": {
-                    "account": reverse('application:account'),
-                    "finances": reverse('application:finances'),
-                },
-            "page_updated": json.dumps({'page_updated': page_updated}, cls=DjangoJSONEncoder),
+                "account": reverse('application:account'),
+                "finances": reverse('application:finances'),
             },
-        )
+            "page_updated": json.dumps({'page_updated': page_updated}, cls=DjangoJSONEncoder),
+        },
+    )
 
 
 def password_reset_request(request):
@@ -294,32 +298,32 @@ def password_reset_request(request):
                     subject = "Password Reset Requested"
                     email_template_name = "dashboard/PasswordReset/password_reset_email.txt"
                     c = {
-                        "email":user.email,
-                        'domain':'getfoco.fcgov.com', #'getfoco.azurewebsites.net' | '127.0.0.1:8000'
+                        "email": user.email,
+                        'domain': 'getfoco.fcgov.com',  # 'getfoco.azurewebsites.net' | '127.0.0.1:8000'
                         'site_name': 'Get FoCo',
                         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                         "user": user,
                         'token': default_token_generator.make_token(user),
                         'protocol': 'http',
-					}
+                    }
                     email = render_to_string(email_template_name, c)
                     try:
-#                        send_mail(subject, email, 'admin@example.com' , [user.email], fail_silently=False)
+                        #                        send_mail(subject, email, 'admin@example.com' , [user.email], fail_silently=False)
                         broadcast_email_pw_reset(user.email, email)
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
-                    return redirect ("/password_reset/done/")
+                    return redirect("/password_reset/done/")
     password_reset_form = PasswordResetForm()
 
     return render(
         request,
         "dashboard/PasswordReset/passwordReset.html",
         {
-            "password_reset_form":password_reset_form,
+            "password_reset_form": password_reset_form,
             'Title': "Password Reset Request",
             'is_prod': django_settings.IS_PROD,
-            },
-        )
+        },
+    )
 
 
 def login_user(request):
@@ -332,7 +336,7 @@ def login_user(request):
         if user is not None:
             login(request, user)
             # Push user to correct page
-            #update application_user "modified" per login
+            # update application_user "modified" per login
             obj = request.user
             obj.modified = datetime.datetime.now(datetime.timezone.utc)
             obj.save()
@@ -352,9 +356,9 @@ def login_user(request):
                     "message": "Invalid username and/or password",
                     'Title': "Login",
                     'is_prod': django_settings.IS_PROD,
-                    },
-                )
-    
+                },
+            )
+
     # If it turns out user is already logged in but is trying to log in again,
     # run through what_page() to find the correct place
     if request.method == "GET" and request.user.is_authenticated:
@@ -373,10 +377,11 @@ def login_user(request):
             {
                 'Title': "Login",
                 'is_prod': django_settings.IS_PROD,
-                },
-            )
+            },
+        )
 
-def notifyRemaining(request):    
+
+def notifyRemaining(request):
     page = what_page(request.user, request)
     return render(
         request,
@@ -385,8 +390,8 @@ def notifyRemaining(request):
             "next_page": page,
             'Title': "Notify Remaining Steps",
             'is_prod': django_settings.IS_PROD,
-            },
-        )
+        },
+    )
 
 
 def qualifiedPrograms(request):
@@ -394,8 +399,10 @@ def qualifiedPrograms(request):
     programs = iqProgramQualifications.objects.all()
     for program in programs:
         iq_program = get_iq_program(request.user.eligibility, program.name)
-        program.visibility = set_program_visibility(request.user.eligibility, program.name)
-        program.button = build_qualification_button(iq_program['status_for_user'])
+        program.visibility = set_program_visibility(
+            request.user.eligibility, program.name)
+        program.button = build_qualification_button(
+            iq_program['status_for_user'])
         program.status_for_user = iq_program['status_for_user']
         program.quick_apply_link = iq_program['quick_apply_link']
         program.learn_more_link = iq_program['learn_more_link']
@@ -405,9 +412,11 @@ def qualifiedPrograms(request):
 
     order_by = request.GET.get('order_by')
     if order_by and order_by == 'eligible':
-        programs = sorted(programs, key=lambda x: (x.status_for_user, x.status_for_user))
+        programs = sorted(programs, key=lambda x: (
+            x.status_for_user, x.status_for_user))
     elif order_by:
-        programs = sorted(programs, key=lambda x: (x.status_for_user.lower() != order_by, x.status_for_user))
+        programs = sorted(programs, key=lambda x: (
+            x.status_for_user.lower() != order_by, x.status_for_user))
 
     return render(
         request,
@@ -423,7 +432,7 @@ def qualifiedPrograms(request):
         },
     )
 
- 
+
 def feedback(request):
     if request.method == "POST":
         form = FeedbackForm(request.POST)
@@ -450,12 +459,11 @@ def feedback(request):
         text5 = "Grocery Rebate Tax Program"
         text6 = "Utilities Income-Qualified Assistance Program"
         text7 = "The Get FoCo Office is working on a timeline to respond to applications within the next two weeks."
-    
+
     if request.user.eligibility.GRqualified == QualificationStatus.PENDING.name or request.user.eligibility.GRqualified == QualificationStatus.ACTIVE.name:
         text2 = "Thank you for quick applying for the Grocery Rebate Tax Program."
         text3 = "Expect an update within 3 weeks - check your email!"
         text4 = ""
-
 
     return render(
         request,
@@ -470,15 +478,15 @@ def feedback(request):
             "program_string7": text7,
             'Title': "Feedback",
             'is_prod': django_settings.IS_PROD,
-            },
-        )
+        },
+    )
 
 
 def manualVerifyIncome(request):
-    if request.method == "POST": 
+    if request.method == "POST":
         try:
             existing = request.user.TaxInformation
-            form = TaxForm(request.POST,instance = existing)
+            form = TaxForm(request.POST, instance=existing)
         except AttributeError or ObjectDoesNotExist:
             form = TaxForm(request.POST or None)
         if form.is_valid():
@@ -497,12 +505,13 @@ def manualVerifyIncome(request):
         request,
         "dashboard/manualVerifyIncome.html",
         {
-            'step':5,
-            'formPageNum':6,
+            'step': 5,
+            'formPageNum': 6,
             'Title': "Input Income",
             'is_prod': django_settings.IS_PROD,
-            },
-        )
+        },
+    )
+
 
 def feedbackReceived(request):
     return render(
@@ -511,8 +520,9 @@ def feedbackReceived(request):
         {
             'Title': "Feedback Received",
             'is_prod': django_settings.IS_PROD,
-            },
-        )
+        },
+    )
+
 
 def underConstruction(request):
     return render(
@@ -521,9 +531,9 @@ def underConstruction(request):
         {
             'Title': "Under Construction",
             'is_prod': django_settings.IS_PROD,
-            },
-        )
-    
+        },
+    )
+
 
 # Everything under here is for new dashboard
 def dashboardGetFoco(request):
@@ -535,8 +545,10 @@ def dashboardGetFoco(request):
     programs = iqProgramQualifications.objects.all()
     for program in programs:
         iq_program = get_iq_program(request.user.eligibility, program.name)
-        program.visibility = set_program_visibility(request.user.eligibility, program.name)
-        program.button = build_qualification_button(iq_program['status_for_user'])
+        program.visibility = set_program_visibility(
+            request.user.eligibility, program.name)
+        program.button = build_qualification_button(
+            iq_program['status_for_user'])
         program.status_for_user = iq_program['status_for_user']
         program.quick_apply_link = iq_program['quick_apply_link']
         program.learn_more_link = iq_program['learn_more_link']
@@ -567,7 +579,7 @@ def dashboardGetFoco(request):
     # By default we assume the user has viewed the dashboard, but if they haven't
     # we set the proxy_viewed_dashboard flag to false and update the user
     # in the database to say that they have viewed the dashboard. This obviates
-    # the need to create some AJAX call to a Django template to update the database 
+    # the need to create some AJAX call to a Django template to update the database
     # when the user views the dashboard.
     proxy_viewed_dashboard = True
     if request.user.has_viewed_dashboard == False:
@@ -585,9 +597,9 @@ def dashboardGetFoco(request):
             "Settings_color": "white",
             "Privacy_Policy_color": "white",
             "iq_programs": programs,
-            "QProgramNumber":QProgramNumber,
-            "PendingNumber":PendingNumber,
-            "ActiveNumber":ActiveNumber,
+            "QProgramNumber": QProgramNumber,
+            "PendingNumber": PendingNumber,
+            "ActiveNumber": ActiveNumber,
             "clientName": request.user.first_name,
             "clientEmail": request.user.email,
 
@@ -597,13 +609,16 @@ def dashboardGetFoco(request):
         },
     )
 
+
 def ProgramsList(request):
-        # Query the database for all programs
+    # Query the database for all programs
     programs = iqProgramQualifications.objects.all()
     for program in programs:
         iq_program = get_iq_program(request.user.eligibility, program.name)
-        program.visibility = set_program_visibility(request.user.eligibility, program.name)
-        program.button = build_qualification_button(iq_program['status_for_user'])
+        program.visibility = set_program_visibility(
+            request.user.eligibility, program.name)
+        program.button = build_qualification_button(
+            iq_program['status_for_user'])
         program.status_for_user = iq_program['status_for_user']
         program.quick_apply_link = iq_program['quick_apply_link']
         program.learn_more_link = iq_program['learn_more_link']
@@ -624,5 +639,5 @@ def ProgramsList(request):
             'Title': "Programs List",
             'is_prod': django_settings.IS_PROD,
             'iq_programs': programs,
-            },
-        )
+        },
+    )

@@ -7,14 +7,17 @@ the Free Software Foundation, either version 3 of the License, or
 """
 
 """Django's command-line utility for administrative tasks."""
+
+
+
+
 import os
 import sys
-
-
 def main():
     """Run administrative tasks."""
-    #note you took this out per Asheesh's suggestion during your DevOps testing with implementing environment variables through Azure, check Azure env variables for this below so you don't need to hardcode
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mobileVers.settings.dev') #.production / .dev put this in to make python manage.py [] easier, don't need to use --settings=...
+    # note you took this out per Asheesh's suggestion during your DevOps testing with implementing environment variables through Azure, check Azure env variables for this below so you don't need to hardcode
+    # .production / .dev put this in to make python manage.py [] easier, don't need to use --settings=...
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mobileVers.settings.dev')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

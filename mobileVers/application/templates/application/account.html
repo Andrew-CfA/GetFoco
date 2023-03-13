@@ -13,139 +13,107 @@ the Free Software Foundation, either version 3 of the License, or
 {% else %}
 <h2 style="font-weight: 700; margin:5vh 0"> Create an Account </h2>
 {% endif %}
-<div class=sideNav> 
-  <div class=fadeSmall>
-  <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
-    <h1><b>You're on your way to greatness!</b></h1>
-    <p>Get FoCo has great things in store for you.</p>
+<div class=sideNav>
+    <div class=fadeSmall>
+        <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;"
+            src="{% static 'application/images/CityLogoWhite-01.png' %}">
+        <h1><b>You're on your way to greatness!</b></h1>
+        <p>Get FoCo has great things in store for you.</p>
     </div>
 </div>
 
 <form action="{% url 'application:account' %}" method="post" id="account-form" autocomplete="false">
-{% csrf_token %}
-{% for field in form %}
+    {% csrf_token %}
+    {% for field in form %}
     {% if form.errors %}
-        {% for error in field.errors %}
-        <div class="alert alert-danger">
-            <p style="color: red;"><strong>{{ error|escape }}</strong> </p> 
-        </div>
-        {% endfor %}
-    
-        {% for error in form.non_field_errors %}
-        <div class="alert alert-danger">
-            <p style="color: red;"><strong>{{ error|escape }}</strong> </p> 
-        </div>
-        {% endfor %}
+    {% for error in field.errors %}
+    <div class="alert alert-danger">
+        <p style="color: red;"><strong>{{ error|escape }}</strong> </p>
+    </div>
+    {% endfor %}
+
+    {% for error in form.non_field_errors %}
+    <div class="alert alert-danger">
+        <p style="color: red;"><strong>{{ error|escape }}</strong> </p>
+    </div>
+    {% endfor %}
     {% endif %}
 
 
     {% if field.label == "First Name" %}
-        <div class ="row">
-            <div class="input">
-                <!--TODO: Save input-->
-                <input class="fill" name="{{ field.name }}"
-                    id="{{ field.id_for_label }}"
-                    maxlength="{{ field.max_length }}"
-                    value="{{ form.first_name.value|default:'' }}"
-                    type="text" 
-                    style="width:80%;" 
-                    required  
-                    autocomplete="off">
-                <label class="label">{{field.label}}</label>    
-            </div>
-            <div class="input">
-                <!--TODO: change this to dropdown menu with data-->
-                <input class="fill" name="{{ form.last_name.name }}"
-                id="{{ form.last_name.id_for_label }}"
-                maxlength="{{ form.last_name.max_length }}"
-                type="text" 
-                value="{{ form.last_name.value|default:'' }}"
-                style="width:100%;" 
-                required  
+    <div class="row">
+        <div class="input">
+            <!--TODO: Save input-->
+            <input class="fill" name="{{ field.name }}" id="{{ field.id_for_label }}" maxlength="{{ field.max_length }}"
+                value="{{ form.first_name.value|default:'' }}" type="text" style="width:80%;" required
                 autocomplete="off">
-                <label class="label">{{ form.last_name.label }}</label>    
-            </div>
+            <label class="label">{{field.label}}</label>
         </div>
+        <div class="input">
+            <!--TODO: change this to dropdown menu with data-->
+            <input class="fill" name="{{ form.last_name.name }}" id="{{ form.last_name.id_for_label }}"
+                maxlength="{{ form.last_name.max_length }}" type="text" value="{{ form.last_name.value|default:'' }}"
+                style="width:100%;" required autocomplete="off">
+            <label class="label">{{ form.last_name.label }}</label>
+        </div>
+    </div>
 
     <!--Probably not the best way, but I needed to get rid of the last name-->
     {% elif field.label == "Last Name" %}
     {% elif field.label == "Phone Number" %}
-        <div class="input">
-            <input class="fill" name="{{ field.name }}"
-            id="phone_number"
-            maxlength="{{ field.max_length }}"
-            type="tel" 
-            value="{{ form.phone_number.value|default:'' }}"
-            style="width:100%;" 
-            required  
-            autocomplete="off">
-            <label class="label">{{field.label}}</label>
-        </div>
+    <div class="input">
+        <input class="fill" name="{{ field.name }}" id="phone_number" maxlength="{{ field.max_length }}" type="tel"
+            value="{{ form.phone_number.value|default:'' }}" style="width:100%;" required autocomplete="off">
+        <label class="label">{{field.label}}</label>
+    </div>
 
     {% elif field.label == "Password" %}
-        <p style="color: red;"><strong> {{ passwordError }} </strong> </p>
-        
-        <div class="input">
-            <!--Have styling that I like on the forms-->        
-            <input class="fill" name="{{ field.name }}"
-            id="password"
-            maxlength="{{ field.max_length }}"
-            type="password" 
-            style="width:100%;"
-            required
-            autocomplete="off">
-            <label class="label">{{field.label}}</label>
-        </div>
-        
+    <p style="color: red;"><strong> {{ passwordError }} </strong> </p>
+
+    <div class="input">
+        <!--Have styling that I like on the forms-->
+        <input class="fill" name="{{ field.name }}" id="password" maxlength="{{ field.max_length }}" type="password"
+            style="width:100%;" required autocomplete="off">
+        <label class="label">{{field.label}}</label>
+    </div>
+
 
     {% elif field.label == "Enter Password Again" %}
-        <div class="input">
-            <!--Have styling that I like on the forms-->        
-            <input class="fill" name="{{ field.name }}"
-            id="password2"
-            maxlength="{{ field.max_length }}"
-            type="password" 
-            style="width:100%;"
-            required  
-            autocomplete="off"
-            onblur="finalChecks()">
-            <label class="label">{{field.label}}</label>    
-        </div>
+    <div class="input">
+        <!--Have styling that I like on the forms-->
+        <input class="fill" name="{{ field.name }}" id="password2" maxlength="{{ field.max_length }}" type="password"
+            style="width:100%;" required autocomplete="off" onblur="finalChecks()">
+        <label class="label">{{field.label}}</label>
+    </div>
     {% else %}
     <div class="input">
-        <!--Have styling that I like on the forms-->        
-        <input class="fill" name="{{ field.name }}"
-        id="{{ field.id_for_label }}"
-        maxlength="{{ field.max_length }}"
-        type="text" 
-        value="{{ form.email.value|default:'' }}"
-        style="width:100%;"
-        required  
-        autocomplete="off">
-        <label class="label">{{field.label}}</label>    
+        <!--Have styling that I like on the forms-->
+        <input class="fill" name="{{ field.name }}" id="{{ field.id_for_label }}" maxlength="{{ field.max_length }}"
+            type="text" value="{{ form.email.value|default:'' }}" style="width:100%;" required autocomplete="off">
+        <label class="label">{{field.label}}</label>
     </div>
     {% endif %}
-{% endfor %}
+    {% endfor %}
 
-<div id="message">
-    <p>Password must contain the following:</p>
-    <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
-    <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
-    <p id="number" class="invalid">A <b>number</b></p>
-    <p id="length" class="invalid">Minimum <b>8 characters</b></p>
-    <p id="complex" class="invalid">Must <b>NOT</b> be a common password</p>
-    <p id="same" class="invalid">Passwords <b>must match</b></p>
-</div>
+    <div id="message">
+        <p>Password must contain the following:</p>
+        <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+        <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+        <p id="number" class="invalid">A <b>number</b></p>
+        <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+        <p id="complex" class="invalid">Must <b>NOT</b> be a common password</p>
+        <p id="same" class="invalid">Passwords <b>must match</b></p>
+    </div>
 
 
-<div class="footer">
-    {% if update_mode is True %}
+    <div class="footer">
+        {% if update_mode is True %}
         <input type="hidden" name="update_mode" value="true">
         <button type="submit"> CONFIRM </button>
-    {% else %}
+        {% else %}
         <button type="submit"> CREATE </button>
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
 
 </form>
 
@@ -162,116 +130,116 @@ the Free Software Foundation, either version 3 of the License, or
     var myInput = document.getElementById("password");
     var myInput2 = document.getElementById("password2");
 
-    
-    // When the user clicks on the password field, show the message box
-    myInput.onfocus  = function() {
-      document.getElementById("message").style.display = "block";
-    }
-    
-    
-    // When the user starts to type something inside the password field
-    myInput.onkeyup = function() {
 
-      // Validate lowercase letters
-      var lowerCaseLetters = /[a-z]/g;
-      if(myInput.value.match(lowerCaseLetters)) {  
-        letter.classList.remove("invalid");
-        letter.classList.add("valid");
-      } else {
-        letter.classList.remove("valid");
-        letter.classList.add("invalid");
-      }
-      
-      // Validate capital letters
-      var upperCaseLetters = /[A-Z]/g;
-      if(myInput.value.match(upperCaseLetters)) {  
-        capital.classList.remove("invalid");
-        capital.classList.add("valid");
-      } else {
-        capital.classList.remove("valid");
-        capital.classList.add("invalid");
-      }
-    
-      // Validate numbers
-      var numbers = /[0-9]/g;
-      if(myInput.value.match(numbers)) {  
-        number.classList.remove("invalid");
-        number.classList.add("valid");
-      } else {
-        number.classList.remove("valid");
-        number.classList.add("invalid");
-      }
-      
-      // Validate length
-      if(myInput.value.length >= 8) {
-        length.classList.remove("invalid");
-        length.classList.add("valid");
-      } else {
-        length.classList.remove("valid");
-        length.classList.add("invalid");
-      }
-      
-      //below is password check code and variables
-      var check = document.getElementById("password").value;
-      var passwordDigest = new Hashes.SHA1().hex(check);
-      var digestFive = passwordDigest.substring(0, 5).toUpperCase();
-      var queryURL = "https://api.pwnedpasswords.com/range/" + digestFive;
-      var checkDigest = passwordDigest.substring(5, 41).toUpperCase();
-      var result;
-      
-      // Validate non common password
-      $.ajax({
-          url: queryURL,
-          type: 'GET',
-          async: false,
-          success: function(res) {
-            if (res.search(checkDigest) > -1){
-              complex.classList.remove("valid");
-              complex.classList.add("invalid");
-              return false;
-            } else {
-              complex.classList.remove("invalid");
-              complex.classList.add("valid");
-              return true;
+    // When the user clicks on the password field, show the message box
+    myInput.onfocus = function () {
+        document.getElementById("message").style.display = "block";
+    }
+
+
+    // When the user starts to type something inside the password field
+    myInput.onkeyup = function () {
+
+        // Validate lowercase letters
+        var lowerCaseLetters = /[a-z]/g;
+        if (myInput.value.match(lowerCaseLetters)) {
+            letter.classList.remove("invalid");
+            letter.classList.add("valid");
+        } else {
+            letter.classList.remove("valid");
+            letter.classList.add("invalid");
+        }
+
+        // Validate capital letters
+        var upperCaseLetters = /[A-Z]/g;
+        if (myInput.value.match(upperCaseLetters)) {
+            capital.classList.remove("invalid");
+            capital.classList.add("valid");
+        } else {
+            capital.classList.remove("valid");
+            capital.classList.add("invalid");
+        }
+
+        // Validate numbers
+        var numbers = /[0-9]/g;
+        if (myInput.value.match(numbers)) {
+            number.classList.remove("invalid");
+            number.classList.add("valid");
+        } else {
+            number.classList.remove("valid");
+            number.classList.add("invalid");
+        }
+
+        // Validate length
+        if (myInput.value.length >= 8) {
+            length.classList.remove("invalid");
+            length.classList.add("valid");
+        } else {
+            length.classList.remove("valid");
+            length.classList.add("invalid");
+        }
+
+        //below is password check code and variables
+        var check = document.getElementById("password").value;
+        var passwordDigest = new Hashes.SHA1().hex(check);
+        var digestFive = passwordDigest.substring(0, 5).toUpperCase();
+        var queryURL = "https://api.pwnedpasswords.com/range/" + digestFive;
+        var checkDigest = passwordDigest.substring(5, 41).toUpperCase();
+        var result;
+
+        // Validate non common password
+        $.ajax({
+            url: queryURL,
+            type: 'GET',
+            async: false,
+            success: function (res) {
+                if (res.search(checkDigest) > -1) {
+                    complex.classList.remove("valid");
+                    complex.classList.add("invalid");
+                    return false;
+                } else {
+                    complex.classList.remove("invalid");
+                    complex.classList.add("valid");
+                    return true;
+                }
             }
-          }
         });
 
     }
 
-    myInput2.onkeyup = function(){
-    // Validate same
-      if(document.getElementById("password").value == document.getElementById("password2").value) {
-        same.classList.remove("invalid");
-        same.classList.add("valid");
-      } else {
-        same.classList.remove("valid");
-        same.classList.add("invalid");
-      }
+    myInput2.onkeyup = function () {
+        // Validate same
+        if (document.getElementById("password").value == document.getElementById("password2").value) {
+            same.classList.remove("invalid");
+            same.classList.add("valid");
+        } else {
+            same.classList.remove("valid");
+            same.classList.add("invalid");
+        }
     }
     {% endif %}
 
     document.getElementById('phone_number').addEventListener('input', function (e) {
-    var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-    e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
     });
 
-    function finalChecks(){
-        if(letter.classList == "invalid") {  
-        alert("You need a lowercase letter in your password")
-      }
-      else if(capital.classList == "invalid") {  
-        alert("You need an uppercase letter in your password")
-      }
-      else if(number.classList == "invalid") {  
-        alert("You need a number in your password")
-      }
-      else if(length.classList == "invalid") {  
-        alert("You need atleast 8 characters letter in your password")
-      }
-      else if(same.classList == "invalid") {  
-        alert("Your passwords need to match")
-      }
+    function finalChecks() {
+        if (letter.classList == "invalid") {
+            alert("You need a lowercase letter in your password")
+        }
+        else if (capital.classList == "invalid") {
+            alert("You need an uppercase letter in your password")
+        }
+        else if (number.classList == "invalid") {
+            alert("You need a number in your password")
+        }
+        else if (length.classList == "invalid") {
+            alert("You need atleast 8 characters letter in your password")
+        }
+        else if (same.classList == "invalid") {
+            alert("Your passwords need to match")
+        }
     }
 </script>
 

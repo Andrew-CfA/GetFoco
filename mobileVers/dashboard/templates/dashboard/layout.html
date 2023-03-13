@@ -9,58 +9,68 @@ the Free Software Foundation, either version 3 of the License, or
 
 <!DOCTYPE html>
 <html lang="en">
-    <!--Get the various stylesheets I need like my fonts and CSS-->
-    <head>
-        <title> {{ Title }} </title>
-        <link href="{% static 'dashboard/styles_app.css' %}" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-         <!-- Global site tag (gtag.js) - Google Analytics -->
-         <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
-         <script>
-         window.dataLayer = window.dataLayer || [];
-         function gtag(){dataLayer.push(arguments);}
-         gtag('js', new Date());
- 
-         gtag('config', 'G-SL59NNQRH0');
-         </script>
+<!--Get the various stylesheets I need like my fonts and CSS-->
+
+<head>
+    <title> {{ Title }} </title>
+    <link href="{% static 'dashboard/styles_app.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-SL59NNQRH0');
+    </script>
 
 
-        <script type="text/javascript">
+    <script type="text/javascript">
         function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages : 'ar,es,fr,pt,zh-CN,zh-TW,tl,eo,de,ht,hi,hmn,id,ja,jv,ko,rw,ko,ms,my,mi,pt,pa,ru,so,sw,uk,vi,xh,yo,zu', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'ar,es,fr,pt,zh-CN,zh-TW,tl,eo,de,ht,hi,hmn,id,ja,jv,ko,rw,ko,ms,my,mi,pt,pa,ru,so,sw,uk,vi,xh,yo,zu', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
         }
-        </script>
-        
-        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    </head>
+    </script>
 
-    <body style="height:100vh;">
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
 
-        {% if is_prod is False %}
-            <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
-        {% endif %}
-        
-        <div class =fadeLarge><img style="display: block; padding-top: 4%; margin-left: auto; margin-right: auto; width: 30%;" src="{% static 'application/images/CityLogoWhite-01.png' %}"></div>
-        <div style="position: fixed; bottom: 0%; right: 1%; display: flex; justify-content: flex-end;background-color: #FFB300; height: 30px; width: auto;" id="google_translate_element"></div>
-        <div class=nav>
-            <a id="dashboardBackBtn" class="row" onClick="window.history.back();return false;">
-                <div class=fadeSmall><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
-                <div class=fadeLarge><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
-                <p style = "font-weight: 700;">BACK</p>
-            </a>
-            <p class=p2 alt="back" alt="exit" style=" margin-right: 5px;" onclick="location.href='{% url 'application:index' %}'">Save & Logout</p>
-        </div>
-        <div class="marginauto content desktop" style="height:150vh;">
-                <!--Whatever I need in the other pages, I can enter it here-->
-            {% block body %}
-            {% endblock %}
-        </div>
-    </body>
+<body style="height:100vh;">
+
+    {% if is_prod is False %}
+    <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING
+        ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com"
+            target="_blank">https://getfoco.fcgov.com</a> instead</div>
+    {% endif %}
+
+    <div class=fadeLarge><img
+            style="display: block; padding-top: 4%; margin-left: auto; margin-right: auto; width: 30%;"
+            src="{% static 'application/images/CityLogoWhite-01.png' %}"></div>
+    <div style="position: fixed; bottom: 0%; right: 1%; display: flex; justify-content: flex-end;background-color: #FFB300; height: 30px; width: auto;"
+        id="google_translate_element"></div>
+    <div class=nav>
+        <a id="dashboardBackBtn" class="row" onClick="window.history.back();return false;">
+            <div class=fadeSmall><img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back"
+                    style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
+            <div class=fadeLarge><img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back"
+                    style="width:max(4.5vw, 16px); margin-right: 5px;"></div>
+            <p style="font-weight: 700;">BACK</p>
+        </a>
+        <p class=p2 alt="back" alt="exit" style=" margin-right: 5px;"
+            onclick="location.href='{% url 'application:index' %}'">Save & Logout</p>
+    </div>
+    <div class="marginauto content desktop" style="height:150vh;">
+        <!--Whatever I need in the other pages, I can enter it here-->
+        {% block body %}
+        {% endblock %}
+    </div>
+</body>
+
 </html>
-
-

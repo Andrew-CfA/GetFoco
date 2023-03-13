@@ -9,52 +9,58 @@ the Free Software Foundation, either version 3 of the License, or
 
 <!DOCTYPE html>
 <html lang="en">
-    <!--Get the various stylesheets I need like my fonts and CSS-->
-    <head>
-        <title>{{ Title }}</title>
-        <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--Get the various stylesheets I need like my fonts and CSS-->
 
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
-        <script>
+<head>
+    <title>{{ Title }}</title>
+    <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
+    <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-SL59NNQRH0');
-        </script>
+    </script>
 
-        <script type="text/javascript">
-            function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages : 'ar,es,fr,pt,zh-CN,zh-TW,tl,eo,de,ht,hi,hmn,id,ja,jv,ko,rw,ko,ms,my,mi,pt,pa,ru,so,sw,uk,vi,xh,yo,zu', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'ar,es,fr,pt,zh-CN,zh-TW,tl,eo,de,ht,hi,hmn,id,ja,jv,ko,rw,ko,ms,my,mi,pt,pa,ru,so,sw,uk,vi,xh,yo,zu', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
         }
-        </script>
-            
-        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    </script>
 
-    </head>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-    <body>
+</head>
 
-        {% if is_prod is False %}
-            <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
-        {% endif %}
-        
-        <div style="position: fixed; bottom: 0%; right: 1%; display: flex; justify-content: flex-end; background-color: #FFB300; height: 30px; width: auto;" id="google_translate_element"></div>
-        <div class=nav>
-            {% block backurl %}
-            {% endblock %}    
-        </div>
-        <div class="content spaceAround" style="padding: 0 0 0 2vw;">
-            {% block content %}
-            {% endblock %}
+<body>
 
-        </div>
-        {% block footerdiv %}
+    {% if is_prod is False %}
+    <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING
+        ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com"
+            target="_blank">https://getfoco.fcgov.com</a> instead</div>
+    {% endif %}
+
+    <div style="position: fixed; bottom: 0%; right: 1%; display: flex; justify-content: flex-end; background-color: #FFB300; height: 30px; width: auto;"
+        id="google_translate_element"></div>
+    <div class=nav>
+        {% block backurl %}
         {% endblock %}
-    </body>
+    </div>
+    <div class="content spaceAround" style="padding: 0 0 0 2vw;">
+        {% block content %}
+        {% endblock %}
+
+    </div>
+    {% block footerdiv %}
+    {% endblock %}
+</body>
+
 </html>

@@ -14,25 +14,27 @@
 }
 
 @media screen and (min-width : 768px) {
-    
+
     .fadeLarge {
         display: none;
     }
+
     .column {
         float: left;
         width: 50%
     }
+
     .row {
-        display:flex;
+        display: flex;
         justify-content: space-around;
         width: 100%;
         padding: 10% 0%;
-    }  
+    }
 
-    .img{
-        display:inline-block;
-        width:30%;
-        height:100%;
+    .img {
+        display: inline-block;
+        width: 30%;
+        height: 100%;
         vertical-align: middle;
         line-height: normal;
     }
@@ -43,43 +45,51 @@
             width: 100%
         }
     }
+
     /*Like the Montserrat font*/
-    html,body {
+    html,
+    body {
         font-family: Montserrat;
         font-style: normal;
-        overflow-x: hidden; 
+        overflow-x: hidden;
         width: 100%;
         box-sizing: border-box;
         position: relative;
     }
 
     /*Keep floating contents inside respective parents*/
-    div{
+    div {
         position: relative;
         overflow: hidden;
     }
+
     /*Set up font sizes*/
     h1 {
         font-size: max(4vw, 25px);
-        margin-bottom:1px;
+        margin-bottom: 1px;
         margin-top: 0px;
         font-family: Montserrat;
         font-weight: 400;
         color: var(--darkblue);
     }
-    .yellow{
+
+    .yellow {
         color: var(--yellow)
     }
+
     h2 {
         font-size: max(3.8vw, 20px);
-        color:var(--darkblue);
+        color: var(--darkblue);
     }
+
     h3 {
         font-size: max(3vw, 16px);
     }
+
     h4 {
         font-size: 25px;
     }
+
     h5 {
         font-size: 20px;
     }
@@ -87,12 +97,14 @@
     p {
         font-size: max(2vw, 14px);
     }
+
     .p2 {
-        color:white;
-        font-size:20px;
+        color: white;
+        font-size: 20px;
     }
-    .p3{
-        color:var(--yellow);
+
+    .p3 {
+        color: var(--yellow);
         font-size: 20px;
     }
 
@@ -102,37 +114,39 @@
         background-color: var(--lightblue);
         border-radius: 3vw;
         padding: 5px 40px;
-        border:none;
+        border: none;
         outline: none;
         box-shadow: none;
-        color:white;
+        color: white;
         height: 55px;
         font-size: max(2vw, 14px);
     }
+
     .quickapply {
         background-color: var(--red);
         border-radius: 3vh;
         padding: 5px 40px;
-        border:none;
+        border: none;
         outline: none;
         box-shadow: none;
-        color:white;
+        color: white;
         height: 6vh;
         font-size: max(3.8vw, 16px);
     }
 
 
     /*Backgrounds for homepage*/
-    .bluemain{
+    .bluemain {
         background-color: var(--darkblue);
         /*padding takes some of the width, this ensures nothing overflows*/
         width: 90% !important;
         flex-direction: column;
         padding: 5% 5%;
         justify-content: center;
-        margin:0;
+        margin: 0;
     }
-    .programsListmain{
+
+    .programsListmain {
         background-color: var(--darkblue);
         width: 84% !important;
         flex-direction: column;
@@ -142,84 +156,90 @@
 
 
 
-    .exploreDiv{
+    .exploreDiv {
         /*padding takes some of the width, this ensures nothing overflows*/
-        background-color: rgb(255, 255, 255,0.1);
-        border-radius:25px;
-        height:40vw;
-        overflow-y:scroll;
+        background-color: rgb(255, 255, 255, 0.1);
+        border-radius: 25px;
+        height: 40vw;
+        overflow-y: scroll;
     }
 
-    .exploreDivPrograms{
-        background-color: rgb(255, 255, 255,0.1);
-        border-radius:10px;
-        
+    .exploreDivPrograms {
+        background-color: rgb(255, 255, 255, 0.1);
+        border-radius: 10px;
+
         width: 75% !important;
         padding: 2% 8%;
-        margin:40px auto;
+        margin: 40px auto;
         justify-content: center;
     }
 
     .exploreDivPrograms span {
         margin-left: 50px;
     }
-    .whitemain{
+
+    .whitemain {
         background-color: var(--darkblue);
         width: 84% !important;
         flex-direction: column;
         padding: 5% 8%;
         justify-content: center;
-        color:white
+        color: white
     }
 
-    .wordblock{
-        display:inline-block;
+    .wordblock {
+        display: inline-block;
         width: 60%;
     }
 
-    .intrigued{
+    .intrigued {
         background-color: var(--lightblue);
         /*padding takes some of the width, this ensures nothing overflows*/
         width: 80% !important;
         flex-direction: column;
         padding: 10%;
         justify-content: center;
-        margin:0;
+        margin: 0;
     }
 
     /*scroll bar, works with Chrome, Edge, Safar and Opera*/
     /* Track */
     body::-webkit-scrollbar-track {
-        background-color: none; 
-        background:blue;
+        background-color: none;
+        background: blue;
     }
+
     body::-webkit-scrollbar {
         width: 0px;
-        border-radius:10px;
+        border-radius: 10px;
         background: none;
-      }
+    }
 
     div::-webkit-scrollbar-track {
-        background-color: none; 
-        background:none;
+        background-color: none;
+        background: none;
     }
+
     div::-webkit-scrollbar {
         width: 7px;
         background: none;
-      }
+    }
+
     div::-webkit-scrollbar-thumb {
-        border-radius:15px;
+        border-radius: 15px;
         background: rgba(84, 160, 210, 0.6);
-      }
-    div::-webkit-scrollbar-track-piece{
+    }
+
+    div::-webkit-scrollbar-track-piece {
         background: none;
-        margin:20px;
-    } 
+        margin: 20px;
+    }
+
     /*Every styling feature below is for the navigation bar --------------------------*/
 
     /*the ul that holds the navbar links list*/
     .navUl {
-        margin:0;
+        margin: 0;
         padding: 6% 0% 6% 3%;
         vertical-align: middle;
         /*make list horizontal*/
@@ -228,6 +248,7 @@
         height: 7vh;
 
     }
+
     #full-nav {
         margin: 0;
         background-color: var(--darkblue);
@@ -242,9 +263,9 @@
         padding: 10px 0px;
     }
 
-    
-    .navClean{
-        display:flex;
+
+    .navClean {
+        display: flex;
         justify-content: space-between;
         width: 90%;
         padding: 5% 5%;
@@ -252,7 +273,7 @@
 
 
     /*styles for the links on navbar*/
-    .link{
+    .link {
         font-size: max(2vw, 14px);
         display: block;
         color: white;
@@ -260,7 +281,8 @@
         text-decoration: none;
         margin-right: 20px;
     }
-    .navLink{
+
+    .navLink {
         font-size: max(2vw, 14px);
         color: var(--lightblue);
         text-decoration: none;
@@ -268,63 +290,70 @@
     }
 
     /*whenever i need to make a row*/
-    .row{
+    .row {
         margin-right: 15px;
         display: flex;
         justify-content: flex-end;
         flex-direction: row;
         margin-left: auto;
         padding: 0;
-        
+
     }
 
     /*ALL THINGS BELOW ARE FOR INPUTS*/
-    .input{
+    .input {
         position: relative;
         padding: 30px 0px;
         /*need height to be 100%*/
     }
-    input{
+
+    input {
         font-size: max(2vw, 14px);
-        padding:5px;
+        padding: 5px;
         font-weight: 700;
-        display:block;
-        border:none;
-        color:var(--yellow);
+        display: block;
+        border: none;
+        color: var(--yellow);
         background-color: var(--lightblue);
-        border-bottom:1px solid white;
+        border-bottom: 1px solid white;
     }
-    input:focus { outline:none; }
-    label{
+
+    input:focus {
+        outline: none;
+    }
+
+    label {
         /*This pushed the words away*/
-        position:absolute;
-        color:white;
+        position: absolute;
+        color: white;
         font-size: max(2vw, 14px);
-        left:5px;
-        top:25px;
+        left: 5px;
+        top: 25px;
         pointer-events: none;
-        transition:0.2s ease-in-out; 
-        -moz-transition:0.2s ease all; 
-        -webkit-transition:0.2s ease all;
-        
+        transition: 0.2s ease-in-out;
+        -moz-transition: 0.2s ease all;
+        -webkit-transition: 0.2s ease all;
+
     }
-    
-    input:focus ~ label, input:valid ~ label {
-        transform:translateY(-30px);
+
+    input:focus~label,
+    input:valid~label {
+        transform: translateY(-30px);
     }
 
     /*POPUP MODAL --------------------------------*/
 
     #popup-1 {
         display: none;
-    /*	background-color: rgba(0,0,0,0.5);*/
+        /*	background-color: rgba(0,0,0,0.5);*/
         position: absolute;
         height: 100vh;
         width: 100%;
         bottom: 0px;
-        z-index:1;
+        z-index: 1;
         transition: bottom 1s;
     }
+
     .popup-content {
         position: relative;
         padding: 10vh 20px 10vh 20px;
@@ -337,9 +366,11 @@
         justify-content: space-around;
         align-items: center;
         top: 5vh;
-        -webkit-box-shadow: 0px 0px 10px 5px #888;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-        -moz-box-shadow:    0px 0px 10px 5px #888;  /* Firefox 3.5 - 3.6 */
-        box-shadow:         0px 0px 10px 5px #888; 
+        -webkit-box-shadow: 0px 0px 10px 5px #888;
+        /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+        -moz-box-shadow: 0px 0px 10px 5px #888;
+        /* Firefox 3.5 - 3.6 */
+        box-shadow: 0px 0px 10px 5px #888;
     }
 
 }
@@ -349,68 +380,78 @@
     .fadeSmall {
         display: none;
     }
+
     .column {
         float: left;
         width: 50%
     }
+
     .row {
-        display:flex;
+        display: flex;
         justify-content: space-around;
         width: 100%;
         padding: 10% 0%;
-    }  
+    }
 
-    .img{
-        display:inline-block;
-        width:30%;
-        height:100%;
+    .img {
+        display: inline-block;
+        width: 30%;
+        height: 100%;
         vertical-align: middle;
         line-height: normal;
     }
 
     /*@media (max-width: 1000px) {*/
-        .column {
-            float: none;
-            width: 100%
-        }
+    .column {
+        float: none;
+        width: 100%
+    }
+
     /*}*/
     /*Like the Montserrat font*/
-    html,body {
+    html,
+    body {
         font-family: Montserrat;
         font-style: normal;
-        overflow-x: hidden; 
+        overflow-x: hidden;
         width: 100%;
         box-sizing: border-box;
         position: relative;
     }
 
     /*Keep floating contents inside respective parents*/
-    div{
+    div {
         position: relative;
         overflow: hidden;
     }
+
     /*Set up font sizes*/
     h1 {
         font-size: max(5.9vw, 15px);
-        margin-bottom:1px;
+        margin-bottom: 1px;
         margin-top: 0px;
         font-family: Montserrat;
         font-weight: 400;
         color: white;
     }
-    .yellow{
+
+    .yellow {
         color: var(--yellow)
     }
+
     h2 {
         font-size: max(5vw, 24px);
-        color:white;
+        color: white;
     }
+
     h3 {
         font-size: max(4vw, 16px);
     }
+
     h4 {
         font-size: 25px;
     }
+
     h5 {
         font-size: 20px;
     }
@@ -425,42 +466,46 @@
         background-color: var(--lightblue);
         border-radius: 3vh;
         padding: 5px 40px;
-        border:none;
+        border: none;
         outline: none;
         box-shadow: none;
-        color:white;
+        color: white;
         height: 45px;
         font-size: max(3.8vw, 16px);
     }
+
     .quickapply {
         background-color: var(--red);
         border-radius: 3vh;
         padding: 5px 40px;
-        border:none;
+        border: none;
         outline: none;
         box-shadow: none;
-        color:white;
+        color: white;
         height: 6vh;
         font-size: max(3.8vw, 16px);
     }
+
     /*Backgrounds for homepage*/
-    .bluemain{
+    .bluemain {
         background-color: var(--darkblue);
         /*padding takes some of the width, this ensures nothing overflows*/
         width: 90% !important;
         flex-direction: column;
         padding: 20% 5%;
         justify-content: center;
-        margin:0;
+        margin: 0;
     }
-    .programsListmain{
+
+    .programsListmain {
         background-color: var(--lightblue);
         width: 84% !important;
         flex-direction: column;
         padding: 5% 8%;
         justify-content: center;
     }
-    .whitemain{
+
+    .whitemain {
         background-color: white;
         width: 84% !important;
         flex-direction: column;
@@ -468,25 +513,26 @@
         justify-content: center;
     }
 
-    .wordblock{
-        display:inline-block;
+    .wordblock {
+        display: inline-block;
         width: 60%;
     }
 
-    .intrigued{
+    .intrigued {
         background-color: var(--lightblue);
         /*padding takes some of the width, this ensures nothing overflows*/
         width: 80% !important;
         flex-direction: column;
         padding: 10%;
         justify-content: center;
-        margin:0;
+        margin: 0;
     }
+
     /*Every styling feature below is for the navigation bar --------------------------*/
 
     /*the ul that holds the navbar links list*/
     .navUl {
-        margin:0;
+        margin: 0;
         padding: 6% 0% 6% 3%;
         vertical-align: middle;
         /*make list horizontal*/
@@ -495,6 +541,7 @@
         height: 7vh;
 
     }
+
     #full-nav {
         margin: 0;
         background-color: var(--darkblue);
@@ -510,7 +557,7 @@
     }
 
     /*styles for the links on navbar*/
-    .link{
+    .link {
         font-size: max(3.8vw, 16px);
         display: block;
         color: white;
@@ -518,68 +565,76 @@
         text-decoration: none;
         margin-right: 20px;
     }
-    .navLink{
+
+    .navLink {
         display: none;
     }
 
     /*whenever i need to make a row*/
-    .row{
+    .row {
         margin-right: 15px;
         display: flex;
         justify-content: flex-end;
         flex-direction: row;
         margin-left: auto;
         padding: 0;
-        
+
     }
 
     /*ALL THINGS BELOW ARE FOR INPUTS*/
-    .input{
+    .input {
         position: relative;
         padding: 20px 0px;
         /*need height to be 100%*/
     }
-    input{
+
+    input {
         font-size: 16px;
-        padding:5px;
+        padding: 5px;
         font-weight: 700;
-        display:block;
-        border:none;
-        color:var(--yellow);
+        display: block;
+        border: none;
+        color: var(--yellow);
         background-color: var(--lightblue);
-        border-bottom:1px solid white;
+        border-bottom: 1px solid white;
     }
-    input:focus { outline:none; }
-    label{
+
+    input:focus {
+        outline: none;
+    }
+
+    label {
         /*This pushed the words away*/
-        position:absolute;
-        color:white;
+        position: absolute;
+        color: white;
         font-size: 12px;
-        left:5px;
-        top:20px;
+        left: 5px;
+        top: 20px;
         pointer-events: none;
-        transition:0.2s ease-in-out; 
-        -moz-transition:0.2s ease all; 
-        -webkit-transition:0.2s ease all;
-        
+        transition: 0.2s ease-in-out;
+        -moz-transition: 0.2s ease all;
+        -webkit-transition: 0.2s ease all;
+
     }
-    
-    input:focus ~ label, input:valid ~ label {
-        transform:translateY(-20px);
+
+    input:focus~label,
+    input:valid~label {
+        transform: translateY(-20px);
     }
 
     /*POPUP MODAL --------------------------------*/
 
     #popup-1 {
         display: none;
-    /*	background-color: rgba(0,0,0,0.5);*/
+        /*	background-color: rgba(0,0,0,0.5);*/
         position: absolute;
         height: 100vh;
         width: 100%;
         bottom: 0px;
-        z-index:1;
+        z-index: 1;
         transition: bottom 1s;
     }
+
     .popup-content {
         position: relative;
         padding: 10vh 20px 10vh 20px;
@@ -592,13 +647,15 @@
         justify-content: space-around;
         align-items: center;
         top: 5vh;
-        -webkit-box-shadow: 0px 0px 10px 5px #888;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-        -moz-box-shadow:    0px 0px 10px 5px #888;  /* Firefox 3.5 - 3.6 */
-        box-shadow:         0px 0px 10px 5px #888; 
+        -webkit-box-shadow: 0px 0px 10px 5px #888;
+        /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+        -moz-box-shadow: 0px 0px 10px 5px #888;
+        /* Firefox 3.5 - 3.6 */
+        box-shadow: 0px 0px 10px 5px #888;
     }
 }
 
-.extraspace{
-    width:10%;
-    height:12vh;
+.extraspace {
+    width: 10%;
+    height: 12vh;
 }

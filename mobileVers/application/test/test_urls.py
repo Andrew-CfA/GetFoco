@@ -2,6 +2,7 @@ from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from application.views import *
 
+
 class TestUrls(SimpleTestCase):
 
     def test_index_resolved(self):
@@ -28,7 +29,7 @@ class TestUrls(SimpleTestCase):
         url = reverse("application:programs")
         print("Test - programs url")
         self.assertEquals(resolve(url).func, programs)
-    
+
     def test_available_resolved(self):
         url = reverse("application:available")
         print("Test - available url")

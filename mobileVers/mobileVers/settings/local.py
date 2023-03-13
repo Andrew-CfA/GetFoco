@@ -16,17 +16,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.core.exceptions import ImproperlyConfigured
+import json
 from pathlib import Path
 from datetime import datetime
 import os
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-import json
-
-from django.core.exceptions import ImproperlyConfigured
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -35,6 +33,8 @@ from django.core.exceptions import ImproperlyConfigured
 # JSON-based secrets module
 with open('secrets_dev.json') as f:
     secrets = json.loads(f.read())
+
+
 def get_secret(setting, secrets=secrets):
     '''Get the secret variable or return explicit exception.'''
     try:
@@ -43,13 +43,16 @@ def get_secret(setting, secrets=secrets):
         error_msg = 'Set the {0} environment variable'.format(setting)
         raise ImproperlyConfigured(error_msg)
 
+
 SECRET_KEY = get_secret('SECRET_KEY')
-TWILIO_ACCOUNT_SID = get_secret('TWILIO_ACCOUNT_SID') #os.getenv("TWILIO_ACCOUNT_SID") 
-TWILIO_AUTH_TOKEN = get_secret('TWILIO_AUTH_TOKEN') #os.getenv("TWILIO_AUTH_TOKEN") 
-TWILIO_NUMBER = get_secret('TWILIO_NUMBER') #os.getenv("TWILIO_NUMBER")
-USPS_SID = get_secret('USPS_SID') #os.getenv("USPS_ACCOUNT_SID") 
-DB_USER = get_secret('DB_USER') #os.getenv("DB_USER")
-DB_PASS = get_secret('DB_PASS') #os.getenv("DB_PASS")
+# os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_ACCOUNT_SID = get_secret('TWILIO_ACCOUNT_SID')
+# os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_AUTH_TOKEN = get_secret('TWILIO_AUTH_TOKEN')
+TWILIO_NUMBER = get_secret('TWILIO_NUMBER')  # os.getenv("TWILIO_NUMBER")
+USPS_SID = get_secret('USPS_SID')  # os.getenv("USPS_ACCOUNT_SID")
+DB_USER = get_secret('DB_USER')  # os.getenv("DB_USER")
+DB_PASS = get_secret('DB_PASS')  # os.getenv("DB_PASS")
 SENDGRID_API_KEY = get_secret('SENDGRID_API_KEY')
 TEMPLATE_ID = get_secret("TEMPLATE_ID")
 TEMPLATE_ID_PW_RESET = get_secret("TEMPLATE_ID_PW_RESET")
@@ -60,7 +63,7 @@ BLOB_STORE_SUFFIX = get_secret("BLOB_STORE_SUFFIX")
 USER_FILES_CONTAINER = get_secret("USER_FILES_CONTAINER")
 IS_PROD = False
 
-#SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 # ANDREW: Make sure to change this later!
@@ -70,7 +73,7 @@ ALLOWED_HOSTS = ["*", "192.168.0.15"]
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin', # NOTE: may just be able to stop admin stuff in settings.py
+    'django.contrib.admin',  # NOTE: may just be able to stop admin stuff in settings.py
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -92,11 +95,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', #add whitenoise
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # add whitenoise
 ]
 
 ROOT_URLCONF = 'mobileVers.urls'
-AUTH_USER_MODEL = "application.User" 
+AUTH_USER_MODEL = "application.User"
 
 TEMPLATES = [
     {
@@ -127,7 +130,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
- }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -173,37 +176,37 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
-#added media path for file uploads
+# added media path for file uploads
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
 str = str((datetime.now().time()))
 logFileName = str.replace(":", "_")
-LOGGING = { 
+LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
-    },  
+    },
     'handlers': {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'logs/' + logFileName + '.log', 
-            'when': 'midnight', # this specifies the interval
-            'interval': 1, # defaults to 1, only necessary for other values 
-            'backupCount': 100, # how many backup file to keep, 10 days
+            'filename': 'logs/' + logFileName + '.log',
+            'when': 'midnight',  # this specifies the interval
+            'interval': 1,  # defaults to 1, only necessary for other values
+            'backupCount': 100,  # how many backup file to keep, 10 days
             'formatter': 'verbose',
         },
 
-    },  
+    },
     'loggers': {
         'django': {
             'handlers': ['file'],
@@ -213,5 +216,5 @@ LOGGING = {
             'handlers': ['file'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         }
-    },  
+    },
 }

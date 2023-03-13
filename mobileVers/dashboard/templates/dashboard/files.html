@@ -11,42 +11,48 @@ the Free Software Foundation, either version 3 of the License, or
 
 <div class=sideNav>
     <div class=fadeSmall>
-        <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
+        <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;"
+            src="{% static 'application/images/CityLogoWhite-01.png' %}">
         <h1><b>Almost Done!</b></h1>
         <p><b>Why are you asking for these documents?</b></p>
-        <p>The documents that you upload will help verify your address and further validate which programs you may be eligible for.</p>
+        <p>The documents that you upload will help verify your address and further validate which programs you may be
+            eligible for.</p>
         <p>An identification card can be any of the following:
-            <ul>
-                <p style="color:white">Colorado Driver's License or Colorado Identification card</p>
-                <p style="color:white">A United States Military or Military Dependent's Identification Card</p>
-                <p style="color:white">A United States Coast Guard Merchant Mariner card </p>
-                <p style="color:white">A Native Tribal Document</p>
-                <p style="color:white">Copy of Applicant's Birth Certificate from any States</p>
-                <p style="color:white">United States Passport</p>
-                <p style="color:white">For a list of more acceptable proof of identification, <a href="https://drive.google.com/file/d/1eyJ4sMmoEw2_lLJFVFlAzQcNFk8oF2Lj/view" style="color:var(--yellow)">please click here</a></p>
-            </ul>
-            </p>
+        <ul>
+            <p style="color:white">Colorado Driver's License or Colorado Identification card</p>
+            <p style="color:white">A United States Military or Military Dependent's Identification Card</p>
+            <p style="color:white">A United States Coast Guard Merchant Mariner card </p>
+            <p style="color:white">A Native Tribal Document</p>
+            <p style="color:white">Copy of Applicant's Birth Certificate from any States</p>
+            <p style="color:white">United States Passport</p>
+            <p style="color:white">For a list of more acceptable proof of identification, <a
+                    href="https://drive.google.com/file/d/1eyJ4sMmoEw2_lLJFVFlAzQcNFk8oF2Lj/view"
+                    style="color:var(--yellow)">please click here</a></p>
+        </ul>
+        </p>
     </div>
 </div>
 <p style="font-weight: 700;"> STEP {{ step }} OF {{ formPageNum }} </p>
 
 
 {% if message %}
-    <div style="color:red; margin-bottom: 5%;">{{ message }} </div>
+<div style="color:red; margin-bottom: 5%;">{{ message }} </div>
 {% endif %}
 
-            
+
 <div style="margin-top: 3vh;">
     <p>To get verified, please upload your</p>
     <h3> {{program_string|linebreaks}} </h3>
 
     <br>
     <br>
-    <p >Uploaded documents are secure & not shared with anyone outside of Fort Collins' income eligible programs. </p>
-    
+    <p>Uploaded documents are secure & not shared with anyone outside of Fort Collins' income eligible programs. </p>
+
 </div>
 
-<div class=fadeLarge><h6> Upload Files Below:</h6></div>
+<div class=fadeLarge>
+    <h6> Upload Files Below:</h6>
+</div>
 <div class=fadeSmall>
     <br>
     <br>
@@ -54,64 +60,74 @@ the Free Software Foundation, either version 3 of the License, or
 <form action="{% url 'dashboard:files' %}" method="post" autocomplete="false" enctype="multipart/form-data">
     {% csrf_token %}
     {% for field in form %}
-        {% if form.errors %}
-            {% for error in field.errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
+    {% if form.errors %}
+    {% for error in field.errors %}
+    <div class="alert alert-danger">
+        <strong>{{ error|escape }}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% if field.label == "Program" %}
+    <div class="row" style="justify-content: space-between;">
+        <p style="font-weight: 800;">Files: <buttonQuestion id="myBtn"><img id
+                    src="{% static 'application/images/clipart249308.png' %}" alt="back"
+                    style="width:min(4.5vw,20px); display: inline;"></buttonQuestion>
+        </p>
+        <select name="{{ field.name }}" id="{{ field.id_for_label}}">
+
+            {% for program, program_was_selected in programs.items %}
+            {% if program_was_selected %}
+            {% if program == "Affordable Connectivity Program" %}
+            <option class="option files" value="ACP Letter">ACP Letter</option>
+            {% elif program == "Identification" %}
+            <option class="option files" value="Identification">Identification</option>
+            {% elif program == "SNAP Card" %}
+            <option class="option files" value="SNAP">SNAP</option>
+            {% elif program == "LEAP Letter" %}
+            <option class="option files" value="LEAP Letter">LEAP Letter</option>
+            {% elif program == "PSD Reduced Lunch Approval Letter" %}
+            <option class="option files" value="Free and Reduced Lunch">Free and Reduced Lunch</option>
+            {% elif program == "Medicaid Card" %}
+            <option class="option files" value="Medicaid">Medicaid</option>
+            {% endif %}
+            {% endif %}
             {% endfor %}
-        {% endif %}
-        {% if field.label == "Program" %}
+
+        </select>
+    </div>
+    {% elif field.label == "Document Upload" %}
+    <div class="upload-btn-wrapper" style="width:100%; align-items: center; margin-top: 3vh;">
+        <button class="buttonFileUpload" id="toggleColorButton">
             <div class="row" style="justify-content: space-between;">
-                <p style="font-weight: 800;">Files: <buttonQuestion  id="myBtn"><img id src="{% static 'application/images/clipart249308.png' %}" alt="back" style="width:min(4.5vw,20px); display: inline;"></buttonQuestion> </p>
-                <select name="{{ field.name }}" id="{{ field.id_for_label}}">
-
-                {% for program, program_was_selected in programs.items %}
-                    {% if program_was_selected %}
-                        {% if program == "Affordable Connectivity Program" %}
-                            <option class="option files" value="ACP Letter">ACP Letter</option>
-                        {% elif program == "Identification" %}
-                            <option class="option files" value="Identification">Identification</option>
-                        {% elif program == "SNAP Card" %}
-                            <option class="option files" value="SNAP">SNAP</option>
-                        {% elif program == "LEAP Letter" %}
-                            <option class="option files" value="LEAP Letter">LEAP Letter</option>
-                        {% elif program == "PSD Reduced Lunch Approval Letter" %}
-                            <option class="option files" value="Free and Reduced Lunch">Free and Reduced Lunch</option>
-                        {% elif program == "Medicaid Card" %}
-                            <option class="option files" value="Medicaid">Medicaid</option>
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-
-                </select>
-            </div>
-        {% elif field.label == "Document Upload" %}
-            <div class="upload-btn-wrapper" style ="width:100%; align-items: center; margin-top: 3vh;">
-                <button class="buttonFileUpload" id="toggleColorButton">
-                    <div class="row" style="justify-content: space-between;">
-                        <img src="{% static 'dashboard/images/upload.svg' %}" alt="back" style="width:15vw; margin-right: 5vw;">
-                        <div style="display:flex; flex-direction:column;align-items:flex-start;">
-                            <div class=fadeSmall><p style = "color:white; font-weight: 400;text-align: left; margin-bottom: 5px;">Upload Documents: Upload multiple files by pressing Ctrl and clicking each file. </p></div>
-                            <div class=fadeLarge><p style = "color:white; font-weight: 400;text-align: left; margin-bottom: 5px;">Click Here to Upload Documents </p></div>
-                            <p style = "color:white;font-weight: 200;">PDF, PNG or JPEG</p>
-                        </div>
+                <img src="{% static 'dashboard/images/upload.svg' %}" alt="back" style="width:15vw; margin-right: 5vw;">
+                <div style="display:flex; flex-direction:column;align-items:flex-start;">
+                    <div class=fadeSmall>
+                        <p style="color:white; font-weight: 400;text-align: left; margin-bottom: 5px;">Upload Documents:
+                            Upload multiple files by pressing Ctrl and clicking each file. </p>
                     </div>
-                </button>
-                <input type="file" name ="{{field.name}}" id="{{ field.id_for_label }}" onchange="preview_image(event)" required multiple>
+                    <div class=fadeLarge>
+                        <p style="color:white; font-weight: 400;text-align: left; margin-bottom: 5px;">Click Here to
+                            Upload Documents </p>
+                    </div>
+                    <p style="color:white;font-weight: 200;">PDF, PNG or JPEG</p>
+                </div>
             </div>
-        {% endif %}
+        </button>
+        <input type="file" name="{{field.name}}" id="{{ field.id_for_label }}" onchange="preview_image(event)" required
+            multiple>
+    </div>
+    {% endif %}
     {% endfor %}
 
     <br>
- <!-- Taking preview out and instead going to replace with "green upload complete button"  also need to mess with field.name, etc. to make sure second upload is actually captured...
+    <!-- Taking preview out and instead going to replace with "green upload complete button"  also need to mess with field.name, etc. to make sure second upload is actually captured...
     <div class="preview"> 
         <img style ="max-width:100%;" id="output_image"/>
     </div>
 -->
     <br>
     <div class="footer">
-        <button type ="submit" > CONTINUE </button>
+        <button type="submit"> CONTINUE </button>
     </div>
 </form>
 
@@ -125,11 +141,11 @@ the Free Software Foundation, either version 3 of the License, or
 </style>
 
 <script>
-    var firstTimeVisitToFileUploadPage = {{ request.session.first_time_file_upload|yesno:"true,false"|escapejs }};
+    var firstTimeVisitToFileUploadPage = {{ request.session.first_time_file_upload| yesno: "true,false" | escapejs }};
     var fileUploadSuccessful = JSON.parse('{{ file_upload|escapejs }}')['success_status'];
 
-    $(document).ready(function() {     
-        $("#myBtn").click(function() {
+    $(document).ready(function () {
+        $("#myBtn").click(function () {
             var modalContent = `
                 <div class ="fadeSmall">
                     <p style="color: var(--darkblue);">If you are uploading multiple files, be sure to click and <b>hold</b> the Ctrl key on your keyboard and click on each file. See an example below!</p>
@@ -146,25 +162,25 @@ the Free Software Foundation, either version 3 of the License, or
                     <img src="{% static 'application/images/step_5_mobile_instructions.gif' %}">
                 </div>
             `;
-            Swal.fire( {
+            Swal.fire({
                 title: 'Uploading Multiple Files',
                 html: modalContent,
                 confirmButtonColor: '#13467D',
                 confirmButtonText: 'Continue'
             })
         });
-        
+
         if (fileUploadSuccessful === null) {
             // The user has come to the page for the first time
             // or has refreshed the page
-            Swal.fire( {
+            Swal.fire({
                 title: 'File Upload',
                 html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
                 confirmButtonColor: '#13467D',
                 confirmButtonText: 'Continue'
             })
         } else if (fileUploadSuccessful) {
-            Swal.fire( {
+            Swal.fire({
                 title: 'Your file has been uploaded!',
                 html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
                 icon: 'success',
@@ -172,7 +188,7 @@ the Free Software Foundation, either version 3 of the License, or
                 confirmButtonText: 'Continue'
             })
         } else {
-            Swal.fire( {
+            Swal.fire({
                 title: 'Error',
                 text: 'File is not a valid file type. Please upload either JPG, PNG, OR PDF.',
                 icon: 'error',
@@ -190,12 +206,11 @@ the Free Software Foundation, either version 3 of the License, or
 
     function preview_image(event) {
         var reader = new FileReader();
-        reader.onload = function()
-        {
-        var output = document.getElementById('output_image');
-        output.src = reader.result;
+        reader.onload = function () {
+            var output = document.getElementById('output_image');
+            output.src = reader.result;
         }
-        
+
         document.getElementById("toggleColorButton").style.backgroundColor = 'Green';
         reader.readAsDataURL(event.target.files[0]);
     }

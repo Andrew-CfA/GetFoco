@@ -19,25 +19,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+
 from django.contrib import admin
 from django.urls import path, include
-
 from application import views
-
-from django.contrib.auth import views as auth_views #import this
-
+from django.contrib.auth import views as auth_views  # import this
 urlpatterns = [
     path('admin/', admin.site.urls),
     # For the no slash, I just put the homepage index file to be first
     path('', views.index, name='index'),
     # Add one of these every time I make a new app
-    path('application/', include(('application.urls', 'application'),namespace='application')),
-    path('dashboard/', include(('dashboard.urls', 'dashboard'),namespace='dashboard')),
+    path('application/', include(('application.urls',
+         'application'), namespace='application')),
+    path('dashboard/', include(('dashboard.urls', 'dashboard'), namespace='dashboard')),
 
 
     path('accounts/', include('django.contrib.auth.urls')),
-    #path('password_reset/', auth_views.PasswordResetView.as_view(template_name='dashboard/PasswordReset/passwordReset.html'), name='passwordReset'),
-    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='dashboard/PasswordReset/passwordResetDone.html'), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="dashboard/PasswordReset/passwordResetConfirm.html"), name='password_reset_confirm'),
-    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='dashboard/PasswordReset/passwordResetComplete.html'), name='password_reset_complete'),      
+    # path('password_reset/', auth_views.PasswordResetView.as_view(template_name='dashboard/PasswordReset/passwordReset.html'), name='passwordReset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(
+        template_name='dashboard/PasswordReset/passwordResetDone.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name="dashboard/PasswordReset/passwordResetConfirm.html"), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(
+        template_name='dashboard/PasswordReset/passwordResetComplete.html'), name='password_reset_complete'),
 ]

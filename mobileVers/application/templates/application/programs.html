@@ -8,60 +8,61 @@ the Free Software Foundation, either version 3 of the License, or
 {% load static %}
 {% block body %}
 <div class=sideNav>
-  <div class=fadeSmall>
-    <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;"
-      src="{% static 'application/images/CityLogoWhite-01.png' %}">
-    <h1><b>It's Time to Get Excited</b></h1>
-    <p>Choose programs you are already a part of. This information will be used to determine what aid you qualify
-      for.<br> <br> <b>Choose all that apply.</b>
-    </p>
-  </div>
+    <div class=fadeSmall>
+        <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;"
+            src="{% static 'application/images/CityLogoWhite-01.png' %}">
+        <h1><b>It's Time to Get Excited</b></h1>
+        <p>Choose programs you are already a part of. This information will be used to determine what aid you qualify
+            for.<br> <br> <b>Choose all that apply.</b>
+        </p>
+    </div>
 </div>
 <h2 style="font-weight: 700; margin-top:5vh"> Are you currently enrolled in any of the following programs? </h2>
 
 <div class=fadeLarge>
-  <p> Choose all that apply: </p>
+    <p> Choose all that apply: </p>
 </div>
 
 <form action="{% url 'application:programs' %}" method="post" autocomplete="false">
-  {% csrf_token %}
-  {% for field in form%}
+    {% csrf_token %}
+    {% for field in form%}
 
-  {% if field.label == "Identification Card" %}
-  <div style="display: none;">
-    <input style="display: none;" id="{{ field.id_for_label}}" type="checkbox" checked required name="{{ field.name}}">
+    {% if field.label == "Identification Card" %}
+    <div style="display: none;">
+        <input style="display: none;" id="{{ field.id_for_label}}" type="checkbox" checked required
+            name="{{ field.name}}">
+        <label class="checklabel" for="{{ field.id_for_label}}">
+
+            <style>
+                input:not(.checked)~label span.buttonCheck {
+                    color: white;
+                }
+            </style>
+
+            <span class="buttonCheck">{{field.label}}</span>
+        </label>
+    </div>
+
+    {% else %}
+    <input style="display: none;" id="{{ field.id_for_label}}" type="checkbox" name="{{ field.name}}">
     <label class="checklabel" for="{{ field.id_for_label}}">
 
-      <style>
-        input:not(.checked)~label span.buttonCheck {
-          color: white;
-        }
-      </style>
+        <style>
+            input:not(.checked)~label span.buttonCheck {
+                color: white;
+            }
+        </style>
 
-      <span class="buttonCheck">{{field.label}}</span>
+        <span class="buttonCheck">{{field.label}}</span>
     </label>
-  </div>
+    {% endif %}
 
-  {% else %}
-  <input style="display: none;" id="{{ field.id_for_label}}" type="checkbox" name="{{ field.name}}">
-  <label class="checklabel" for="{{ field.id_for_label}}">
-
-    <style>
-      input:not(.checked)~label span.buttonCheck {
-        color: white;
-      }
-    </style>
-
-    <span class="buttonCheck">{{field.label}}</span>
-  </label>
-  {% endif %}
-
-  {% endfor %}
+    {% endfor %}
 
 
-  <div class="footer">
-    <button id="btnContinue" type="submit" disabled> SELECT A PROGRAM </button>
-  </div>
+    <div class="footer">
+        <button id="btnContinue" type="submit" disabled> SELECT A PROGRAM </button>
+    </div>
 
 </form>
 {% endblock %}

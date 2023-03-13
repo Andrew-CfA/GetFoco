@@ -13,33 +13,37 @@ the Free Software Foundation, either version 3 of the License, or
 
 <!--Back to dashboard button-->
 <div class="fadeLarge">
-    <a class="row" onClick="window.history.back();return false;" style="text-decoration: none;justify-content: start;align-items: center;">
-        <img src="{% static 'dashboard/images/Path 1083.svg' %}" alt="back" style="height: 3vw; margin-right: 5px;color:black">
-        <p style = "color:var(--lightblue);margin-left: 3%;">Back to Dashboard</p>
+    <a class="row" onClick="window.history.back();return false;"
+        style="text-decoration: none;justify-content: start;align-items: center;">
+        <img src="{% static 'dashboard/images/Path 1083.svg' %}" alt="back"
+            style="height: 3vw; margin-right: 5px;color:black">
+        <p style="color:var(--lightblue);margin-left: 3%;">Back to Dashboard</p>
     </a>
 </div>
 
 <div class="iq_program_container">
     {% for program in iq_programs %}
-        <div class="modulequickApply">
-            <div class = "row" style="margin:0; width:100%">
-                <div style="margin:0">
-                    <p style ="font-weight: 550; margin: 0">{{ program.title }}</p>
-                    <p style = "margin-top:3px;"> {{ program.subtitle }} </p>
-                    <p style = "margin-top:3px;">{{ program.description }}</p>
+    <div class="modulequickApply">
+        <div class="row" style="margin:0; width:100%">
+            <div style="margin:0">
+                <p style="font-weight: 550; margin: 0">{{ program.title }}</p>
+                <p style="margin-top:3px;"> {{ program.subtitle }} </p>
+                <p style="margin-top:3px;">{{ program.description }}</p>
 
-                </div>
-            </div>
-            <div class = "row" style="margin:0;width:100%">
-                <a class="row" href="{{ program.learn_more_link }}" target="_blank" style="text-decoration: none;justify-content: start;align-items: center;margin:0">
-                    <p style = "margin: 0;color:var(--lightblue)"> Learn More </p>
-                    <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back" style="height: 3vw; margin-left: 5px;color:black">
-                </a>
-                {% if program.supplemental_info %}
-                    <p style = "color:#999999;margin-top:0;text-align: right;" >{{ program.supplemental_info }}</p>
-                {% endif %}
             </div>
         </div>
+        <div class="row" style="margin:0;width:100%">
+            <a class="row" href="{{ program.learn_more_link }}" target="_blank"
+                style="text-decoration: none;justify-content: start;align-items: center;margin:0">
+                <p style="margin: 0;color:var(--lightblue)"> Learn More </p>
+                <img src="{% static 'dashboard/images/Arrow 1.svg' %}" alt="back"
+                    style="height: 3vw; margin-left: 5px;color:black">
+            </a>
+            {% if program.supplemental_info %}
+            <p style="color:#999999;margin-top:0;text-align: right;">{{ program.supplemental_info }}</p>
+            {% endif %}
+        </div>
+    </div>
     {% endfor %}
 </div>
 
@@ -51,7 +55,7 @@ the Free Software Foundation, either version 3 of the License, or
             padding-left: 300px;
         }
     }
-    
+
     @media screen and (max-width : 767px) {
         .iq_program_container {
             padding-left: 0px;

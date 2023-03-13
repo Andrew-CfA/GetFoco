@@ -20,7 +20,7 @@ urlpatterns = [
     path('attestation', views.attestation, name='attestation'),
     path('moreInfoNeeded', views.moreInfoNeeded, name='moreInfoNeeded'),
     path('filesInfoNeeded', views.filesInfoNeeded, name='filesInfoNeeded'),
-    
+
 
     # Available/NotAvailable Digital Equity in your area
     # path('available', views.available, name='available'),
@@ -35,8 +35,10 @@ urlpatterns = [
     path('takeUSPSaddress', views.takeUSPSaddress, name='takeUSPSaddress'),
 
     # Recreation Dependent Pages
-    path('RecreationQuickApply', views.RecreationQuickApply, name='RecreationQuickApply'),
-    path('ConnexionQuickApply', views.ConnexionQuickApply, name='ConnexionQuickApply'),
+    path('RecreationQuickApply', views.RecreationQuickApply,
+         name='RecreationQuickApply'),
+    path('ConnexionQuickApply', views.ConnexionQuickApply,
+         name='ConnexionQuickApply'),
     path('SPINQuickApply', views.SPINQuickApply, name='SPINQuickApply'),
     # ETC. pages
     path('comingSoon', views.comingSoon, name='comingSoon'),
@@ -46,5 +48,5 @@ urlpatterns = [
     path('getReady', views.getReady, name='getReady'),
 
     path('ajax/load-gahi/', views.load_gahi_selector, name='ajax_load_gahi'),
-    
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #this is needed to get file uploads to work! 
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # this is needed to get file uploads to work!

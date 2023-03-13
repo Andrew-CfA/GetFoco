@@ -10,13 +10,14 @@ the Free Software Foundation, either version 3 of the License, or
 
 
 {% block body %}
-    <div class="content spaceAround" style="padding: 0 0 0 3vw;">
-        <!--NOTE: For the future have numbers change based on database-->
-        <h2 style="font-weight: 400;">We see you have not finished your application. </br></br> <b> Would you like to continue from where you left off?</b></h2>
-            <!--Whatever I need in the other pages, I can enter it here-->
+<div class="content spaceAround" style="padding: 0 0 0 3vw;">
+    <!--NOTE: For the future have numbers change based on database-->
+    <h2 style="font-weight: 400;">We see you have not finished your application. </br></br> <b> Would you like to
+            continue from where you left off?</b></h2>
+    <!--Whatever I need in the other pages, I can enter it here-->
 
-    </div>
-    <div class="footer" style="width:100%">
-        <button onclick="location.href='{% url next_page %}'"> CONTINUE </button>
-    </div>
+</div>
+<div class="footer" style="width:100%">
+    <button onclick="location.href='{% url next_page %}'"> CONTINUE </button>
+</div>
 {% endblock %}

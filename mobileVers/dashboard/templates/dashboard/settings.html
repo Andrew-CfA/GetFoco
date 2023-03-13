@@ -29,7 +29,8 @@ the Free Software Foundation, either version 3 of the License, or
 
         gtag('config', 'G-SL59NNQRH0');
     </script>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -58,7 +59,8 @@ the Free Software Foundation, either version 3 of the License, or
         <h1 class="mb-3">{{lastName}}</h1>
 
         <!-- Create a div that centers the content nested inside of it-->
-        <p class="pb-15">Manage your account information, including updating your account, address, and financial information.
+        <p class="pb-15">Manage your account information, including updating your account, address, and financial
+            information.
         </p>
         <div class="w-100">
             <a href="{{routes.account}}?update_mode=1" class="simple-and-cool-button">Account</a>
@@ -86,7 +88,7 @@ the Free Software Foundation, either version 3 of the License, or
         }
 
         .container {
-            margin-bottom:5vw;
+            margin-bottom: 5vw;
             margin-left: auto;
             margin-right: auto;
         }
@@ -125,10 +127,10 @@ the Free Software Foundation, either version 3 of the License, or
     </style>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var page_updated = JSON.parse('{{ page_updated | escapejs }}');
 
-            if (page_updated['page_updated']) {            
+            if (page_updated['page_updated']) {
                 Swal.fire({
                     title: 'Success!',
                     text: `Your ${page_updated['page_updated']} information was updated!`,
@@ -143,4 +145,5 @@ the Free Software Foundation, either version 3 of the License, or
     </script>
 
 </body>
+
 </html>

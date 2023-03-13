@@ -7,9 +7,10 @@ the Free Software Foundation, either version 3 of the License, or
 {% extends "application/layout.html" %}
 {% load static %}
 {% block body %}
-<div class=sideNav> 
+<div class=sideNav>
     <div class="fadeSmall">
-        <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
+        <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;"
+            src="{% static 'application/images/CityLogoWhite-01.png' %}">
         <h1> <b>Provide your address so we can find programs you may qualify for!</b></h1>
     </div>
 </div>
@@ -17,65 +18,48 @@ the Free Software Foundation, either version 3 of the License, or
 <h2 style="font-weight: 700; margin:5vh 0"> Where do you live? </h2>
 
 <form action="{% url 'application:address' %}" method="post" autocomplete="false" enctype="multipart/form-data">
-{% csrf_token %}
-{% for field in form %}
+    {% csrf_token %}
+    {% for field in form %}
     {% if form.errors %}
-        {% for error in field.errors %}
-        <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
-        </div>
-        {% endfor %}
+    {% for error in field.errors %}
+    <div class="alert alert-danger">
+        <strong>{{ error|escape }}</strong>
+    </div>
+    {% endfor %}
     {% endif %}
     <!-- Just leave out user_id so user cannot touch it-->
     {% if field.label == "State" %}
-        <div class ="row" style = "width:100%">
-            <div class="input" style = "width:100%">
-                <!--TODO: Save input-->
-                <input class="fill" value = "{{ field.initial }}" 
-                        name="{{ field.name }}"
-                        id="state"
-                        maxlength="{{ field.max_length }}"
-                        type="text" 
-                        style="width:80%;" 
-                        required  
-                        autocomplete="off"
-                        onblur="stateNameToAbbreviation() ">
-                <label class="label">{{field.label}}</label>    
-            </div>
-            <div class="input" style = "width:100%">
-                <!--TODO: change this to dropdown menu with data-->
-                <input class="fill" name="{{ form.zipCode.name }}"
-                    id="zipCode"
-                    maxlength="{{ form.zipCode.max_length }}"
-                    type="number" 
-                    style="width:100%;" 
-                    required  
-                    autocomplete="off"
-                    onblur="zipCheck()"
-                    >
-                <label class="label">{{ form.zipCode.label }}</label>    
-            </div>
+    <div class="row" style="width:100%">
+        <div class="input" style="width:100%">
+            <!--TODO: Save input-->
+            <input class="fill" value="{{ field.initial }}" name="{{ field.name }}" id="state"
+                maxlength="{{ field.max_length }}" type="text" style="width:80%;" required autocomplete="off"
+                onblur="stateNameToAbbreviation() ">
+            <label class="label">{{field.label}}</label>
         </div>
+        <div class="input" style="width:100%">
+            <!--TODO: change this to dropdown menu with data-->
+            <input class="fill" name="{{ form.zipCode.name }}" id="zipCode" maxlength="{{ form.zipCode.max_length }}"
+                type="number" style="width:100%;" required autocomplete="off" onblur="zipCheck()">
+            <label class="label">{{ form.zipCode.label }}</label>
+        </div>
+    </div>
 
     <!--Probably not the best way, but I needed to get rid of the zip code at the very end-->
     {% elif field.label == "Zip Code" or field.label == "N2n" %}
     {% else %}
     <div class="input">
-        <!--Have styling that I like on the forms-->        
-        <input class="fill" name="{{ field.name }}"
-            id="{{ field.id_for_label }}"
-            maxlength="{{ field.max_length }}"
-            type="text" 
-            style="width:100%;"   
-            autocomplete="off">    
-        <label class="label">{{field.label}}</label>    
+        <!--Have styling that I like on the forms-->
+        <input class="fill" name="{{ field.name }}" id="{{ field.id_for_label }}" maxlength="{{ field.max_length }}"
+            type="text" style="width:100%;" autocomplete="off">
+        <label class="label">{{field.label}}</label>
     </div>
     {% endif %}
-{% endfor %}
+    {% endfor %}
 
-<div class="footer">
-    <button type ="submit" > CONTINUE </button>
-</div>
+    <div class="footer">
+        <button type="submit"> CONTINUE </button>
+    </div>
 
 
 
@@ -83,143 +67,143 @@ the Free Software Foundation, either version 3 of the License, or
 
 <script>
     function stateNameToAbbreviation() {
-      var stateName = document.getElementById("state");
-      //x.value = x.value.toUpperCase();
-      
-      var states = {
-                "arizona": "AZ",
-                "alabama": "AL",
-                "alaska": "AK",
-                "arkansas": "AR",
-                "california": "CA",
-                "colorado": "CO",
-                "connecticut": "CT",
-                "district of columbia": "DC",
-                "delaware": "DE",
-                "florida": "FL",
-                "georgia": "GA",
-                "hawaii": "HI",
-                "idaho": "ID",
-                "illinois": "IL",
-                "indiana": "IN",
-                "iowa": "IA",
-                "kansas": "KS",
-                "kentucky": "KY",
-                "louisiana": "LA",
-                "maine": "ME",
-                "maryland": "MD",
-                "massachusetts": "MA",
-                "michigan": "MI",
-                "minnesota": "MN",
-                "mississippi": "MS",
-                "missouri": "MO",
-                "montana": "MT",
-                "nebraska": "NE",
-                "nevada": "NV",
-                "new hampshire": "NH",
-                "new jersey": "NJ",
-                "new mexico": "NM",
-                "new york": "NY",
-                "north carolina": "NC",
-                "north dakota": "ND",
-                "ohio": "OH",
-                "oklahoma": "OK",
-                "oregon": "OR",
-                "pennsylvania": "PA",
-                "rhode island": "RI",
-                "south carolina": "SC",
-                "south dakota": "SD",
-                "tennessee": "TN",
-                "texas": "TX",
-                "utah": "UT",
-                "vermont": "VT",
-                "virginia": "VA",
-                "washington": "WA",
-                "west virginia": "WV",
-                "wisconsin": "WI",
-                "wyoming": "WY",
-                "american samoa": "AS",
-                "guam": "GU",
-                "northern mariana islands": "MP",
-                "puerto rico": "PR",
-                "us virgin islands": "VI",
-                "us minor outlying islands": "UM",
+        var stateName = document.getElementById("state");
+        //x.value = x.value.toUpperCase();
 
-                "az": "AZ",
-                "al": "AL",
-                "ak": "AK",
-                "ar": "AR",
-                "ca": "CA",
-                "co": "CO",
-                "ct": "CT",
-                "dc": "DC",
-                "de": "DE",
-                "fl": "FL",
-                "ga": "GA",
-                "hi": "HI",
-                "id": "ID",
-                "il": "IL",
-                "in": "IN",
-                "ia": "IA",
-                "ks": "KS",
-                "ky": "KY",
-                "la": "LA",
-                "me": "ME",
-                "md": "MD",
-                "ma": "MA",
-                "mi": "MI",
-                "mn": "MN",
-                "ms": "MS",
-                "mo": "MO",
-                "mt": "MT",
-                "ne": "NE",
-                "nv": "NV",
-                "nh": "NH",
-                "nj": "NJ",
-                "nm": "NM",
-                "ny": "NY",
-                "nc": "NC",
-                "nd ": "ND",
-                "oh": "OH",
-                "ok": "OK",
-                "or": "OR",
-                "pa": "PA",
-                "ri ": "RI",
-                "sc ": "SC",
-                "sd ": "SD",
-                "tn": "TN",
-                "tx": "TX",
-                "ut": "UT",
-                "vt": "VT",
-                "va": "VA",
-                "wa": "WA",
-                "wv ": "WV",
-                "wi": "WI",
-                "wy": "WY",
-                "as": "AS",
-                "gu": "GU",
-                "mp  ": "MP",
-                "pr ": "PR",
-                "vi": "VI",
-                "um": "UM"
-            }
-            
-            stateName.value = stateName.value.trim().replace(/[^\w ]/g, "").toLowerCase(); 
-            //Trim, remove all non-word characters with the exception of spaces, and convert to lowercase
-            if(stateName.value != null) {
-                stateName.value =  states[stateName.value];
-            }
-            if(stateName.value == "undefined") {  
+        var states = {
+            "arizona": "AZ",
+            "alabama": "AL",
+            "alaska": "AK",
+            "arkansas": "AR",
+            "california": "CA",
+            "colorado": "CO",
+            "connecticut": "CT",
+            "district of columbia": "DC",
+            "delaware": "DE",
+            "florida": "FL",
+            "georgia": "GA",
+            "hawaii": "HI",
+            "idaho": "ID",
+            "illinois": "IL",
+            "indiana": "IN",
+            "iowa": "IA",
+            "kansas": "KS",
+            "kentucky": "KY",
+            "louisiana": "LA",
+            "maine": "ME",
+            "maryland": "MD",
+            "massachusetts": "MA",
+            "michigan": "MI",
+            "minnesota": "MN",
+            "mississippi": "MS",
+            "missouri": "MO",
+            "montana": "MT",
+            "nebraska": "NE",
+            "nevada": "NV",
+            "new hampshire": "NH",
+            "new jersey": "NJ",
+            "new mexico": "NM",
+            "new york": "NY",
+            "north carolina": "NC",
+            "north dakota": "ND",
+            "ohio": "OH",
+            "oklahoma": "OK",
+            "oregon": "OR",
+            "pennsylvania": "PA",
+            "rhode island": "RI",
+            "south carolina": "SC",
+            "south dakota": "SD",
+            "tennessee": "TN",
+            "texas": "TX",
+            "utah": "UT",
+            "vermont": "VT",
+            "virginia": "VA",
+            "washington": "WA",
+            "west virginia": "WV",
+            "wisconsin": "WI",
+            "wyoming": "WY",
+            "american samoa": "AS",
+            "guam": "GU",
+            "northern mariana islands": "MP",
+            "puerto rico": "PR",
+            "us virgin islands": "VI",
+            "us minor outlying islands": "UM",
+
+            "az": "AZ",
+            "al": "AL",
+            "ak": "AK",
+            "ar": "AR",
+            "ca": "CA",
+            "co": "CO",
+            "ct": "CT",
+            "dc": "DC",
+            "de": "DE",
+            "fl": "FL",
+            "ga": "GA",
+            "hi": "HI",
+            "id": "ID",
+            "il": "IL",
+            "in": "IN",
+            "ia": "IA",
+            "ks": "KS",
+            "ky": "KY",
+            "la": "LA",
+            "me": "ME",
+            "md": "MD",
+            "ma": "MA",
+            "mi": "MI",
+            "mn": "MN",
+            "ms": "MS",
+            "mo": "MO",
+            "mt": "MT",
+            "ne": "NE",
+            "nv": "NV",
+            "nh": "NH",
+            "nj": "NJ",
+            "nm": "NM",
+            "ny": "NY",
+            "nc": "NC",
+            "nd ": "ND",
+            "oh": "OH",
+            "ok": "OK",
+            "or": "OR",
+            "pa": "PA",
+            "ri ": "RI",
+            "sc ": "SC",
+            "sd ": "SD",
+            "tn": "TN",
+            "tx": "TX",
+            "ut": "UT",
+            "vt": "VT",
+            "va": "VA",
+            "wa": "WA",
+            "wv ": "WV",
+            "wi": "WI",
+            "wy": "WY",
+            "as": "AS",
+            "gu": "GU",
+            "mp  ": "MP",
+            "pr ": "PR",
+            "vi": "VI",
+            "um": "UM"
+        }
+
+        stateName.value = stateName.value.trim().replace(/[^\w ]/g, "").toLowerCase();
+        //Trim, remove all non-word characters with the exception of spaces, and convert to lowercase
+        if (stateName.value != null) {
+            stateName.value = states[stateName.value];
+        }
+        if (stateName.value == "undefined") {
             alert("Please re-enter your state again")
-            }
+        }
     }
 </script>
 
 <script>
-    function zipCheck(){
-      if(zipCode.value.length != 5) {  
-        alert("Please enter a 5 digit Zip Code ")
-      }
+    function zipCheck() {
+        if (zipCode.value.length != 5) {
+            alert("Please enter a 5 digit Zip Code ")
+        }
     }
 </script>
 

@@ -9,39 +9,43 @@ the Free Software Foundation, either version 3 of the License, or
 
 <!DOCTYPE html>
 <html lang="en">
-    <!--Get the various stylesheets I need like my fonts and CSS-->
-    <head>
-        <title>Feedback Received</title>
-        <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
-        <script>
+<!--Get the various stylesheets I need like my fonts and CSS-->
+
+<head>
+    <title>Feedback Received</title>
+    <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
+    <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-SL59NNQRH0');
-        </script>
-    </head>
+    </script>
+</head>
 
-    <body>
+<body>
 
-        {% if is_prod is False %}
-            <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
-        {% endif %}
-        
-        <div class="content spaceAround">
-            <!--NOTE: For the future have numbers change based on database-->
-            <h1><b>Thank you for submitting your feedback!</b></h1>
-                <!--Whatever I need in the other pages, I can enter it here-->
+    {% if is_prod is False %}
+    <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING
+        ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com"
+            target="_blank">https://getfoco.fcgov.com</a> instead</div>
+    {% endif %}
 
-        </div>
-        <div class="footer">
-            <button onclick="location.href='{% url 'dashboard:dashboard' %}'"> CONTINUE </button>
-        </div>
-    </body>
+    <div class="content spaceAround">
+        <!--NOTE: For the future have numbers change based on database-->
+        <h1><b>Thank you for submitting your feedback!</b></h1>
+        <!--Whatever I need in the other pages, I can enter it here-->
+
+    </div>
+    <div class="footer">
+        <button onclick="location.href='{% url 'dashboard:dashboard' %}'"> CONTINUE </button>
+    </div>
+</body>
+
 </html>

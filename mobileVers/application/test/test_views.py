@@ -4,6 +4,7 @@ from django.urls import reverse
 from application.models import *
 import json
 
+
 class TestViews(TestCase):
 
     def setUp(self):
@@ -15,10 +16,10 @@ class TestViews(TestCase):
         print("Test - index.view GET()")
         response = self.client.get(self.index_url)
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response,'application/index.html')
+        self.assertTemplateUsed(response, 'application/index.html')
 
     def test_address_GET(self):
         print("Test - address.view GET()")
         response = self.client.get(self.address_url)
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response,'application/address.html')
+        self.assertTemplateUsed(response, 'application/address.html')

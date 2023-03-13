@@ -7,18 +7,19 @@ the Free Software Foundation, either version 3 of the License, or
 {% extends 'application/availability_base.html' %}
 
 {% block backurl %}
-    <a class="row" href="{% url 'application:index' %}#Check Availability">
-        <p style = " font-weight: 700;">BACK</p>
-    </a>
+<a class="row" href="{% url 'application:index' %}#Check Availability">
+    <p style=" font-weight: 700;">BACK</p>
+</a>
 {% endblock %}
 
 {% block content %}
-    <h1><b>Your address couldn't be found with this method.</b></h1>
-    <p style="margin-top: 2vh;">Please press back and re-enter your address or press the continue button below to fill out the application with more detailed information.</p>
+<h1><b>Your address couldn't be found with this method.</b></h1>
+<p style="margin-top: 2vh;">Please press back and re-enter your address or press the continue button below to fill out
+    the application with more detailed information.</p>
 {% endblock %}
 
 {% block footerdiv %}
-    <div class="footer" style="width:100%">
-        <button onclick="location.href='{% url 'application:getReady' %}'"><b>APPLY</b></button>
-    </div>
+<div class="footer" style="width:100%">
+    <button onclick="location.href='{% url 'application:getReady' %}'"><b>APPLY</b></button>
+</div>
 {% endblock %}

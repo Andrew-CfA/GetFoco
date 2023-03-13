@@ -7,12 +7,14 @@ the Free Software Foundation, either version 3 of the License, or
 {% extends 'application/comingSoon_base.html' %}
 
 {% block backurl %}
-    <a href="windows.history.back()" style="margin-left:auto; margin-right:10px; text-decoration: none;">
-        <p class=p2 alt="back" style="margin-left:auto; margin-right: 5px;" onclick="location.href='{% url 'application:index' %}'">EXIT</p>
-    </a>    
+<a href="windows.history.back()" style="margin-left:auto; margin-right:10px; text-decoration: none;">
+    <p class=p2 alt="back" style="margin-left:auto; margin-right: 5px;"
+        onclick="location.href='{% url 'application:index' %}'">EXIT</p>
+</a>
 {% endblock %}
 
 {% block maintext %}
-    <h1 style="overflow: hidden; padding: auto;"><b>Connexion is not quite ready at your address.</b></h1>
-    <p style="margin-top: 2vh;">Subscribe for updates when Connexion will be available for your address, and/or press continue to enroll. If the box is checked, updates will be sent to the email address on your Get FoCo account.</p>  
+<h1 style="overflow: hidden; padding: auto;"><b>Connexion is not quite ready at your address.</b></h1>
+<p style="margin-top: 2vh;">Subscribe for updates when Connexion will be available for your address, and/or press
+    continue to enroll. If the box is checked, updates will be sent to the email address on your Get FoCo account.</p>
 {% endblock %}

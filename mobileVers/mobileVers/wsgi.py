@@ -11,6 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mobileVers.settings') #.production when we start doing production, MUST BE 'mobileVers.settings.production'
+# .production when we start doing production, MUST BE 'mobileVers.settings.production'
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mobileVers.settings')
 
 application = get_wsgi_application()

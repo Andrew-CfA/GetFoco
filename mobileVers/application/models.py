@@ -14,11 +14,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.postgres.fields import JSONField
 
 # Create custom user manager class (because django only likes to use usernames as usernames not email)
+
+
 class CustomUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.
     """
+
     def create_user(self, email, password, **extra_fields):
         """
         Create and save a User with the given email and password.
@@ -32,9 +35,9 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password, **extra_fields):
-        
-        #Create and save a SuperUser with the given email and password.
-        
+
+        # Create and save a SuperUser with the given email and password.
+
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
@@ -44,15 +47,15 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
-    
+
 
 class CaseInsensitiveFieldMixin:
     """
     Field mixin that uses case-insensitive lookup alternatives if they exist.
-    
+
     This and associate case-insensitive index migration found in
     https://concisecoder.io/2018/10/27/case-insensitive-fields-in-django-models
-    
+
     """
     LOOKUP_CONVERSIONS = {
         'exact': 'iexact',
@@ -61,6 +64,7 @@ class CaseInsensitiveFieldMixin:
         'endswith': 'iendswith',
         'regex': 'iregex',
     }
+
     def get_lookup(self, lookup_name):
         converted = self.LOOKUP_CONVERSIONS.get(lookup_name, lookup_name)
         return super().get_lookup(converted)
@@ -73,7 +77,7 @@ class TimeStampedModel(models.Model):
     """
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         abstract = True
 
@@ -85,14 +89,17 @@ class CIEmailField(CaseInsensitiveFieldMixin, models.EmailField):
     pass
 
 # User model class
-class User(TimeStampedModel,AbstractUser):
+
+
+class User(TimeStampedModel, AbstractUser):
     username = None
     email = CIEmailField(_('email address'), unique=True)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     phone_number = PhoneNumberField()
     files = models.ManyToManyField('dashboard.Form', related_name="forms")
-    address_files = models.ManyToManyField('dashboard.residencyForm', related_name="residencyforms")
+    address_files = models.ManyToManyField(
+        'dashboard.residencyForm', related_name="residencyforms")
     has_viewed_dashboard = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
@@ -101,9 +108,11 @@ class User(TimeStampedModel,AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email  
+        return self.email
 
 # Addresses model attached to user (will delete as user account is deleted too)
+
+
 class Addresses(TimeStampedModel):
     user_id = models.OneToOneField(
         User,
@@ -115,13 +124,14 @@ class Addresses(TimeStampedModel):
 
     # Try to get past the things that should be the same for every applicant
     city = models.CharField(max_length=64,)
-    state = models.CharField(max_length=2,default="")
+    state = models.CharField(max_length=2, default="")
 
-    zipCode = models.DecimalField(max_digits=5, decimal_places=0)    
-    
+    zipCode = models.DecimalField(max_digits=5, decimal_places=0)
+
     isInGMA = models.BooleanField(null=True, default=None)
     hasConnexion = models.BooleanField(null=True, default=None)
     is_verified = models.BooleanField(default=False)
+
 
 choices = (
     ('More than 3 Years', 'More than 3 Years'),
@@ -129,39 +139,43 @@ choices = (
     ('Less than a Year', 'Less than a Year'),
 )
 
+
 class AMI(TimeStampedModel):
     """ Model class to store the Area Median Income values.
-    
+
     Note that these values are separated by number in household.
-    
+
     The 'active' field designates if the record is currently in use; only
     'active' records should be displayed in the webapp.
-    
+
     """
-    
+
     householdNum = models.CharField(max_length=15, primary_key=True)
     active = models.BooleanField()
-    
+
     ami = models.IntegerField()
-    
+
     def __str__(self):
         return str(self.householdNum)
-    
+
+
 class iqProgramQualifications(TimeStampedModel):
     """ Model class to store the IQ program qualifications.
-    
+
     The program names specified here will be used in the remainder of the
     app's backend.
-    
+
     """
-    
+
     name = models.CharField(max_length=40, primary_key=True)
     percentAmi = models.DecimalField(max_digits=10, decimal_places=4)
-    
+
     def __str__(self):
         return str(self.percentAmi)
 
 # Eligibility model class attached to user (will delete as user account is deleted too)
+
+
 class Eligibility(TimeStampedModel):
     user_id = models.OneToOneField(
         User,
@@ -170,7 +184,7 @@ class Eligibility(TimeStampedModel):
     )
 
     rent = models.CharField(choices=choices, max_length=200)
-    #TODO: possibly add field for how many total individuals are in the household
+    # TODO: possibly add field for how many total individuals are in the household
     dependents = models.IntegerField(100, default=1)
 
     DEqualified = models.CharField(max_length=20)
@@ -180,14 +194,13 @@ class Eligibility(TimeStampedModel):
     RecreationQualified = models.CharField(max_length=20)
     SPINQualified = models.CharField(max_length=20)
 
-    #TODO 5/13/2021
-    #insert other rebate flags here i.e.
-    #xQualified = models.CharField(max_length=20)
-    #utilitiesQualified = models.CharField(max_length=20)
-    
+    # TODO 5/13/2021
+    # insert other rebate flags here i.e.
+    # xQualified = models.CharField(max_length=20)
+    # utilitiesQualified = models.CharField(max_length=20)
 
-    grossAnnualHouseholdIncome = models.CharField(max_length=20)    
-    # Define the min and max Gross Annual Household Income as a fraction of 
+    grossAnnualHouseholdIncome = models.CharField(max_length=20)
+    # Define the min and max Gross Annual Household Income as a fraction of
     # AMI (which is a function of number of individuals in household)
     AmiRange_min = models.DecimalField(max_digits=5, decimal_places=4)
     AmiRange_max = models.DecimalField(max_digits=5, decimal_places=4)
@@ -196,13 +209,13 @@ class Eligibility(TimeStampedModel):
 
 class MoreInfo(TimeStampedModel):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    dependentInformation = JSONField(null=True,blank=True)
-    #dependentsBirthdate = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
-    #dependentsName = models.CharField(max_length=20)
-    
+    dependentInformation = JSONField(null=True, blank=True)
+    # dependentsBirthdate = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    # dependentsName = models.CharField(max_length=20)
+
 
 # Programs model class attached to user (will delete as user account is deleted too)
-class programs(TimeStampedModel): #incomeVerificationPrograms
+class programs(TimeStampedModel):  # incomeVerificationPrograms
     user_id = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -216,6 +229,7 @@ class programs(TimeStampedModel): #incomeVerificationPrograms
     leap = models.BooleanField()
     medicaid = models.BooleanField(default=False)
 
+
 class attestations(TimeStampedModel):
     user_id = models.OneToOneField(
         User,
@@ -227,18 +241,22 @@ class attestations(TimeStampedModel):
 
 # TODO: Should be deleted, but might need to ETL the data
 # before the model is deleted
+
+
 class addressVerification(TimeStampedModel):
     user_id = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    #Identification = models.BooleanField()
+    # Identification = models.BooleanField()
     Utility = models.BooleanField()
-    #freeReducedLunch = models.BooleanField()
+    # freeReducedLunch = models.BooleanField()
+
 
 class addressLookup(TimeStampedModel):
-    address = models.CharField(max_length=100) 
+    address = models.CharField(max_length=100)
+
 
 class futureEmails(TimeStampedModel):
     connexionCommunication = models.BooleanField(default=True, blank=True)
@@ -248,4 +266,4 @@ class EligibilityHistory(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-    historical_eligibility = JSONField(null=True,blank=True)
+    historical_eligibility = JSONField(null=True, blank=True)

@@ -30,13 +30,13 @@ $(document).on('submit', '#account-form', function (e) {
 })
 
 // Check for when the document is ready
-$(document).ready(function() {
+$(document).ready(function () {
     // Check if any of the input[type=checkbox] are checked when the page
     // is ready.
     toggleBtnState();
 
     // When a checkbox is clicked, call the toggleBtnState() function
-    $("input[type=checkbox]").click(function() {
+    $("input[type=checkbox]").click(function () {
         toggleBtnState();
     });
 });

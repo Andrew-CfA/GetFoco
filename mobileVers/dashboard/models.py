@@ -19,9 +19,10 @@ class TimeStampedModel(models.Model):
     """
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         abstract = True
+
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
@@ -29,52 +30,56 @@ def user_directory_path(instance, filename):
 
 
 class Form(TimeStampedModel):
-    user_id = models.ForeignKey(User, related_name ="UserFiles", on_delete=models.CASCADE)
-    document = models.FileField(max_length=5000, upload_to=user_directory_path) #upload_to="mobileVers/uploads/" + str(datetime.date.today()) + "/" this uploads file to date and time of day
+    user_id = models.ForeignKey(
+        User, related_name="UserFiles", on_delete=models.CASCADE)
+    # upload_to="mobileVers/uploads/" + str(datetime.date.today()) + "/" this uploads file to date and time of day
+    document = models.FileField(max_length=5000, upload_to=user_directory_path)
     form_titles = (
         ('SNAP', 'SNAP'),
         ('Free and Reduced Lunch', 'Free and Reduced Lunch'),
         ('Medicaid', 'Medicaid'),
         ('Identification', 'Identification'),
-        ('ACP Letter','ACP Letter'),
+        ('ACP Letter', 'ACP Letter'),
         ('LEAP Letter', 'LEAP Letter',)
-        )
+    )
     document_title = models.CharField(
         max_length=30,
         choices=form_titles,
     )
-    
-    
+
 
 class residencyForm(TimeStampedModel):
-    user_id = models.ForeignKey(User, related_name ="UserResidencyFiles", on_delete=models.CASCADE, blank=False)
+    user_id = models.ForeignKey(
+        User, related_name="UserResidencyFiles", on_delete=models.CASCADE, blank=False)
     form_titles = (
         ('Identification', 'Identification'),
         ('Utility', 'Utility'),
         ('Free and Reduced Lunch', 'Free and Reduced Lunch'),
-        )
+    )
     document_title = models.CharField(
         max_length=30,
         choices=form_titles,
     )
-    document = models.FileField(max_length=5000,  upload_to=user_directory_path)
+    document = models.FileField(
+        max_length=5000,  upload_to=user_directory_path)
 
 
 class TaxInformation(TimeStampedModel):
     user_id = models.OneToOneField(
-    User,
-    on_delete=models.CASCADE,
-    primary_key=True,
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
     )
-    TaxBoxAmount = models.DecimalField(max_digits=9, null=True, blank=True, decimal_places=2,)
-    last4SSN = models.DecimalField(null=True,max_digits=4, decimal_places=0, blank=True)
+    TaxBoxAmount = models.DecimalField(
+        max_digits=9, null=True, blank=True, decimal_places=2,)
+    last4SSN = models.DecimalField(
+        null=True, max_digits=4, decimal_places=0, blank=True)
 
 
 class Feedback(TimeStampedModel):
     starRating = models.CharField(
-        max_length = 1
+        max_length=1
     )
     feedbackComments = models.TextField(
         max_length=500
     )
-    

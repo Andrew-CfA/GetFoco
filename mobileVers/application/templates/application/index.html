@@ -10,233 +10,255 @@ the Free Software Foundation, either version 3 of the License, or
 
 <!DOCTYPE html>
 <html lang="en">
-    <!--Get the various stylesheets I need like my fonts and CSS-->
+<!--Get the various stylesheets I need like my fonts and CSS-->
+
 <head>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
-        <script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
+    <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-SL59NNQRH0');
-        </script>
-                
+    </script>
 
-        <!-- Google Translate below -->
-        <script type="text/javascript">
-            function googleTranslateElementInit() {
-              new google.translate.TranslateElement({pageLanguage: 'en',includedLanguages : 'ar,es,fr,pt,zh-CN,zh-TW,tl,eo,de,ht,hi,hmn,id,ja,jv,ko,rw,ko,ms,my,mi,pt,pa,ru,so,sw,uk,vi,xh,yo,zu',}, 'google_translate_element');
+
+    <!-- Google Translate below -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'ar,es,fr,pt,zh-CN,zh-TW,tl,eo,de,ht,hi,hmn,id,ja,jv,ko,rw,ko,ms,my,mi,pt,pa,ru,so,sw,uk,vi,xh,yo,zu', }, 'google_translate_element');
+        }
+    </script>
+
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <title>Home</title>
+    <link href="{% static 'application/styles.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<!-- TODO: make a message to only look at this on mobile-->
+
+<body style="margin:0; padding:0">
+
+    {% if is_prod is False %}
+    <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING
+        ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com"
+            target="_blank">https://getfoco.fcgov.com</a> instead</div>
+    {% endif %}
+
+    <!--NAVBAR-->
+    <div id=full-nav>
+        <!-- NEED TO DEVELOP: DROPDOWN MENU FOR LANGUAGES-->
+        <!-- Sample menu definition -->
+
+        <ul class=navUl style="vertical-align: middle;">
+
+
+            <div id="google_translate_element" style="display: inline;padding-top:1vh;width: 196px; padding-right: 2%;">
+            </div>
+            <img src="{% static 'application/images/CityLogoWhite-01.png' %}">
+
+            <div class="row"
+                style="height: 5vh; vertical-align: middle; display: table-cell; text-align: right;overflow: initial;">
+                <!--TODO: MAKE SURE THIS LINK WORKS-->
+                <a href="#How it Works" class="navLink"> How it Works</a>
+                <a href="#Available Programs" class="navLink"> Available Programs </a>
+                <a href="#Check Availability" class="navLink"> Check Availability </a>
+                <a class="link" style="display: inline;" href="{% url 'dashboard:login' %}">LOG IN</a>
+                <button onclick="location.href='{% url 'application:getReady' %}'"><b>APPLY</b></button>
+            </div>
+        </ul>
+    </div>
+    <div class=bluemain style="margin:0;">
+        <div class="img" style="float:left; padding: 20px;">
+            <img src="{% static 'application/images/WelcomeIllustration.svg' %}" alt="Welcome"
+                style="width:100%; float:left">
+        </div>
+        <h1 style="color:white">Welcome to</h1>
+        <h1 style="color:white"><b>Get <b class=yellow style=>FoCo</b></b></h1>
+        <div style="overflow: auto;">
+            <p style="color:white;"> An all-in-one application portal to the discounted services and municipal benefits
+                offered by the City of Fort Collins, for income eligible residents. Get FoCo is a partnership between
+                Fort Collins' Connexion and the City of Fort Collins' income eligible programming.</p>
+        </div>
+    </div>
+    <div class=whitemain>
+        <h2 style="text-align:center"><b><a id="How it Works">How it Works</a></b></h2>
+        <p style="padding-bottom:20px">With Get Foco, you’ll be able to do more with your City of Fort Collins program
+            applications than ever before.</p>
+        <div class="column">
+            <div class="row" style="justify-content: space-around;">
+                <div class="img">
+                    <div class="fadeLarge">
+                        <img src="{% static 'application/images/control.png' %}" alt="Control" style="width:100%">
+                    </div>
+                    <div class="fadeSmall">
+                        <img src="{% static 'application/images/control.svg' %}" alt="Control" style="width:100%">
+                    </div>
+                </div>
+                <div class="wordblock">
+                    <p style="margin-top:0;"><b>Control Your Application</b></p>
+                    <p>Manage applications in real
+                        time with up-to-date
+                        application status.</p>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="row" style="justify-content: space-around;">
+                <div class="img">
+                    <div class="fadeLarge">
+                        <img src="{% static 'application/images/save.png' %}" alt="Save" style="width:100%">
+                    </div>
+                    <div class="fadeSmall">
+                        <img src="{% static 'application/images/save.svg' %}" alt="Save" style="width:100%">
+                    </div>
+                </div>
+                <div class="wordblock">
+                    <p style="margin-top:0;"><b>Do More, Save More</b></p>
+                    <p>If you qualify, you’ll get access
+                        to specific City of Fort Collins' income qualified programs
+                        that are tailored to save you money.</p>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="row" style="justify-content: space-around;">
+                <div class="img">
+                    <div class="fadeLarge">
+                        <img src="{% static 'application/images/forget.png' %}" alt="Forget" style="width:100%">
+                    </div>
+                    <div class="fadeSmall">
+                        <img src="{% static 'application/images/forget.svg' %}" alt="Forget" style="width:100%">
+                    </div>
+                </div>
+                <div class="wordblock">
+                    <p style="margin-top:0;"><b>Forget “Forgetting”</b></p>
+                    <p>Never forget to renew your
+                        application with easy reminders – making information
+                        updates a breeze.</p>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="row" style="justify-content: space-around;">
+                <div class="img">
+                    <div class="fadeLarge">
+                        <img src="{% static 'application/images/know.png' %}" alt="Know" style="width:100%">
+                    </div>
+                    <div class="fadeSmall">
+                        <img src="{% static 'application/images/know.svg' %}" alt="Know" style="width:100%">
+                    </div>
+                </div>
+                <div class="wordblock">
+                    <p style="margin-top:0;"><b>Stay in the Know</b></p>
+                    <p>Be informed with the latest
+                        news & updates from both
+                        Connexion & the City.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class=programsListmain>
+        <h2 style="color:white; text-align: center;"><a id="Available Programs">Available Income Eligible Programs</a>
+        </h2>
+        <p style="color:white; text-align: center;">Get FOCO is always working to include more programs into the mobile
+            app– making it easier for you to be connected!</p>
+        <div class=fadeSmall>
+            <div class=exploreDiv>
+                <div style="padding-top: 1vw; padding-left: 3vw;">
+                    <h4 style="color: white;">All Programs</h4>
+                </div>
+                <div class=exploreDivPrograms>
+                    <p class=p2><b>Connexion Discount Program</b> <span> Utilities Aid</span></p>
+                    <p class=p2>As Connexion comes online in neighborhoods across our community, the City of Fort
+                        Collins is committed to fast, affordable internet. Digital Access & Equity is an
+                        income-qualified rate of $19.95 per month for 1 gig-speed of internet plus wireless.</p>
+                    <p class=p3> Applications accepted all year </p>
+                    <a href="https://www.fcgov.com/connexion/" style="color: #F9B316;"> Learn More</a>
+
+                </div>
+                <div class=exploreDivPrograms>
+                    <p class=p2><b>Grocery Tax Rebate</b> <span> Groceries Aid </span></p>
+                    <p class=p2>The Grocery Rebate Tax is an annual cash payment to low-income individuals and families
+                        living in the City of Fort Collins and its Growth Management Area. It provides your family with
+                        direct assistance in exchange for the taxes you spend on food. </p>
+                    <p class=p3> Applications accepted all year </p>
+                    <a href="https://www.fcgov.com/rebate/" style="color: #F9B316;"> Learn More</a>
+
+                </div>
+                <div class=exploreDivPrograms>
+                    <p class=p2><b>Recreation Reduced Fee</b> <span> Recreation Aid</p></span>
+                    <p class=p2>The Recreation Reduced Fee program provides income-eligible families and residents
+                        reduced cost access to recreation programs, classes, and facilities across the community.</p>
+                    <p class=p3> Applications accepted all year </p>
+                    <a href="https://www.fcgov.com/recreation/reducedfeeprogram" style="color: #F9B316;"> Learn More</a>
+                </div>
+                <div class=exploreDivPrograms>
+                    <p class=p2><b>SPIN</b> <span> 1 Year of Free SPIN E-bikes & Scooters</p></span>
+                    <p class=p2>Receive five (5) free 30-minute rides per day to get to work, go to a job interview, run
+                        an errand, or get some fresh air.
+                        75 One-Year Free Spin Passes! Quantities are Limited, so Apply Today.
+                        You must be at least 18 years of age and a resident of Fort Collins to receive the pass. Passes
+                        available through the generosity of CDOT.</p>
+                    <p class=p3> Quantities are limited </p>
+                    <a href="https://www.fcgov.com/fcmoves/spin" style="color: #F9B316;"> Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class=fadeLarge><button style="background-color: var(--darkblue);width:100%;margin-bottom: 3vh;"
+                onclick="location.href='{% url 'dashboard:ProgramsList' %}'">Explore Programs</button> </div>
+    </div>
+    <div class="intrigued">
+        <h2 style="color:white"><a id="Check Availability">Curious?</a></h2>
+        <p style="color:white">Enter your address to check if you qualify for income eligible programs & if Fort Collins
+            Connexion
+            is currently available for you.</p>
+        <!--TODO: Save input and add logic for checking zipcode-->
+
+        <form action="{% url 'application:index' %}" method="post" autocomplete="false" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row" style="margin: 30px 0 0 0;">
+                <div class="input" style="width:100%">
+                    <!--TODO: change this to dropdown menu with data-->
+                    <input class="fill" name="{{ form.address.name }}" id="{{ form.address.id_for_label }}"
+                        maxlength="{{ form.address.max_length }}" type="text" style="width:95%;" required
+                        autocomplete="off">
+                    <label class="label">{{ form.address.label }}</label>
+                </div>
+                <button style="background-color:var(--darkblue);font-weight: 700;" type="submit"> ENTER </button>
+            </div>
+        </form>
+        <p class="link" style="margin:0; padding-top: 10%;">Service brought to you by the City of Fort Collins</p>
+        <a class="link" href="{% url 'application:privacyPolicy' %}" style="margin:0; padding-top: 10%;"><u>Privacy
+                Policy</u></a>
+    </div>
+
+    <script>
+        var inProgressAppSaved = {{ in_progress_app_saved| yesno: "true,false" }};
+
+        $(document).ready(function () {
+            if (inProgressAppSaved) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Logged Out",
+                    text: "You're changes are saved. When you're ready to continue, log back in.",
+                    confirmButtonColor: "#13467D",
+                });
             }
-            </script>
-            
-            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        });
+    </script>
+</body>
 
-        <title>Home</title>
-        <link href="{% static 'application/styles.css' %}" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">   
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>     
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    </head>
-
-    <!-- TODO: make a message to only look at this on mobile-->
-    
-    <body style="margin:0; padding:0">
-
-        {% if is_prod is False %}
-            <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
-        {% endif %}
-        
-        <!--NAVBAR-->
-        <div id=full-nav>
-                <!-- NEED TO DEVELOP: DROPDOWN MENU FOR LANGUAGES-->
-                <!-- Sample menu definition -->
-                
-                <ul class=navUl style = "vertical-align: middle;">
-
-                    
-                    <div id="google_translate_element" style="display: inline;padding-top:1vh;width: 196px; padding-right: 2%;"></div>
-                    <img src="{% static 'application/images/CityLogoWhite-01.png' %}">
-
-                    <div class="row" style="height: 5vh; vertical-align: middle; display: table-cell; text-align: right;overflow: initial;">
-                        <!--TODO: MAKE SURE THIS LINK WORKS-->
-                            <a href="#How it Works" class ="navLink"> How it Works</a>
-                            <a href="#Available Programs" class ="navLink"> Available Programs </a>
-                            <a href="#Check Availability" class ="navLink"> Check Availability </a>
-                            <a class="link" style = "display: inline;" href="{% url 'dashboard:login' %}">LOG IN</a>
-                            <button onclick="location.href='{% url 'application:getReady' %}'"><b>APPLY</b></button>
-                    </div>
-                </ul>
-        </div>
-        <div class=bluemain style="margin:0;">
-            <div class="img" style="float:left; padding: 20px;">
-                <img src="{% static 'application/images/WelcomeIllustration.svg' %}" alt="Welcome" style="width:100%; float:left">
-            </div>
-            <h1 style="color:white">Welcome to</h1>
-            <h1 style="color:white"><b>Get <b class=yellow style=>FoCo</b></b></h1>
-            <div style="overflow: auto;">            
-                <p style="color:white;"> An all-in-one application portal to the discounted services and municipal benefits offered by the City of Fort Collins, for income eligible residents. Get FoCo is a partnership between Fort Collins' Connexion and the City of Fort Collins' income eligible programming.</p>
-            </div>
-        </div>
-        <div class=whitemain>
-            <h2 style="text-align:center"><b><a id="How it Works">How it Works</a></b></h2>
-            <p style="padding-bottom:20px">With Get Foco, you’ll be able to do more with your City of Fort Collins program applications than ever before.</p>
-            <div class="column">
-                <div class="row"  style = "justify-content: space-around;">
-                    <div class="img">
-                        <div class="fadeLarge">
-                            <img src="{% static 'application/images/control.png' %}" alt="Control" style="width:100%">
-                        </div>
-                        <div class ="fadeSmall">
-                            <img src="{% static 'application/images/control.svg' %}" alt="Control" style="width:100%">
-                        </div>
-                    </div>
-                    <div class="wordblock">
-                        <p style="margin-top:0;"><b>Control Your Application</b></p>
-                        <p>Manage applications in real 
-                            time with up-to-date 
-                            application status.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <div class="row" style = "justify-content: space-around;">
-                    <div class="img">
-                        <div class="fadeLarge">
-                            <img src="{% static 'application/images/save.png' %}" alt="Save" style="width:100%">
-                        </div>
-                        <div class ="fadeSmall">
-                            <img src="{% static 'application/images/save.svg' %}" alt="Save" style="width:100%">
-                        </div>
-                    </div>
-                    <div class="wordblock">
-                        <p style="margin-top:0;"><b>Do More, Save More</b></p>
-                        <p>If you qualify, you’ll get access 
-                            to specific City of Fort Collins' income qualified programs
-                            that are tailored to save you money.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <div class="row"  style = "justify-content: space-around;">
-                    <div class="img">
-                        <div class="fadeLarge">
-                            <img src="{% static 'application/images/forget.png' %}" alt="Forget" style="width:100%">
-                        </div>
-                        <div class ="fadeSmall">
-                            <img src="{% static 'application/images/forget.svg' %}" alt="Forget" style="width:100%">
-                        </div>
-                    </div>
-                    <div class="wordblock">
-                        <p style="margin-top:0;"><b>Forget “Forgetting”</b></p>
-                        <p>Never forget to renew your 
-                            application with easy reminders – making information 
-                            updates a breeze.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <div class="row"  style = "justify-content: space-around;">
-                    <div class="img">
-                        <div class="fadeLarge">
-                            <img src="{% static 'application/images/know.png' %}" alt="Know" style="width:100%">
-                        </div>
-                        <div class ="fadeSmall">
-                            <img src="{% static 'application/images/know.svg' %}" alt="Know" style="width:100%">
-                        </div>
-                    </div>
-                    <div class="wordblock">
-                        <p style="margin-top:0;"><b>Stay in the Know</b></p>
-                        <p>Be informed with the latest
-                            news & updates from both
-                            Connexion & the City.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class=programsListmain>
-            <h2 style="color:white; text-align: center;"><a id="Available Programs">Available Income Eligible Programs</a></h2>
-            <p style="color:white; text-align: center;">Get FOCO is always working to include more programs into the mobile app– making it easier for you to be connected!</p>
-            <div class=fadeSmall> 
-                <div class=exploreDiv> 
-                        <div style="padding-top: 1vw; padding-left: 3vw;"> <h4 style="color: white;">All Programs</h4></div>
-                        <div class=exploreDivPrograms>
-                            <p class=p2><b>Connexion Discount Program</b> <span> Utilities Aid</span></p>
-                            <p class=p2>As Connexion comes online in neighborhoods across our community, the City of Fort Collins is committed to fast, affordable internet. Digital Access & Equity is an income-qualified rate of $19.95 per month for 1 gig-speed of internet plus wireless.</p>
-                            <p class=p3> Applications accepted all year </p>
-                            <a href="https://www.fcgov.com/connexion/"style="color: #F9B316;"> Learn More</a>
-                            
-                        </div>
-                        <div class=exploreDivPrograms>
-                            <p class=p2><b>Grocery Tax Rebate</b> <span> Groceries Aid </span></p>
-                            <p class=p2>The Grocery Rebate Tax is an annual cash payment to low-income individuals and families living in the City of Fort Collins and its Growth Management Area. It provides your family with direct assistance in exchange for the taxes you spend on food. </p> 
-                            <p class=p3> Applications accepted all year  </p>
-                            <a href="https://www.fcgov.com/rebate/" style="color: #F9B316;"> Learn More</a>
-                           
-                        </div>
-                        <div class=exploreDivPrograms>
-                            <p class=p2><b>Recreation Reduced Fee</b> <span> Recreation Aid</p></span>
-                            <p class=p2>The Recreation Reduced Fee program provides income-eligible families and residents reduced cost access to recreation programs, classes, and facilities across the community.</p>
-                            <p class=p3> Applications accepted all year </p>
-                            <a href="https://www.fcgov.com/recreation/reducedfeeprogram" style="color: #F9B316;"> Learn More</a>
-                        </div>
-                        <div class=exploreDivPrograms>
-                            <p class=p2><b>SPIN</b> <span> 1 Year of Free SPIN E-bikes & Scooters</p></span>
-                            <p class=p2>Receive five (5) free 30-minute rides per day to get to work, go to a job interview, run an errand, or get some fresh air.
-                                75 One-Year Free Spin Passes! Quantities are Limited, so Apply Today.
-                                You must be at least 18 years of age and a resident of Fort Collins to receive the pass. Passes available through the generosity of CDOT.</p>
-                            <p class=p3> Quantities are limited </p>
-                            <a href="https://www.fcgov.com/fcmoves/spin" style="color: #F9B316;"> Learn More</a>
-                        </div>
-                </div>
-            </div>
-            <div class=fadeLarge><button style="background-color: var(--darkblue);width:100%;margin-bottom: 3vh;" onclick="location.href='{% url 'dashboard:ProgramsList' %}'">Explore Programs</button> </div>
-        </div>
-        <div class="intrigued">
-            <h2 style="color:white"><a id="Check Availability">Curious?</a></h2>
-            <p style="color:white">Enter your address to check if you qualify for income eligible programs & if Fort Collins Connexion 
-                is currently available for you.</p>
-                <!--TODO: Save input and add logic for checking zipcode-->
-                
-                <form action="{% url 'application:index' %}" method="post" autocomplete="false" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row" style="margin: 30px 0 0 0;">
-                        <div class="input" style = "width:100%">
-                            <!--TODO: change this to dropdown menu with data-->
-                            <input class="fill" name="{{ form.address.name }}"
-                                id="{{ form.address.id_for_label }}"
-                                maxlength="{{ form.address.max_length }}"
-                                type="text" 
-                                style="width:95%;" 
-                                required  
-                                autocomplete="off">
-                            <label class="label">{{ form.address.label }}</label>    
-                        </div>
-                        <button style="background-color:var(--darkblue);font-weight: 700;" type="submit"> ENTER </button>
-                    </div>
-                </form>
-            <p class="link" style="margin:0; padding-top: 10%;">Service brought to you by the City of Fort Collins</p>
-            <a class="link" href="{% url 'application:privacyPolicy' %}" style="margin:0; padding-top: 10%;"><u>Privacy Policy</u></a>        
-        </div>
-        
-        <script>
-            var inProgressAppSaved = {{ in_progress_app_saved|yesno:"true,false" }};
-
-            $(document).ready(function() {
-                if (inProgressAppSaved) {
-                    Swal.fire({
-                        icon: "info",
-                        title: "Logged Out",
-                        text: "You're changes are saved. When you're ready to continue, log back in.",
-                        confirmButtonColor: "#13467D",
-                    });
-                }
-            });
-        </script>
-    </body>
 </html>

@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model
 
 from django.conf import settings
 
-#below imports needed for blob storage
+# below imports needed for blob storage
 from azure.storage.blob import BlockBlobService
 
 from py_models.qualification_status import QualificationStatus
@@ -26,33 +26,36 @@ def blobStorageUpload(filename, file):
         account_name=settings.BLOB_STORE_NAME,
         account_key=settings.BLOB_STORE_KEY,
         endpoint_suffix=settings.BLOB_STORE_SUFFIX,
-        )
-    
-    blob_service_client.create_blob_from_bytes(
-        container_name = settings.USER_FILES_CONTAINER,
-        blob_name = filename,
-        blob = file.read(),
     )
+
+    blob_service_client.create_blob_from_bytes(
+        container_name=settings.USER_FILES_CONTAINER,
+        blob_name=filename,
+        blob=file.read(),
+    )
+
 
 def authenticate(username=None, password=None):
     User = get_user_model()
-    try: #to allow authentication through phone number or any other field, modify the below statement
+    try:  # to allow authentication through phone number or any other field, modify the below statement
         user = User.objects.get(email=username)
         print(user)
         print(password)
         print(user.password)
         print(user.check_password(password))
         if user.check_password(password):
-            return user 
+            return user
         return None
     except User.DoesNotExist:
         return None
+
 
 def get_user(self, user_id):
     try:
         return UserModel.objects.get(id=user_id)
     except UserModel.DoesNotExist:
         return None
+
 
 def files_to_string(file_list):
     list_string = ""
@@ -86,42 +89,44 @@ def files_to_string(file_list):
 
 # redirect user to whatever page they need to go to every time by checking which steps they've
 # completed in the application process
-def what_page(user,request):
+
+
+def what_page(user, request):
     if user.is_authenticated:
-        
+
         searchForUser = request.user.id
-        
-        #for some reason, none of these login correctly... reviewing this now
-        try: #check if the addresses.is_verified==True
+
+        # for some reason, none of these login correctly... reviewing this now
+        try:  # check if the addresses.is_verified==True
             if Addresses.objects.all().filter(user_id_id=searchForUser).exists() and Addresses.objects.get(user_id_id=searchForUser).is_verified:
                 print("Address has been verified")
             else:
                 print("Still need to verify address")
                 raise AttributeError()
-            
+
         except AttributeError:
             return "application:address"
 
-        try: #check if finances is filled
+        try:  # check if finances is filled
             value = request.user.eligibility
         except AttributeError:
             return "application:finances"
 
-        try: #check if dependents / birthdays are filled
-            if(MoreInfo.objects.all().filter(user_id_id=searchForUser).exists()):
+        try:  # check if dependents / birthdays are filled
+            if (MoreInfo.objects.all().filter(user_id_id=searchForUser).exists()):
                 print("MoreInfo exists")
             else:
                 print("MoreInfo doesn't exist")
                 return "application:moreInfoNeeded"
         except AttributeError or ObjectDoesNotExist:
             return "application:moreInfoNeeded"
-        
-        try: #check if programs is filled out
+
+        try:  # check if programs is filled out
             value = request.user.programs
         except AttributeError or ObjectDoesNotExist:
             return "application:programs"
 
-        try: #check if files are all uploaded
+        try:  # check if files are all uploaded
             file_list = {
                 "SNAP Card": request.user.programs.snap,
                 # Have Reduced Lunch be last item in the list if we add more programs
@@ -133,7 +138,8 @@ def what_page(user,request):
             }
 
             Forms = request.user.files
-            checkAllForms = [not(request.user.programs.snap),not(request.user.programs.freeReducedLunch),not(request.user.programs.ebb_acf),not(request.user.programs.Identification),not(request.user.programs.leap),not(request.user.programs.medicaid),]
+            checkAllForms = [not (request.user.programs.snap), not (request.user.programs.freeReducedLunch), not (request.user.programs.ebb_acf), not (
+                request.user.programs.Identification), not (request.user.programs.leap), not (request.user.programs.medicaid),]
             for group in Forms.all():
                 if group.document_title == "SNAP":
                     checkAllForms[0] = True
@@ -160,15 +166,13 @@ def what_page(user,request):
         except AttributeError:
             return "dashboard:files"
 
-        try: #check if ACP last four SSN is needed or not...
+        try:  # check if ACP last four SSN is needed or not...
             if ((request.user.programs.ebb_acf) == True) and ((request.user.taxinformation.last4SSN) == "NULL"):
                 return "application:filesInfoNeeded"
             else:
                 print("last 4 ssn found")
         except:
             return "application:filesInfoNeeded"
-
-
 
         return "dashboard:dashboard"
     else:

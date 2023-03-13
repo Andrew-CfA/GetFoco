@@ -9,6 +9,16 @@ the Free Software Foundation, either version 3 of the License, or
 Here you'll find some useful backend logic / functions used in the main application, most of these functions are used to 
 supplement the application and to keep views.py clutter to a minimum!
 '''
+
+
+# Andrew backend code for Twilio
+
+
+
+
+from django.template.loader import render_to_string
+from sendgrid.helpers.mail import Mail
+from sendgrid import SendGridAPIClient
 import csv
 import ast
 from usps import USPSApi, Address
@@ -16,24 +26,17 @@ import re
 import requests
 from django import http  # used for type checks
 import datetime
-
 import urllib.parse
 import requests
-
-#Andrew backend code for Twilio
 from twilio.rest import Client
-from django.conf import settings    
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-from django.template.loader import render_to_string
-
-
+from django.conf import settings
 def broadcast_sms(phone_Number):
-    message_to_broadcast = ("Thank you for creating an account with Get FoCo! Be sure to review the programs you qualify for on your dashboard and click on Quick Apply to finish the application process!")
+    message_to_broadcast = (
+        "Thank you for creating an account with Get FoCo! Be sure to review the programs you qualify for on your dashboard and click on Quick Apply to finish the application process!")
     client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
     client.messages.create(to=phone_Number,
-                            from_=settings.TWILIO_NUMBER,
-                            body=message_to_broadcast)
+                           from_=settings.TWILIO_NUMBER,
+                           body=message_to_broadcast)
 
 
 def addressCheck(address_dict):
@@ -54,34 +57,35 @@ def addressCheck(address_dict):
         The status of Connexion service (True, False, None).
 
     """
-    
+
     try:
         # Gather the coordinate string for future queries
         # Parse the 'instance' data for proper 'address_parts'
         address_parts = "{}, {}".format(
             address_dict['AddressValidateResponse']['Address']['Address2'],
             address_dict['AddressValidateResponse']['Address']['Zip5'],
-            )
+        )
         coordString = address_lookup(address_parts)
-        
+
     except NameError:   # NameError specifies that the address is not found
-                        # in City lookups and is therefore not in the IQ
-                        # service area           
+        # in City lookups and is therefore not in the IQ
+        # service area
         return (False, False)
-    
+
     else:
         # Alternatively:
-            # hasConnexion = connexion_lookup(address_lookup(address_parts))
+        # hasConnexion = connexion_lookup(address_lookup(address_parts))
         hasConnexion = connexion_lookup(coordString)
-        print('No Connexion for you') if hasConnexion is None else print('Connexion available') if hasConnexion else print('Connexion coming soon')
-        
+        print('No Connexion for you') if hasConnexion is None else print(
+            'Connexion available') if hasConnexion else print('Connexion coming soon')
+
         # Alternatively:
-            # isInGMA = gma_lookup(address_lookup(address_parts))
+        # isInGMA = gma_lookup(address_lookup(address_parts))
         isInGMA = gma_lookup(coordString)
         print('Is in GMA!') if isInGMA else print('Outside of GMA')
 
         return (isInGMA, hasConnexion)
-    
+
 
 def address_lookup(address_parts):
     """
@@ -107,22 +111,22 @@ def address_lookup(address_parts):
         future queries.
 
     """
-    
+
     url = 'https://gisweb.fcgov.com/arcgis/rest/services/Geocode/Fort_Collins_Area_Address_Point_Geocoding_Service/GeocodeServer/findAddressCandidates'
-    
-    payload={
+
+    payload = {
         'f': 'pjson',
         'Street': address_parts,
-        }
-    
+    }
+
     # Gather response
     response = requests.get(url, params=payload)
-    if response.status_code!=requests.codes.ok:
-        raise requests.exceptions.HTTPError(response.reason,response.content)
-        
+    if response.status_code != requests.codes.ok:
+        raise requests.exceptions.HTTPError(response.reason, response.content)
+
     # Parse response
     outVal = response.json()
-    
+
     # Ensure candidate(s) exist and they have a decent match score
     # Because this is how the Sales Tax lookup is architected, it should be
     # safe to assume these are returned sorted, with best candidate first
@@ -131,12 +135,12 @@ def address_lookup(address_parts):
         coordString = '{x},{y}'.format(
             x=outVal['candidates'][0]['location']['x'],
             y=outVal['candidates'][0]['location']['y'],
-            )
-        
+        )
+
     else:
         raise NameError("Matching address not found")
-    
-    return coordString 
+
+    return coordString
 
 
 def connexion_lookup(coord_string):
@@ -147,7 +151,7 @@ def connexion_lookup(coord_string):
     ----------
     coord_string : str
         Formatted <x>,<y> string of coordinates from address_lookup().
-        
+
     Raises
     ------
     requests.exceptions.HTTPError
@@ -162,47 +166,47 @@ def connexion_lookup(coord_string):
         Boolean 'status', designating True for 'service available' or False
         for 'service will be available, but not yet' OR None for 'unavailable'
         (probably)
-    
+
     TODO: Switch this to an enum if we want to keep this structure
 
     """
-    
+
     url = 'https://gisweb.fcgov.com/arcgis/rest/services/FDH_Boundaries_ForPublic/MapServer/0/query'
-    
-    payload={
+
+    payload = {
         'f': 'pjson',
         'geometryType': 'esriGeometryPoint',
         'geometry': coord_string,
-        }
-    
+    }
+
     # Gather response
     response = requests.post(url, params=payload)
-    if response.status_code!=requests.codes.ok:
-        raise requests.exceptions.HTTPError(response.reason,response.content)
-        
+    if response.status_code != requests.codes.ok:
+        raise requests.exceptions.HTTPError(response.reason, response.content)
+
     # Parse response
     outVal = response.json()
-    
+
     try:
         statusInput = outVal['features'][0]['attributes']['INVENTORY_STATUS_CODE']
-        
+
     except (IndexError, KeyError):
         return None
-    
+
     else:
         statusInput = statusInput.lower()
-        
+
         # If we made it to this point, Connexion will be or is currently
         # available
         if statusInput in (
                 'released',
-                'out of warranty',                
-                ):      # this is the 'available' case
+                'out of warranty',
+        ):      # this is the 'available' case
             return True
-        
+
         else:
             return False
-        
+
         # Below this point are status messages from Connexion lookup tool at
         # https://www.fcgov.com/connexion/ as of 2021-06-11.
         # statusMsg is currently unused here - for reference only
@@ -211,23 +215,23 @@ def connexion_lookup(coord_string):
                 'in design',
                 'design approved',
                 'proofing complete'
-                ):
+        ):
             statusMsg = 'In Design\n\nYou are currently in the design phase. This is the earliest stage of the build process and involves infrastructure identification, conduit and boring need identification, as well as scheduling consideration. We are unable to give you an approximate date for service at this stage. If you would like to be notified when service is available at your address, please complete the <a href="/connexion/residential#service-availability"> service availability notification form </a>.'
-            
+
         elif statusInput in (
                 'in construction',
                 'gig',
                 'accepted',
-                ):
+        ):
             statusMsg = 'In Construction\n\nThis is the building phase of the process. Once you see construction in your neighborhood and receive a door hanger announcing construction, service is typically available within 6-9 months. For any construction-related questions or concerns email <a href="mailto:fcresidents@aeg.cc">fcresidents@aeg.cc</a> or call 970-207-7873. If you would like to be notified when service is available at your address, please complete the <a href="/connexion/residential#service-availability">service availability notification form</a>.'
-            
+
         elif statusInput in (
                 'released',
                 'out of warranty',
-                ):
+        ):
             statusMsg = 'Service Available\n\nCongratulations!! Service is available in your neighborhood. If you would like to learn more about our products and services, please <a href="https://www.fcgov.com/connexion/support#customer-service">contact our Customer Service Team</a>. <br><br>If you live in a multi-family dwelling unit, service may not be immediately available. Townhomes, apartments, and condos require permission prior to Connexion service being available. Please contact your property owner or homeowners association for permission for Connexion to provide service.'
-            
-        
+
+
 def gma_lookup(coord_string):
     """
     Look up the GMA location given the coordinate string.
@@ -236,7 +240,7 @@ def gma_lookup(coord_string):
     ----------
     coord_string : str
         Formatted <x>,<y> string of coordinates from address_lookup().
-        
+
     Raises
     ------
     requests.exceptions.HTTPError
@@ -248,10 +252,10 @@ def gma_lookup(coord_string):
     otherwise.
 
     """
-    
+
     url = 'https://gisweb.fcgov.com/arcgis/rest/services/FCMaps/MapServer/26/query'
-    
-    payload={
+
+    payload = {
         # Manually stringify 'geometry' - requests and json.dumps do this
         # incorrectly
         'geometry': """{"points":[["""+coord_string+"""]],"spatialReference":{"wkid":102653}}""",
@@ -263,13 +267,13 @@ def gma_lookup(coord_string):
         'outSR': 2231,
         'outFields': '*',
         'f': 'pjson',
-        }
-    
+    }
+
     # Gather response
     response = requests.get(url, params=payload)
-    if response.status_code!=requests.codes.ok:
-        raise requests.exceptions.HTTPError(response.reason,response.content)    
-        
+    if response.status_code != requests.codes.ok:
+        raise requests.exceptions.HTTPError(response.reason, response.content)
+
     # Parse response
     outVal = response.json()
 
@@ -277,7 +281,8 @@ def gma_lookup(coord_string):
         return True
     else:
         return False
-    
+
+
 def enroll_connexion_updates(request):
     """
     Enroll a user in Connexion service update emails.
@@ -298,10 +303,10 @@ def enroll_connexion_updates(request):
     None. No return designates a successful write to the service.
 
     """
-    
+
     usr = request.user
     addr = request.user.addresses
-    
+
     print(usr.email)
     print(usr.phone_number.national_number)
     print("{ad}, {zc}".format(ad=addr.address, zc=addr.zipCode))
@@ -313,37 +318,38 @@ def enroll_connexion_updates(request):
         'phone': usr.phone_number.national_number,
         # Create an address string recognized by the City system
         'address': "{ad}, {zc}".format(ad=addr.address, zc=addr.zipCode),
-        }
+    }
     payload = urllib.parse.urlencode(params)
-    
+
     headers = {
-      'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded'
     }
     response = requests.post(url, data=payload, headers=headers)
-    
+
     # raise AssertionError('error test')
-    
+
     # This seems to rely on the 'errors' return rather than status code, so
     # need to verify both (kick back an error if either are not good)
     if response.status_code != requests.codes.okay or response.json()['errors'] != '':
         print(response.json()['errors'])
         raise AssertionError('subscription request could not be completed')
 
+
 def validateUSPS(inobj):
     if isinstance(inobj, http.request.QueryDict):
         # Combine fields into Address
         address = Address(
-            name = " ",
-            address_1 = inobj['address'],
-            address_2 = inobj['address2'],
-            city = inobj['city'],
-            state = inobj['state'],
-            zipcode = inobj['zipcode'],
+            name=" ",
+            address_1=inobj['address'],
+            address_2=inobj['address2'],
+            city=inobj['city'],
+            state=inobj['state'],
+            zipcode=inobj['zipcode'],
         )
-        
+
     elif isinstance(inobj, dict):
         address = Address(**inobj)
-        
+
     else:
         raise AttributeError('Unknown validation input')
 
@@ -354,7 +360,7 @@ def validateUSPS(inobj):
         print(outDict['AddressValidateResponse']['Address']['Address2'])
         print(outDict)
         return outDict
-    
+
     except KeyError:
         print("Address could not be found - no guesses")
         raise
@@ -392,7 +398,7 @@ def broadcast_program_enrolled_email(email, counter):
     message = Mail(
         from_email='getfoco@fcgov.com',
         to_emails=email)
-    if counter == 1:        
+    if counter == 1:
         message.dynamic_template_data = {
             'program1': "Connexion",
             'program2': "Grocery Rebate",
@@ -400,7 +406,7 @@ def broadcast_program_enrolled_email(email, counter):
             'date': str(datetime.datetime.now().date()),
         }
 
-    elif counter == 2:        
+    elif counter == 2:
         message.dynamic_template_data = {
             'program1': "Connexion",
             'program2': "Grocery Rebate",
@@ -409,7 +415,7 @@ def broadcast_program_enrolled_email(email, counter):
             'ConnexionRequirements': "For Connexion, please contact representatives using the information below and give them this code",
             'ConnexionUUID': "specialcodehere",
             'ConnexionContact': "Phone Number: xxx-xxx-xxxx; Email: connexion@connexion.com",
-            
+
             'GroceryRequirements': "",
             'GroceryContact': "",
 
@@ -418,7 +424,7 @@ def broadcast_program_enrolled_email(email, counter):
 
             'date': str(datetime.datetime.now().date()),
         }
-    
+
     message.template_id = TEMPLATE_ID
     try:
         sg = SendGridAPIClient("***REMOVED***")
@@ -429,12 +435,13 @@ def broadcast_program_enrolled_email(email, counter):
     except Exception as e:
         print(e.message)
 
+
 def broadcast_email(email):
     TEMPLATE_ID = settings.TEMPLATE_ID
     message = Mail(
         from_email='getfoco@fcgov.com',
         to_emails=email)
-    
+
     message.template_id = TEMPLATE_ID
     try:
         sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
@@ -445,13 +452,14 @@ def broadcast_email(email):
     except Exception as e:
         print(e.message)
 
+
 def broadcast_email_pw_reset(email, content):
     TEMPLATE_ID_PW_RESET = settings.TEMPLATE_ID_PW_RESET
     message = Mail(
         subject='Password Reset Requested',
         from_email='getfoco@fcgov.com',
         to_emails=email,
-        )
+    )
     message.dynamic_template_data = {
         'subject': 'Password Reset Requested',
         'html_content': content,
@@ -465,6 +473,7 @@ def broadcast_email_pw_reset(email, content):
         print(response.headers)
     except Exception as e:
         print(e.message)
+
 
 def get_dependant_info(more_info):
     """

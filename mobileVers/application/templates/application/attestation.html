@@ -9,11 +9,13 @@ the Free Software Foundation, either version 3 of the License, or
 {% block body %}
 
 <h2 style="font-weight: 700; margin:5vh 0">Please confirm the following: </h2>
-<div class=sideNav> <div class=fadeSmall>
-    <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
-    <h1><b>You're done & ready for Get FoCo!</b></h1>
+<div class=sideNav>
+    <div class=fadeSmall>
+        <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;"
+            src="{% static 'application/images/CityLogoWhite-01.png' %}">
+        <h1><b>You're done & ready for Get FoCo!</b></h1>
 
-    <p>Before we can finish, let's get some legalities out of the way.</p>
+        <p>Before we can finish, let's get some legalities out of the way.</p>
     </div>
 </div>
 
@@ -21,7 +23,8 @@ the Free Software Foundation, either version 3 of the License, or
     {% csrf_token %}
     {% for field in form %}
     <label for="{{ field.id_for_label}}">
-        <input style="vertical-align: middle; display: inline-block;" required id="{{ field.id_for_label}}" type="checkbox" name="{{ field.name}}">
+        <input style="vertical-align: middle; display: inline-block;" required id="{{ field.id_for_label}}"
+            type="checkbox" name="{{ field.name}}">
         {{field.label}}
     </label>
     <br>
@@ -29,7 +32,10 @@ the Free Software Foundation, either version 3 of the License, or
     {% endfor %}
 
     <p style="padding: 50px;"><b>Privacy Notice</b>
-        <br>Your privacy is important to us. We will only share your information, without your consent, with other City of Fort Collins income eligible services to evaluate your eligibility and make applying for these programs easier. </p> 
+        <br>Your privacy is important to us. We will only share your information, without your consent, with other City
+        of Fort Collins income eligible services to evaluate your eligibility and make applying for these programs
+        easier.
+    </p>
 
     <div class="footer">
         <button type="submit"> CONTINUE </button>

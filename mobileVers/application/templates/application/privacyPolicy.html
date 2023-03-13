@@ -8,49 +8,55 @@ the Free Software Foundation, either version 3 of the License, or
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en" style ="background-color: white;">
-    <!--Get the various stylesheets I need like my fonts and CSS-->
-    <head>
-        <title>Privacy Policy</title>
-        <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
-        <script>
+<html lang="en" style="background-color: white;">
+<!--Get the various stylesheets I need like my fonts and CSS-->
+
+<head>
+    <title>Privacy Policy</title>
+    <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SL59NNQRH0"></script>
+    <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-SL59NNQRH0');
-        </script>
-    </head>
+    </script>
+</head>
 
-    <body style="background-color: white;">
+<body style="background-color: white;">
 
-        {% if is_prod is False %}
-            <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
-        {% endif %}
-        
-        {% if user_logged_in %}
-        <div class=nav>
-            <a href="{% url 'dashboard:dashboard' %}" style="margin-left:auto; margin-right:10px">
-                <p style = "color:#999999; font-weight: 700;">EXIT</p>
-            </a>        
-        </div>
-        {% else %}
-        <div class=nav>
-            <a href="{% url 'application:index' %}" style="margin-left:auto; margin-right:10px">
-                <p style = "color:#999999; font-weight: 700;">EXIT</p>
-            </a>        
-        </div>
-        {% endif %}
-        <div class="content spaceAround">
-            <h1 style="color:var(--yellow)"><b>Privacy Policy</b></h1>
-            <p style="color:#000000; margin-top: 2vh;"> Your privacy is important to us. We will only share your information, without your consent, with other City of Fort Collins income eligible services to evaluate your eligibility and make applying for these programs easier. </p>
-                   
-        </div>
-    </body>
+    {% if is_prod is False %}
+    <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING
+        ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com"
+            target="_blank">https://getfoco.fcgov.com</a> instead</div>
+    {% endif %}
+
+    {% if user_logged_in %}
+    <div class=nav>
+        <a href="{% url 'dashboard:dashboard' %}" style="margin-left:auto; margin-right:10px">
+            <p style="color:#999999; font-weight: 700;">EXIT</p>
+        </a>
+    </div>
+    {% else %}
+    <div class=nav>
+        <a href="{% url 'application:index' %}" style="margin-left:auto; margin-right:10px">
+            <p style="color:#999999; font-weight: 700;">EXIT</p>
+        </a>
+    </div>
+    {% endif %}
+    <div class="content spaceAround">
+        <h1 style="color:var(--yellow)"><b>Privacy Policy</b></h1>
+        <p style="color:#000000; margin-top: 2vh;"> Your privacy is important to us. We will only share your
+            information, without your consent, with other City of Fort Collins income eligible services to evaluate your
+            eligibility and make applying for these programs easier. </p>
+
+    </div>
+</body>
+
 </html>

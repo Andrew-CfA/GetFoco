@@ -7,12 +7,12 @@ the Free Software Foundation, either version 3 of the License, or
 {% extends 'application/availability_base.html' %}
 
 {% block content %}
-    <h1><b>Your address is in the Get FoCo service area and Connexion is available & ready!</b></h1>
-    <p style="margin-top: 2vh;">Click the continue button below to start your application now!</p>
+<h1><b>Your address is in the Get FoCo service area and Connexion is available & ready!</b></h1>
+<p style="margin-top: 2vh;">Click the continue button below to start your application now!</p>
 {% endblock %}
 
 {% block footerdiv %}
-    <div class="footer" style="width:100%">
-        <button onclick="location.href='{% url 'application:getReady' %}'"> CONTINUE </button> 
-    </div>
+<div class="footer" style="width:100%">
+    <button onclick="location.href='{% url 'application:getReady' %}'"> CONTINUE </button>
+</div>
 {% endblock %}

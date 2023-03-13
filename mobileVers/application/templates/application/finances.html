@@ -11,9 +11,10 @@ the Free Software Foundation, either version 3 of the License, or
 <div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-      <span class="close">&times;</span>
-      <p style="color: var(--darkblue);">Drop down bar not appearing? Make sure you enter how many individuals are in your household <b>first</b> to reveal the drop down bar. <br><br>
-        If you are on mobile be sure to click on "Done" after entering the number of individuals.</p>
+        <span class="close">&times;</span>
+        <p style="color: var(--darkblue);">Drop down bar not appearing? Make sure you enter how many individuals are in
+            your household <b>first</b> to reveal the drop down bar. <br><br>
+            If you are on mobile be sure to click on "Done" after entering the number of individuals.</p>
 
         <br>
         <br>
@@ -27,125 +28,137 @@ the Free Software Foundation, either version 3 of the License, or
 
 <div class=sideNav>
     <div class=fadeSmall>
-      <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="{% static 'application/images/CityLogoWhite-01.png' %}">
+        <img style="display: block; margin-left: auto; margin-right: auto; width: 50%;"
+            src="{% static 'application/images/CityLogoWhite-01.png' %}">
         <h1 style="font-weight: 700; margin:2vh 0; padding-top: 0px;"> Share basic information about your income </h1>
-        <p>Your information will not be shared with anyone outside of the departments of City of Fort Collins' income eligible programs. They are meant to determine potential assistance programs you may qualify for.</p>
-        <p><a href="{% url 'application:dependentInfo' %}" style="color: white;">What does "Household" mean<img src="{% static 'application/images/clipart249308.png' %}" alt="back" style="width:min(4.5vw,20px);"></a></p> 
+        <p>Your information will not be shared with anyone outside of the departments of City of Fort Collins' income
+            eligible programs. They are meant to determine potential assistance programs you may qualify for.</p>
+        <p><a href="{% url 'application:dependentInfo' %}" style="color: white;">What does "Household" mean<img
+                    src="{% static 'application/images/clipart249308.png' %}" alt="back"
+                    style="width:min(4.5vw,20px);"></a></p>
     </div>
 </div>
-<div class=fadeLarge><h2 style="font-weight: 700; margin:5vh 0"> Please share basic information about your income </h2></div>
+<div class=fadeLarge>
+    <h2 style="font-weight: 700; margin:5vh 0"> Please share basic information about your income </h2>
+</div>
 
 
-<form action="{% url 'application:finances' %}" method="post" autocomplete="false" id="eligibilityForm" gahi-selector-url="{% url 'application:ajax_load_gahi' %}" novalidate>
+<form action="{% url 'application:finances' %}" method="post" autocomplete="false" id="eligibilityForm"
+    gahi-selector-url="{% url 'application:ajax_load_gahi' %}" novalidate>
     {% csrf_token %}
 
     {% if update_mode is True %}
-      {# We're not interested in updating their length of residency when we're updating financials #}
+    {# We're not interested in updating their length of residency when we're updating financials #}
     {% else %}
-      <div class="input" style="padding-top:0">
-          <label class="labelword">How long have you lived at this address?</label>
-          <div class="row" style="justify-content:left; padding-top:5%">
-              {% for choice in form.rent %}
-                  <label for="{{choice.id_for_label}}" class="row" style="padding-right: 5%;">
-                      <span class="radio">{{ choice.tag }}</span>
-                      <p>{{ choice.choice_label }}</p>
-                  </label>
-              {% endfor %}
-          </div> 
-      </div>
+    <div class="input" style="padding-top:0">
+        <label class="labelword">How long have you lived at this address?</label>
+        <div class="row" style="justify-content:left; padding-top:5%">
+            {% for choice in form.rent %}
+            <label for="{{choice.id_for_label}}" class="row" style="padding-right: 5%;">
+                <span class="radio">{{ choice.tag }}</span>
+                <p>{{ choice.choice_label }}</p>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
     {% endif %}
     {% for field in form %}
-        {% if field.label == "Rent" %}
-        {% elif field.label == 'Number of Dependents' %}
+    {% if field.label == "Rent" %}
+    {% elif field.label == 'Number of Dependents' %}
 
-        {% if form.errors %}
-            {% for error in field.errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-            </div>
-            {% endfor %}
-        {% endif %}
+    {% if form.errors %}
+    {% for error in field.errors %}
+    <div class="alert alert-danger">
+        <strong>{{ error|escape }}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
 
-        <div class="input">
-            <label class="labelword"style="position:relative">How many individuals are in your household?</label>  <a href="{% url 'application:dependentInfo' %}"><img src="{% static 'application/images/clipart249308.png' %}" alt="info" style="width:min(4.5vw,20px);"></a>
-            {% if update_mode is True %}
-            <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}" value="{{ form.dependents.value }}" style="height: 3vh;">
-            {% else %}
-            <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}" style="height: 3vh;">
-            {% endif %}
-          </div>
+    <div class="input">
+        <label class="labelword" style="position:relative">How many individuals are in your household?</label> <a
+            href="{% url 'application:dependentInfo' %}"><img src="{% static 'application/images/clipart249308.png' %}"
+                alt="info" style="width:min(4.5vw,20px);"></a>
+        {% if update_mode is True %}
+        <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}"
+            value="{{ form.dependents.value }}" style="height: 3vh;">
         {% else %}
-        <div class="input">
-            <label class="labelword" style="position:relative">How much is your gross annual household income? <buttonQuestion  id="myBtn"><img id src="{% static 'application/images/clipart249308.png' %}" alt="back" style="width:min(4.5vw,20px); display: inline;"></buttonQuestion></label>
-            <br>
-            <div name="gahiDiv" id="gahiDiv">
-            </div>
-        </div>
-
+        <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}" style="height: 3vh;">
         {% endif %}
+    </div>
+    {% else %}
+    <div class="input">
+        <label class="labelword" style="position:relative">How much is your gross annual household income?
+            <buttonQuestion id="myBtn"><img id src="{% static 'application/images/clipart249308.png' %}" alt="back"
+                    style="width:min(4.5vw,20px); display: inline;"></buttonQuestion></label>
+        <br>
+        <div name="gahiDiv" id="gahiDiv">
+        </div>
+    </div>
+
+    {% endif %}
     {% endfor %}
 
     <div class="footer">
-      {% if update_mode is True %}
+        {% if update_mode is True %}
         <input type="hidden" name="update_mode" value="true">
-        <button type="submit" >CONFIRM</button>
-      {% else %}
+        <button type="submit">CONFIRM</button>
+        {% else %}
         <button type="submit"> CONTINUE </button>
-      {% endif %}
+        {% endif %}
     </div>
 </form>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-  var update_mode = {{ update_mode|yesno:"true,false" }};
+    var update_mode = {{ update_mode| yesno: "true,false" }};
 
-  $(document).ready(function(){
-    $("#id_dependents").on("input", function() {
-      var url = $("#eligibilityForm").attr("gahi-selector-url");  // get the url of the `load_cities` view
-      var dependentsId = $(this).val();  // get the selected country ID from the HTML input
+    $(document).ready(function () {
+        $("#id_dependents").on("input", function () {
+            var url = $("#eligibilityForm").attr("gahi-selector-url");  // get the url of the `load_cities` view
+            var dependentsId = $(this).val();  // get the selected country ID from the HTML input
 
-      $.ajax({                       // initialize an AJAX request
-        url: '{% url 'application:ajax_load_gahi' %}',                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-        data: {
-          'dependents': dependentsId       // add the country id to the GET parameters
-        },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-          $("#gahiDiv").html(data);  // replace the contents of the city input with the data that came from the server
+            $.ajax({                       // initialize an AJAX request
+                url: '{% url 'application: ajax_load_gahi' %}',                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'dependents': dependentsId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#gahiDiv").html(data);  // replace the contents of the city input with the data that came from the server
 
-          if (update_mode) {
-            $("#id_grossAnnualHouseholdIncome").val('{{ form.grossAnnualHouseholdIncome.value }}');
-          }
+                    if (update_mode) {
+                        $("#id_grossAnnualHouseholdIncome").val('{{ form.grossAnnualHouseholdIncome.value }}');
+                    }
+                }
+            });
+        });
+
+        $("#id_dependents").trigger('input');
+
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function () {
+            modal.style.display = "block";
         }
-      });
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     });
-
-    $("#id_dependents").trigger('input');
-
-    // Get the modal
-    var modal = document.getElementById("myModal");
-    
-    // Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
-    
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-    
-    // When the user clicks the button, open the modal 
-    btn.onclick = function() {
-      modal.style.display = "block";
-    }
-    
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-    
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-  });
 </script>
 {% endblock %}

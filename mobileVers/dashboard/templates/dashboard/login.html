@@ -8,29 +8,33 @@ the Free Software Foundation, either version 3 of the License, or
 
 {% block body %}
 <!--Login Page for GetyourConnexion-->
-<div class="fadeLarge"><h2 style="font-weight: 700;color:white; margin-top:5vh">Login</h2></div>
-<div class="fadeSmall"><h2 style="font-weight: 700;color:#13467D; margin-top:5vh">Login</h2></div>
+<div class="fadeLarge">
+    <h2 style="font-weight: 700;color:white; margin-top:5vh">Login</h2>
+</div>
+<div class="fadeSmall">
+    <h2 style="font-weight: 700;color:#13467D; margin-top:5vh">Login</h2>
+</div>
 
 {% if message %}
-    <div style="color:red;">{{ message }} </div>
+<div style="color:red;">{{ message }} </div>
 {% endif %}
 
 <!--Login fields-->
 <form action="{% url 'dashboard:login' %}" method="post" class="verticalContainer">
     {% csrf_token %}
     <div class="input">
-        <!--Have styling that I like on the forms-->      
+        <!--Have styling that I like on the forms-->
         <input class="fill" type="text" name="email" required style="width: 100%;" autocomplete="off">
-        <label class="label">Email</label>    
+        <label class="label">Email</label>
     </div>
     <div class="input">
-        <!--Have styling that I like on the forms-->        
+        <!--Have styling that I like on the forms-->
         <input class="fill" type="password" name="password" required style="width: 100%;" autocomplete="off">
         <label class="label">Password</label>
     </div>
     <br>
 
-    
+
     <button class="login" type="submit"><strong>LOGIN</strong></button>
 
 </form>
@@ -40,13 +44,13 @@ the Free Software Foundation, either version 3 of the License, or
 <a class="forgot_password" href="/dashboard/password_reset">Forgot your Password?</a>
 
 <style>
-    .forgot_password{
+    .forgot_password {
         color: var(--darkblue);
     }
 
     @media screen and (max-width : 767px) {
-        .forgot_password{
-            color:white;
+        .forgot_password {
+            color: white;
         }
     }
 </style>
