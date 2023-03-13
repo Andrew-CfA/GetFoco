@@ -12,7 +12,7 @@ from application.models import iqProgramQualifications
 from .forms import FileForm, FeedbackForm, TaxForm, AddressForm
 from django.conf import settings as django_settings  
 
-from .backend import authenticate, files_to_string, get_iq_program, what_page, blobStorageUpload, build_qualification_button, set_program_visibility
+from .backend import authenticate, files_to_string, get_iq_programs, what_page, blobStorageUpload, build_qualification_button, set_program_visibility
 from django.contrib.auth import get_user_model, login, authenticate
 from application.backend import broadcast_email, broadcast_sms, broadcast_email_pw_reset
 
@@ -390,18 +390,7 @@ def notifyRemaining(request):
 
 
 def qualifiedPrograms(request):
-    # Query the database for all programs
-    programs = iqProgramQualifications.objects.all()
-    for program in programs:
-        iq_program = get_iq_program(request.user.eligibility, program.name)
-        program.visibility = set_program_visibility(request.user.eligibility, program.name)
-        program.button = build_qualification_button(iq_program['status_for_user'])
-        program.status_for_user = iq_program['status_for_user']
-        program.quick_apply_link = iq_program['quick_apply_link']
-        program.learn_more_link = iq_program['learn_more_link']
-        program.title = iq_program['title']
-        program.subtitle = iq_program['subtitle']
-        program.supplemental_info = iq_program['supplemental_info']
+    programs = get_iq_programs(request.user.eligibility)
 
     order_by = request.GET.get('order_by')
     if order_by and order_by == 'eligible':
@@ -532,26 +521,13 @@ def dashboardGetFoco(request):
     ActiveNumber = 0
     PendingNumber = 0
 
-    programs = iqProgramQualifications.objects.all()
+    programs = get_iq_programs(request.user.eligibility)
     for program in programs:
-        iq_program = get_iq_program(request.user.eligibility, program.name)
-        program.visibility = set_program_visibility(request.user.eligibility, program.name)
-        program.button = build_qualification_button(iq_program['status_for_user'])
-        program.status_for_user = iq_program['status_for_user']
-        program.quick_apply_link = iq_program['quick_apply_link']
-        program.learn_more_link = iq_program['learn_more_link']
-        program.title = iq_program['title']
-        program.description = iq_program['description']
-        program.supplemental_info = iq_program['supplemental_info']
-        program.eligibility_review_status = iq_program['eligibility_review_status']
-        program.eligibility_review_time_period = iq_program['eligibility_review_time_period']
-
         # If the program's visibility is 'block' or the status is `ACTIVE` or `PENDING`, it means the user is eligible for the program
         # so we'll count it for their total number of programs they qualify for
         if program.visibility == "block" or program.status_for_user == 'ACTIVE' or program.status_for_user == 'PENDING':
             QProgramNumber += 1
 
-    for program in programs:
         # If a program's status_for_user is 'PENDING' add 1 to the pending number and subtract 1 from the QProgramNumber
         if program.status_for_user == 'PENDING':
             PendingNumber += 1
@@ -598,20 +574,7 @@ def dashboardGetFoco(request):
     )
 
 def ProgramsList(request):
-        # Query the database for all programs
-    programs = iqProgramQualifications.objects.all()
-    for program in programs:
-        iq_program = get_iq_program(request.user.eligibility, program.name)
-        program.visibility = set_program_visibility(request.user.eligibility, program.name)
-        program.button = build_qualification_button(iq_program['status_for_user'])
-        program.status_for_user = iq_program['status_for_user']
-        program.quick_apply_link = iq_program['quick_apply_link']
-        program.learn_more_link = iq_program['learn_more_link']
-        program.title = iq_program['title']
-        program.subtitle = iq_program['subtitle']
-        program.description = iq_program['description']
-        program.supplemental_info = iq_program['supplemental_info']
-
+    programs = get_iq_programs(request.user.eligibility)
     return render(
         request,
         'dashboard/ProgramsList.html',

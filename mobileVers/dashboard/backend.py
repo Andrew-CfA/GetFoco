@@ -201,6 +201,23 @@ def build_qualification_button(users_enrollment_status):
     }.get(users_enrollment_status, "")
 
 
+def get_iq_programs(users_iq_program_statuses):
+    programs = iqProgramQualifications.objects.all()
+    for program in programs:
+        iq_program = get_iq_program_info(users_iq_program_statuses, program.name)
+        program.visibility = set_program_visibility(users_iq_program_statuses, program.name)
+        program.button = build_qualification_button(iq_program['status_for_user'])
+        program.status_for_user = iq_program['status_for_user']
+        program.quick_apply_link = iq_program['quick_apply_link']
+        program.learn_more_link = iq_program['learn_more_link']
+        program.title = iq_program['title']
+        program.description = iq_program['description']
+        program.supplemental_info = iq_program['supplemental_info']
+        program.eligibility_review_status = iq_program['eligibility_review_status']
+        program.eligibility_review_time_period = iq_program['eligibility_review_time_period']
+    return programs
+
+
 def set_program_visibility(users_eligibility, program_name):
     if (users_eligibility.GenericQualified == QualificationStatus.PENDING.name or users_eligibility.GenericQualified == QualificationStatus.ACTIVE.name) and (users_eligibility.AmiRange_max <= iqProgramQualifications.objects.filter(name=program_name).values('percentAmi').first()['percentAmi']):
         return "block"
@@ -208,7 +225,7 @@ def set_program_visibility(users_eligibility, program_name):
         return "none"
 
 
-def get_iq_program(users_iq_program_status, program):
+def get_iq_program_info(users_iq_program_status, program):
     return {
         'connexion': {
             'status_for_user': users_iq_program_status.ConnexionQualified,
