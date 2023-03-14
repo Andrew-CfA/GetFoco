@@ -895,51 +895,39 @@ def IQProgramQuickApply(request, iq_program):
         'percentAmi'
         ).first()['percentAmi']
     print(f'{iq_program["program_name"]} max AMI %:',qualifyAmiPc)
-    
-    # If GenericQualified is 'ACTIVE' or 'PENDING' (this will assume they are being truthful with their income range)
-    if (request.user.eligibility.GenericQualified == QualificationStatus.ACTIVE.name or request.user.eligibility.GenericQualified == QualificationStatus.PENDING.name) and request.user.eligibility.AmiRange_max <= qualifyAmiPc:
-        if iq_program['program_name'] == 'spin':
-            setattr(request.user.eligibility, 'spin_privacy_acknowledgement', True)
-        elif iq_program['program_name'] == 'connexion':
-            addr = request.user.addresses
-            ## Check for Connexion services
-            # Recreate the relevant parts of addressDict as if from validateUSPS()
-            addressDict = {
-                'AddressValidateResponse': {
-                    'Address': {
-                        'Address2': addr.address,
-                        'Zip5': addr.zipCode,
-                        },
+
+    setattr(request.user.eligibility, iq_program['eligibility_column_name'], QualificationStatus.PENDING.name)
+    if iq_program['program_name'] == 'spin':
+        setattr(request.user.eligibility, 'spin_privacy_acknowledgement', True)
+    elif iq_program['program_name'] == 'connexion':
+        addr = request.user.addresses
+        ## Check for Connexion services
+        # Recreate the relevant parts of addressDict as if from validateUSPS()
+        addressDict = {
+            'AddressValidateResponse': {
+                'Address': {
+                    'Address2': addr.address,
+                    'Zip5': addr.zipCode,
                     },
-                }
-            _, hasConnexion = addressCheck(addressDict)
-            # Connexion status unknown, but since isInGMA==True at this point in
-            # the application, Connexion will be available at some point
-            if not hasConnexion:    # this covers both None and False
-                return redirect(reverse("application:comingSoon"))
-        setattr(request.user.eligibility, iq_program['eligibility_column_name'], QualificationStatus.PENDING.name)
-        request.user.eligibility.save()
-        return render(
-            request,
-            "application/quickApply.html",
-            {
-                'programName': iq_program['program_name'].title(),
-                'Title': f"{iq_program['program_name'].title()} Quick Apply Complete",
-                'is_prod': django_settings.IS_PROD,
                 },
-            )
-    else:
-        setattr(request.user.eligibility, iq_program['eligibility_column_name'], QualificationStatus.NOTQUALIFIED.name)     
-        request.user.eligibility.save()
-        return render(
-            request,
-            "application/notQualify.html",
-            {
-                'programName': iq_program['program_name'].title(),
-                'Title': f"{iq_program['program_name'].title()} Not Qualified",
-                'is_prod': django_settings.IS_PROD,
-                },
-            )
+            }
+        _, hasConnexion = addressCheck(addressDict)
+        # Connexion status unknown, but since isInGMA==True at this point in
+        # the application, Connexion will be available at some point
+        if not hasConnexion:    # this covers both None and False
+            return redirect(reverse("application:comingSoon"))
+        
+    request.user.eligibility.save()
+
+    return render(
+        request,
+        "application/quickApply.html",
+        {
+            'programName': iq_program['program_name'].title(),
+            'Title': f"{iq_program['program_name'].title()} Quick Apply Complete",
+            'is_prod': django_settings.IS_PROD,
+            },
+        )
 
 
 def attestation(request):
