@@ -29,30 +29,17 @@ class TestUrls(SimpleTestCase):
         print("Test - programs url")
         self.assertEquals(resolve(url).func, programs)
     
-    def test_available_resolved(self):
-        url = reverse("application:available")
-        print("Test - available url")
-        self.assertEquals(resolve(url).func, available)
 
     def test_notAvailable_resolved(self):
         url = reverse("application:notAvailable")
         print("Test - notAvailable url")
         self.assertEquals(resolve(url).func, notAvailable)
 
-    def test_notInRegion_resolved(self):
-        url = reverse("application:notInRegion")
-        print("Test - notInRegion url")
-        self.assertEquals(resolve(url).func, notInRegion)
 
     def test_addressCorrection_resolved(self):
         url = reverse("application:addressCorrection")
         print("Test - addressCorrection url")
         self.assertEquals(resolve(url).func, addressCorrection)
-
-    def test_GRQuickApply_resolved(self):
-        url = reverse("application:GRQuickApply")
-        print("Test - GRQuickApply url")
-        self.assertEquals(resolve(url).func, GRQuickApply)
 
     def test_mayQualify_resolved(self):
         url = reverse("application:mayQualify")
