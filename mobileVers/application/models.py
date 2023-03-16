@@ -216,6 +216,8 @@ class programs(TimeStampedModel): #incomeVerificationPrograms
     leap = models.BooleanField()
     medicaid = models.BooleanField(default=False)
 
+# TODO: Should be deleted, but might need to ETL the data
+# before the model is deleted
 class attestations(TimeStampedModel):
     user_id = models.OneToOneField(
         User,
