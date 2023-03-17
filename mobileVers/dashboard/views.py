@@ -334,7 +334,6 @@ def login_user(request):
             # Push user to correct page
             #update application_user "modified" per login
             obj = request.user
-            obj.modified = datetime.datetime.now(datetime.timezone.utc)
             obj.save()
             # Push user to correct page
             page = what_page(request.user, request)

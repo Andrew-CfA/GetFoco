@@ -77,6 +77,30 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True
 
+# Class to automate generic timestamps in database data
+class GenericTimeStampedModel(models.Model):
+    """
+    An abstract base class model that provides auto-updating ``created_at`` and
+    ``modified_at`` fields.
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        abstract = True
+
+# Class to automate IQ-program-specific timestamps in database data
+class IQProgramTimeStampedModel(models.Model):
+    """
+    An abstract base class model that provides auto-updating ``applied_at`` and
+    ``enrolled_at`` fields.
+    """
+    applied_at = models.DateTimeField(auto_now_add=True)
+    enrolled_at = models.DateTimeField()
+    
+    class Meta:
+        abstract = True
+
 
 class CIEmailField(CaseInsensitiveFieldMixin, models.EmailField):
     """
@@ -85,7 +109,7 @@ class CIEmailField(CaseInsensitiveFieldMixin, models.EmailField):
     pass
 
 # User model class
-class User(TimeStampedModel,AbstractUser):
+class User(AbstractUser):
     username = None
     email = CIEmailField(_('email address'), unique=True)
     first_name = models.CharField(max_length=200)
