@@ -5,6 +5,8 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version
 """
 
+import datetime
+
 from unicodedata import decimal
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
@@ -223,6 +225,43 @@ class AMI(TimeStampedModel):
     def __str__(self):
         return str(self.householdNum)
     
+class AMI_rearch(GenericTimeStampedModel):
+    """ Model class to store the Area Median Income values.
+    
+    Note that these values are separated by number in household and the 'valid
+    year' (which is the year when the numbers were updated by the Census
+    Bureau).
+    
+    The 'active' field designates if the record is currently in use; only
+    'active' records should be used for calculations in the webapp.
+    
+    """
+    
+    # ``id`` is implicitly the primary key
+    year_valid = models.IntegerField()
+    number_persons_in_household = models.CharField(max_length=15)
+    ami = models.IntegerField()
+
+    active = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return str(self.number_persons_in_household)    
+    
+    class Meta:
+        # Create a composite unique key for year_valid and individuals
+        # This - along with an ``id`` field - is a workaround for Django not
+        # supporting composite primary keys.
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "number_persons_in_household",
+                    "year_valid",
+                    ],
+                name="unq_year_values",
+            ),
+        ]
+
+    
 class iqProgramQualifications(TimeStampedModel):
     """ Model class to store the IQ program qualifications.
     
@@ -236,7 +275,7 @@ class iqProgramQualifications(TimeStampedModel):
     
     def __str__(self):
         return str(self.percentAmi)
-
+    
 
 choices = (
     ('More than 3 Years', 'More than 3 Years'),
