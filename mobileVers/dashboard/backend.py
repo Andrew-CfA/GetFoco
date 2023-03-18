@@ -272,3 +272,37 @@ def get_iq_program_info(users_iq_program_status, program):
             'eligibility_review_time_period': "Estimated Notification Time: Two Weeks" if users_iq_program_status.SPINQualified == 'PENDING' else "",
         },
     }.get(program)
+
+
+def check_user_file_upload_progress(request, file_list):
+    """Checks if user has uploaded all required documents
+    params:
+        request (object): Django request object
+        file_list (dict): Dictionary of required documents and whether or not they have been uploaded
+    Returns:
+        uploads_complete (bool): True if all required documents have been uploaded, False otherwise
+        file_list (dict): Dictionary of required documents and whether or not they have been uploaded
+    """
+    checkAllForms = [not(request.user.programs.snap),not(request.user.programs.freeReducedLunch),not(request.user.programs.ebb_acf),not(request.user.programs.Identification),not(request.user.programs.leap),not(request.user.programs.medicaid),]
+    for group in request.user.files.all():
+        if group.document_title == "SNAP":
+            checkAllForms[0] = True
+            file_list["SNAP Card"] = False
+        if group.document_title == "Free and Reduced Lunch":
+            checkAllForms[1] = True
+            file_list["PSD Reduced Lunch Approval Letter"] = False
+        if group.document_title == "ACP Letter":
+            checkAllForms[2] = True
+            file_list["Affordable Connectivity Program"] = False
+        if group.document_title == "Identification":
+            checkAllForms[3] = True
+            file_list["Identification"] = False
+        if group.document_title == "LEAP Letter":
+            checkAllForms[4] = True
+            file_list["LEAP Letter"] = False
+        if group.document_title == "Medicaid":
+            checkAllForms[5] = True
+            file_list["Medicaid Card"] = False
+        
+    uploads_complete = all(checkAllForms)
+    return uploads_complete, file_list

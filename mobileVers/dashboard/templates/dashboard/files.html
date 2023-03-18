@@ -131,7 +131,6 @@ the Free Software Foundation, either version 3 of the License, or
 </style>
 
 <script>
-    var firstTimeVisitToFileUploadPage = {{ request.session.first_time_file_upload|yesno:"true,false"|escapejs }};
     var fileUploadSuccessful = JSON.parse('{{ file_upload|escapejs }}')['success_status'];
 
     $(document).ready(function() {     
