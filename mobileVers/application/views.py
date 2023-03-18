@@ -21,6 +21,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, attestationForm, UserUpdateForm, EligibilityUpdateForm
 from .backend import addressCheck, validateUSPS, enroll_connexion_updates, get_dependant_info, model_to_dict
 from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility, EligibilityHistory
+from dashboard.backend import get_eligiblity_programs
 
 from py_models.qualification_status import QualificationStatus
 
@@ -1312,13 +1313,15 @@ def mayQualify(request):
 
 
 def getReady(request):
-     return render(
-         request,
-         'application/getReady.html',
-         {
-            'step':0,
-            'formPageNum':formPageNum,
-            'Title': "Ready some Necessary Documents",
-            'is_prod': django_settings.IS_PROD,
-            },
-         )
+    eligiblity_programs = get_eligiblity_programs()
+    return render(
+        request,
+        'application/getReady.html',
+        {
+        'step':0,
+        'formPageNum':formPageNum,
+        'Title': "Ready some Necessary Documents",
+        'is_prod': django_settings.IS_PROD,
+        'eligiblity_programs': eligiblity_programs,
+        },
+    )
