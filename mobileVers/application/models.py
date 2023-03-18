@@ -344,6 +344,17 @@ class MoreInfo(TimeStampedModel):
     dependentInformation = JSONField(null=True,blank=True)
     #dependentsBirthdate = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
     #dependentsName = models.CharField(max_length=20)
+
+class MoreInfo_rearch(GenericTimeStampedModel):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,   # set this to the primary key of this model
+    )
+
+    # Store the household info (individuals' names and birthdates) as JSON for
+    # quick storage and reference
+    household_info = JSONField(null=True,blank=True)
     
 
 # Programs model class attached to user (will delete as user account is deleted too)
