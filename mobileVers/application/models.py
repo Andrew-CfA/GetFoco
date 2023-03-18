@@ -147,11 +147,63 @@ class Addresses(TimeStampedModel):
     hasConnexion = models.BooleanField(null=True, default=None)
     is_verified = models.BooleanField(default=False)
 
-choices = (
-    ('More than 3 Years', 'More than 3 Years'),
-    ('1 to 3 Years', '1 to 3 Years'),
-    ('Less than a Year', 'Less than a Year'),
-)
+# Address lookup model
+class AddressesNew_rearch(GenericTimeStampedModel):
+    address1 = models.CharField(max_length=200, default="")
+    address2 = models.CharField(max_length=200, blank=True, default="")
+
+    # Try to get past the things that should be the same for every applicant
+    city = models.CharField(max_length=64,)
+    state = models.CharField(max_length=2,default="")
+
+    zip_code = models.DecimalField(max_digits=5, decimal_places=0)    
+    
+    is_in_gma = models.BooleanField(null=True, default=None)
+    is_city_covered = models.BooleanField(null=True, default=None)
+    has_connexion = models.BooleanField(null=True, default=None)
+    is_verified = models.BooleanField(default=False)
+
+    def clean(self):
+        self.address1 = self.address1.upper()
+        self.address2 = self.address2.upper()
+        self.city = self.city.upper()
+        self.state = self.state.upper()
+
+    class Meta:
+        # Create a composite unique key from the full address
+        # This makes the full address searchable as well as ensuring uniqueness
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "address1",
+                    "address2",
+                    "city",
+                    "state",
+                    "zip_code",
+                    ],
+                name="unq_full_address",
+            ),
+        ]
+
+# Addresses model attached to user (will delete as user account is deleted too)
+class Addresses_rearch(GenericTimeStampedModel):
+    # Default relation is the User primary key
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,   # set this to the primary key of this model
+    )
+    mailing_address = models.OneToOneField(
+        AddressesNew_rearch,
+        on_delete=models.DO_NOTHING,    # don't remove the address if this is deleted
+        related_name='+',   # don't relate AddressesNew_rearch id with this field
+    )
+    eligibility_address = models.OneToOneField(
+        AddressesNew_rearch,
+        on_delete=models.DO_NOTHING,    # don't remove the address if this is 
+        related_name='+',   # don't relate AddressesNew_rearch id with this field
+    )
+
 
 class AMI(TimeStampedModel):
     """ Model class to store the Area Median Income values.
@@ -184,6 +236,13 @@ class iqProgramQualifications(TimeStampedModel):
     
     def __str__(self):
         return str(self.percentAmi)
+
+
+choices = (
+    ('More than 3 Years', 'More than 3 Years'),
+    ('1 to 3 Years', '1 to 3 Years'),
+    ('Less than a Year', 'Less than a Year'),
+)
 
 # Eligibility model class attached to user (will delete as user account is deleted too)
 class Eligibility(TimeStampedModel):
