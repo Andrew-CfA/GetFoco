@@ -261,6 +261,35 @@ class AMI_rearch(GenericTimeStampedModel):
             ),
         ]
 
+
+choices = (
+    ('More than 3 Years', 'More than 3 Years'),
+    ('1 to 3 Years', '1 to 3 Years'),
+    ('Less than a Year', 'Less than a Year'),
+)
+
+# Eligibility model class attached to user (will delete as user account is deleted too)
+class Eligibility_rearch(GenericTimeStampedModel):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,   # set this to the primary key of this model
+    )
+
+    duration_at_address = models.CharField(choices=choices, max_length=200)
+    number_persons_in_household = models.IntegerField(100, default=1)
+
+    # Note that ami_year is the same value as 'year_valid' in AMI_rearch (but
+    # there's not a way to reasonably associate them in Django)
+    ami_year = models.IntegerField()
+
+    # Define the min and max Gross Annual Household Income as a fraction of 
+    # AMI (which is a function of number of individuals in household)
+    ami_range_min = models.DecimalField(max_digits=3, decimal_places=2)
+    ami_range_max = models.DecimalField(max_digits=3, decimal_places=2)
+
+    is_income_verified = models.BooleanField(default=False)
+
     
 class iqProgramQualifications(TimeStampedModel):
     """ Model class to store the IQ program qualifications.
@@ -276,12 +305,6 @@ class iqProgramQualifications(TimeStampedModel):
     def __str__(self):
         return str(self.percentAmi)
     
-
-choices = (
-    ('More than 3 Years', 'More than 3 Years'),
-    ('1 to 3 Years', '1 to 3 Years'),
-    ('Less than a Year', 'Less than a Year'),
-)
 
 # Eligibility model class attached to user (will delete as user account is deleted too)
 class Eligibility(TimeStampedModel):
