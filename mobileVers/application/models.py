@@ -195,14 +195,14 @@ class Addresses_rearch(GenericTimeStampedModel):
         on_delete=models.CASCADE,
         primary_key=True,   # set this to the primary key of this model
     )
-    mailing_address = models.OneToOneField(
+    mailing_address = models.ForeignKey(
         AddressesNew_rearch,
-        on_delete=models.DO_NOTHING,    # don't remove the address if this is deleted
+        on_delete=models.DO_NOTHING,    # don't remove this value if address is deleted
         related_name='+',   # don't relate AddressesNew_rearch id with this field
     )
-    eligibility_address = models.OneToOneField(
+    eligibility_address = models.ForeignKey(
         AddressesNew_rearch,
-        on_delete=models.DO_NOTHING,    # don't remove the address if this is 
+        on_delete=models.DO_NOTHING,    # don't remove this value if address is deleted
         related_name='+',   # don't relate AddressesNew_rearch id with this field
     )
 
