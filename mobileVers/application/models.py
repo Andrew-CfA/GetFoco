@@ -343,6 +343,8 @@ class iqProgramQualifications_rearch(GenericTimeStampedModel):
     # 'Two Weeks'). This should be manually updated periodically based on
     # program metrics.
     friendly_eligibility_review_period = models.CharField(max_length=5000)
+
+    is_active = models.BooleanField(default=True)
     
     def __str__(self):
         return str(self.ami_threshold)
