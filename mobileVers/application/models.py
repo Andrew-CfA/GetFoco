@@ -242,7 +242,7 @@ class AMI_rearch(GenericTimeStampedModel):
     number_persons_in_household = models.CharField(max_length=15)
     ami = models.IntegerField()
 
-    active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     
     def __str__(self):
         return str(self.number_persons_in_household)    
