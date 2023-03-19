@@ -402,6 +402,9 @@ class futureEmails(TimeStampedModel):
 
 class EligibilityHistory(models.Model):
     id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,  # don't remove the eligibility history if a user account is deleted
+        )
     created = models.DateTimeField(auto_now_add=True)
     historical_eligibility = JSONField(null=True,blank=True)
