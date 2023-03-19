@@ -305,6 +305,69 @@ class iqProgramQualifications(TimeStampedModel):
     def __str__(self):
         return str(self.percentAmi)
     
+class iqProgramQualifications_rearch(GenericTimeStampedModel):
+    """ Model class to store the IQ program qualifications.
+    
+    The program names specified here will be used in the remainder of the
+    app's backend.
+    
+    """
+    
+    # ``id`` is the implicity primary key
+    program_name = models.CharField(max_length=40)
+
+    # Store the AMI for which users must be below in order to be eligible
+    ami_threshold = models.DecimalField(max_digits=3, decimal_places=2)
+    
+    ## The following "friendly" fields will be viewable by users. None of them
+    ## have a database-constrained length in order to maximize flexibility.
+
+    ## TODO: remove the max_length input once updated to Django 4.1. In current
+    ## Django version, max_length=None (the default) throws an exception.
+    ## max_length is currently set to a large value, but below Postgres's 
+    ## VARCHAR(MAX).
+
+    # Name of the program
+    friendly_name = models.CharField(max_length=5000)
+    # Program category (as defined by the Program Lead)
+    friendly_category = models.CharField(max_length=5000)
+    # Description of the program
+    friendly_description = models.CharField(max_length=5000)
+    # Supplmental information about the program (recommend leaving blank
+    # (``''``) unless further info is necessary)
+    friendly_supplemental_info = models.CharField(max_length=5000)
+    # Hyperlink to learn more about the program
+    learn_more_link = models.CharField(max_length=5000)
+    # Estimated time period for the eligibility review (in readable text, e.g.
+    # 'Two Weeks'). This should be manually updated periodically based on
+    # program metrics.
+    friendly_eligibility_review_period = models.CharField(max_length=5000)
+    
+    def __str__(self):
+        return str(self.ami_threshold)
+    
+class iq_programs_rearch(IQProgramTimeStampedModel):
+    """ Model class to store each user's program enrollment status.
+    
+    Note that the record for a program is created when a user applies (at which
+    point ``applied_at`` is timestamped) and ``is_enrolled`` is set to ``True``
+    and ``enrolled_at`` is timestamped when income verification is complete.
+    
+    """
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+
+    program = models.ForeignKey(
+        iqProgramQualifications_rearch,
+        on_delete=models.DO_NOTHING,    # don't update these values if the program is deleted
+    )
+
+    is_enrolled = models.BooleanField(default=False)
+    
 
 # Eligibility model class attached to user (will delete as user account is deleted too)
 class Eligibility(TimeStampedModel):
