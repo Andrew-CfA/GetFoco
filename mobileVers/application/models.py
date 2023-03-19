@@ -470,6 +470,7 @@ class Dashboard_form_rearch(GenericTimeStampedModel):
     # ``id`` is the implicit primary key
     user = models.ForeignKey(
         User,
+        related_name='eligibility_files',
         on_delete=models.CASCADE,
     )
 
@@ -515,6 +516,7 @@ class EligibilityHistory(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(
         User,
+        related_name='eligibility_history',
         on_delete=models.DO_NOTHING,  # don't remove the eligibility history if a user account is deleted
         )
     created = models.DateTimeField(auto_now_add=True)
