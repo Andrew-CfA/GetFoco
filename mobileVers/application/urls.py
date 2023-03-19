@@ -20,6 +20,8 @@ urlpatterns = [
     path('attestation', views.attestation, name='attestation'),
     path('moreInfoNeeded', views.moreInfoNeeded, name='moreInfoNeeded'),
     path('filesInfoNeeded', views.filesInfoNeeded, name='filesInfoNeeded'),
+
+    path('rearch_phase0', views.rearch_phase0_write_moreinfo, name='rearch_phase0'),
     
 
     # Available/NotAvailable Digital Equity in your area

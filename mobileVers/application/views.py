@@ -6,6 +6,7 @@ the Free Software Foundation, either version 3 of the License, or
 """
 from concurrent.futures.process import _python_exit
 import json
+import ast
 from django.core.serializers.json import DjangoJSONEncoder
 from multiprocessing.sharedctypes import Value
 from django.conf import settings as django_settings
@@ -20,7 +21,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, attestationForm, UserUpdateForm, EligibilityUpdateForm
 from .backend import addressCheck, validateUSPS, enroll_connexion_updates, get_dependant_info, model_to_dict
-from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility, EligibilityHistory
+from .models import AMI, MoreInfo, MoreInfo_rearch, iqProgramQualifications, User, Eligibility, EligibilityHistory
 
 from py_models.qualification_status import QualificationStatus
 
@@ -678,6 +679,7 @@ def account(request):
             'update_mode': request.session.get('update_mode'),
             },
         )
+
 def filesInfoNeeded(request):
     '''
     can be used in the future for more information that may be needed from client pertaining to IQ programs
@@ -1322,3 +1324,80 @@ def getReady(request):
             'is_prod': django_settings.IS_PROD,
             },
          )
+
+def rearch_phase0_write_moreinfo(request):
+    # FOR DATABASE REARCHITECTURE PHASE 0 ONLY:
+    # On initial page load, convert all
+    # application.models.MoreInfo.dependentInformation to JSON and save as
+    # application.models.MoreInfo_rearch.household_info
+
+    allMoreInfo = MoreInfo.objects.all()
+    totalCnt = len(allMoreInfo)
+    for cntidx,mi in enumerate(allMoreInfo):
+        str_in = mi.dependentInformation
+
+        ## Parse the QueryDict pseudo-JSON into a dictionary - modified from
+        ## Tim Campbell's extract-creation script
+        
+        # if '"Daisy"' in str_in:
+        #     print(str_in)
+        #     raise Exception('breakpoint')
+            
+        # if 'Flinn' in str_in:
+        #     print(str_in)
+        #     raise Exception('breakpoint')
+        
+        # Read in the pseudo-JSON and replace double-quotes with placeholder
+        # BUT FIRST, take the special case of '"Daisy"' and use a different placeholder
+        # and SECOND, take the special case of “Flinn” etc and use another different placeholder
+        jsonBuilder = str_in[str_in.index('{'):str_in.index('}')+1].replace('"Daisy"','&*&').replace('“Flinn” Daniel Relethford','#@#').replace('"',"*|*")
+        
+        # Replace single-quotes with a non-word char before and word char
+        # after with a double-quote
+        jsonBuilder = re.sub(
+            r"(\W)'(\s|\w)",
+            r'\1"\2',
+            jsonBuilder,
+            )
+        
+        # Replace single-quotes with a word char before and non-word char
+        # after with a double-quote
+        jsonBuilder = re.sub(
+            r"(\w|\s|\.|\))'(\W)",
+            r'\1"\2',
+            jsonBuilder,
+            )
+        
+        # Replace placeholder with double-quote and special cases with
+        # single-quoted values
+        jsonBuilder = jsonBuilder.replace("*|*",'"').replace('&*&',"'Daisy'").replace("\'#@#\'",""" "'Flinn' Daniel Relethford" """)
+
+        try:
+            parsedDict = json.loads(
+                jsonBuilder,
+                )
+        except json.JSONDecodeError:
+            print(jsonBuilder)
+            raise
+
+        # Create outputDict with the correct keys
+        outputDict = {'persons_in_household': [None]*len(parsedDict['dependentsName'])}
+        for dictidx,nm in enumerate(parsedDict['dependentsName']):
+            outputDict['persons_in_household'][dictidx] = {
+                'name': nm,
+                'birthdate': parsedDict['dependentsBirthdate'][dictidx],
+                }
+
+        rearchVal = MoreInfo_rearch(
+            created_at=mi.created,
+            user=mi.user_id,
+            household_info=outputDict,
+            )
+        rearchVal.save()
+
+        print("Saved {} of {}".format(cntidx+1,totalCnt))
+
+    return render(
+        request,
+        'application/account.html',
+        )        
