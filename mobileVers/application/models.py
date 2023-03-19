@@ -323,7 +323,8 @@ class iqProgramQualifications_rearch(GenericTimeStampedModel):
     ## have a database-constrained length in order to maximize flexibility.
 
     ## TODO: remove the max_length input once updated to Django 4.1. In current
-    ## Django version, max_length=None (the default) throws an exception.
+    ## Django version, max_length=None (the default) throws an exception but is
+    ## fixed in 4.1 to associate with VARCHAR(MAX).
     ## max_length is currently set to a large value, but below Postgres's 
     ## VARCHAR(MAX).
 
@@ -434,6 +435,53 @@ class programs(TimeStampedModel): #incomeVerificationPrograms
     ebb_acf = models.BooleanField()
     leap = models.BooleanField()
     medicaid = models.BooleanField(default=False)
+
+
+class programs_rearch(GenericTimeStampedModel):
+    """
+    Model class to store the eligibility programs.
+    
+    """
+    # ``id`` is the implicit primary key
+    program_name = models.CharField(max_length=40)
+
+    # Store the AMI threshold that the users with each program are underneath
+    ami_threshold = models.DecimalField(max_digits=3, decimal_places=2)
+
+    # This is the friendly name displayed to the user
+
+    # TODO: remove the max_length input once updated to Django 4.1. In current
+    # Django version, max_length=None (the default) throws an exception but is
+    # fixed in 4.1 to associate with VARCHAR(MAX).
+    # max_length is currently set to a large value, but below Postgres's 
+    # VARCHAR(MAX).
+
+    friendly_program_name = models.CharField(max_length=5000)
+
+def userfiles_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'user_{0:05}/{1}'.format(instance.user_id.id, filename)
+
+class Dashboard_form_rearch(GenericTimeStampedModel):
+    """
+    Model class to store the eligibility programs.
+    
+    """
+    # ``id`` is the implicit primary key
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+
+    program = models.ForeignKey(
+        programs_rearch,
+        on_delete=models.DO_NOTHING,  # don't remove the program ID if the program is deleted
+        )
+
+    # Upload the file(?) to the proper directory in Azure Blob Storage and store
+    # the path
+    document_path = models.FileField(max_length=5000, upload_to=userfiles_path)
+    
 
 class attestations(TimeStampedModel):
     user_id = models.OneToOneField(
