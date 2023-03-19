@@ -419,6 +419,8 @@ class MoreInfo_rearch(GenericTimeStampedModel):
     # Store the household info (individuals' names and birthdates) as JSON for
     # quick storage and reference
     household_info = JSONField(null=True,blank=True)
+    created_at_init_temp = models.DateTimeField()
+    modified_at_init_temp = models.DateTimeField()
     
 
 # Programs model class attached to user (will delete as user account is deleted too)
