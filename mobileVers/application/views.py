@@ -1388,12 +1388,35 @@ def rearch_phase0_write_moreinfo(request):
                 'birthdate': parsedDict['dependentsBirthdate'][dictidx],
                 }
 
-        rearchVal = MoreInfo_rearch(
-            created_at=mi.created,
-            user=mi.user_id,
-            household_info=outputDict,
-            )
-        rearchVal.save()
+        try:
+            try:   
+                # Check if item for user has already been added
+                inDbObj = MoreInfo_rearch.objects.get(
+                    user=mi.user_id,
+                    )
+            except MoreInfo_rearch.DoesNotExist:
+                # Item doesn't exist, so continue with save
+                raise AssertionError()
+            
+            else:
+                # Item exists; check the modified date. If newer, continue with
+                # save to overwrite; if older, ignore
+                print('Duplicate found')
+                if mi.modified>=inDbObj.modified_at_init_temp:
+                    print('Current object newer; overwriting')
+                    raise AssertionError()
+                else:
+                    print('Current object older; ignoring')
+        
+        except AssertionError:
+            rearchVal = MoreInfo_rearch(
+                created_at=mi.created,
+                user=mi.user_id,
+                household_info=outputDict,
+                created_at_init_temp=mi.created,
+                modified_at_init_temp=mi.modified,
+                )
+            rearchVal.save()
 
         print("Saved {} of {}".format(cntidx+1,totalCnt))
 
