@@ -314,7 +314,7 @@ class iqProgramQualifications_rearch(GenericTimeStampedModel):
     """
     
     # ``id`` is the implicity primary key
-    program_name = models.CharField(max_length=40)
+    program_name = models.CharField(max_length=40, unique=True)
 
     # Store the AMI for which users must be below in order to be eligible
     ami_threshold = models.DecimalField(max_digits=3, decimal_places=2)
@@ -445,7 +445,7 @@ class programs_rearch(GenericTimeStampedModel):
     
     """
     # ``id`` is the implicit primary key
-    program_name = models.CharField(max_length=40)
+    program_name = models.CharField(max_length=40, unique=True)
 
     # Store the AMI threshold that the users with each program are underneath
     ami_threshold = models.DecimalField(max_digits=3, decimal_places=2)
