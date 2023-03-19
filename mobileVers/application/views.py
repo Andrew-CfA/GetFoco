@@ -699,7 +699,7 @@ def filesInfoNeeded(request):
                 return redirect(reverse("dashboard:broadcast"))
             except IntegrityError:
                 print("User already has information filled out for this section")
-                return redirect(reverse("application:filesInfoNeeded"))
+                return redirect(reverse("dashboard:broadcast"))
         else:
             print(form.data)
     else:

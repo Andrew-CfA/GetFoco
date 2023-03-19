@@ -254,17 +254,15 @@ def check_user_file_upload_progress(request, file_list):
         file_list (dict): Dictionary of required documents and whether or not they have been uploaded
     """
     eligibility_programs = get_eligiblity_programs()
-    # FYI: The array is order dependent. 0 = SNAP, 1 = PSD Reduced Lunch, 2 = ACP, 3 = ID, 4 = LEAP, etc. Feels like it
-    # could be somewhat dangerous if the order of the programs in the database changes.
-    checkAllForms = [not getattr(request.user.programs, program['eligibility_program']) for program in eligibility_programs]
-    for i, group in enumerate(request.user.files.all()):
+    checkAllForms = {program['document_title'] : not getattr(request.user.programs, program['eligibility_program']) for program in eligibility_programs}
+    for file in request.user.files.all():
         for program in eligibility_programs:
-            if group.document_title == program['document_title']:
-                checkAllForms[i] = True
+            if file.document_title == program['document_title']:
+                checkAllForms[program['document_title']] = True
                 file_list[program['document_description']] = False
                 break
 
-    uploads_complete = all(checkAllForms)
+    uploads_complete = all(checkAllForms.values())
     return uploads_complete, file_list
 
 
