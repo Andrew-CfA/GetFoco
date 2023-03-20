@@ -462,6 +462,8 @@ class programs_rearch(GenericTimeStampedModel):
     # VARCHAR(MAX).
 
     friendly_program_name = models.CharField(max_length=5000)
+    
+    is_active = models.BooleanField(default=True)
 
 def userfiles_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
