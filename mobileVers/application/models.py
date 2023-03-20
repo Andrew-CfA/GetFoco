@@ -358,10 +358,11 @@ class iq_programs_rearch(IQProgramTimeStampedModel):
     
     """
 
-    user = models.OneToOneField(
+    # ``id`` is the implicit primary key
+    user = models.ForeignKey(
         User,
+        related_name='iq_programs',
         on_delete=models.CASCADE,
-        primary_key=True,
     )
 
     program = models.ForeignKey(
