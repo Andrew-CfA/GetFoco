@@ -111,7 +111,7 @@ class CIEmailField(CaseInsensitiveFieldMixin, models.EmailField):
     pass
 
 # User model class
-class User(AbstractUser):
+class User(TimeStampedModel,AbstractUser):
     username = None
     email = CIEmailField(_('email address'), unique=True)
     first_name = models.CharField(max_length=200)
