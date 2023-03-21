@@ -819,7 +819,7 @@ def finances(request):
             # eligibility history table.
             users_eligibility = model_to_dict(Eligibility.objects.get(user_id=request.user.id))
             eligibility_history = EligibilityHistory.objects.create(
-                user_id=request.user,
+                user=request.user,
                 # Convert the eligibility object to a dictionary and then to a JSON string
                 # and set it to the historical_eligibility field
                 historical_eligibility=json.dumps(users_eligibility, cls=DjangoJSONEncoder)                                

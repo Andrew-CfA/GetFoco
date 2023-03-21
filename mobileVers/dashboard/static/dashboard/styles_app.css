@@ -76,7 +76,6 @@
 select {
     background-color: var(--darkblue);
     color: var(--darkblue);
-    background: url('http://www.free-icons-download.net/images/small-down-arrow-icon-15593.png');
     width: 50%;
     height: 6vh;
     border: none;
@@ -476,7 +475,6 @@ input.fill:focus ~ label, input.fill:valid ~ label {
     select {
         background-color: var(--darkblue);
         color: white;
-        background: url('http://www.free-icons-download.net/images/small-down-arrow-icon-15593.png');
         width: 50%;
         height: 6vh;
         border: none;
