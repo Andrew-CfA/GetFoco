@@ -202,31 +202,7 @@ def connexion_lookup(coord_string):
         
         else:
             return False
-        
-        # Below this point are status messages from Connexion lookup tool at
-        # https://www.fcgov.com/connexion/ as of 2021-06-11.
-        # statusMsg is currently unused here - for reference only
-        if statusInput in (
-                'on hold',
-                'in design',
-                'design approved',
-                'proofing complete'
-                ):
-            statusMsg = 'In Design\n\nYou are currently in the design phase. This is the earliest stage of the build process and involves infrastructure identification, conduit and boring need identification, as well as scheduling consideration. We are unable to give you an approximate date for service at this stage. If you would like to be notified when service is available at your address, please complete the <a href="/connexion/residential#service-availability"> service availability notification form </a>.'
-            
-        elif statusInput in (
-                'in construction',
-                'gig',
-                'accepted',
-                ):
-            statusMsg = 'In Construction\n\nThis is the building phase of the process. Once you see construction in your neighborhood and receive a door hanger announcing construction, service is typically available within 6-9 months. For any construction-related questions or concerns email <a href="mailto:fcresidents@aeg.cc">fcresidents@aeg.cc</a> or call 970-207-7873. If you would like to be notified when service is available at your address, please complete the <a href="/connexion/residential#service-availability">service availability notification form</a>.'
-            
-        elif statusInput in (
-                'released',
-                'out of warranty',
-                ):
-            statusMsg = 'Service Available\n\nCongratulations!! Service is available in your neighborhood. If you would like to learn more about our products and services, please <a href="https://www.fcgov.com/connexion/support#customer-service">contact our Customer Service Team</a>. <br><br>If you live in a multi-family dwelling unit, service may not be immediately available. Townhomes, apartments, and condos require permission prior to Connexion service being available. Please contact your property owner or homeowners association for permission for Connexion to provide service.'
-            
+         
         
 def gma_lookup(coord_string):
     """
@@ -359,75 +335,6 @@ def validateUSPS(inobj):
         print("Address could not be found - no guesses")
         raise
 
-
-def broadcast_program_enrolled_email(email, counter):
-    """
-    Initial sent email to clients if they are marked as "qualified" in the database (after going through verification process)
-
-    Utilizes SendGrid DynamicEmail template Program Approval, lets clients know which programs they were accepted into
-    and any possible INITIAL next steps, more steps may be required per program
-
-
-    Parameters
-    ----------
-    email : str
-        email to send to client(s)
-    counter: int
-        counter allows us to choose which version of the message to send
-        1) qualified for these programs, may need to specify any further clarifications via "contact us"
-        2) a simple contact this number / email for further information and steps
-
-    Raises
-    ------
-    Exception
-        Email may not be valid
-
-    Returns / Outside Action
-    -------
-    API return
-        Sendgrid sends email
-
-    """
-    TEMPLATE_ID = settings.TEMPLATE_ID_DYNAMIC_EMAIL
-    message = Mail(
-        from_email='getfoco@fcgov.com',
-        to_emails=email)
-    if counter == 1:        
-        message.dynamic_template_data = {
-            'program1': "Connexion",
-            'program2': "Grocery Rebate",
-            'program3': "Recreation",
-            'date': str(datetime.datetime.now().date()),
-        }
-
-    elif counter == 2:        
-        message.dynamic_template_data = {
-            'program1': "Connexion",
-            'program2': "Grocery Rebate",
-            'program3': "Recreation",
-
-            'ConnexionRequirements': "For Connexion, please contact representatives using the information below and give them this code",
-            'ConnexionUUID': "specialcodehere",
-            'ConnexionContact': "Phone Number: xxx-xxx-xxxx; Email: connexion@connexion.com",
-            
-            'GroceryRequirements': "",
-            'GroceryContact': "",
-
-            'RecreationRequirements': "For Recreation you must buy a family pass using the information provided on Get:FoCo, please give them your email when you buy your pass more information found below.",
-            'RecreationContact': "https://www.fcgov.com/recreation/",
-
-            'date': str(datetime.datetime.now().date()),
-        }
-    
-    message.template_id = TEMPLATE_ID
-    try:
-        sg = SendGridAPIClient("***REMOVED***")
-        response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
-    except Exception as e:
-        print(e.message)
 
 def broadcast_email(email):
     TEMPLATE_ID = settings.TEMPLATE_ID
