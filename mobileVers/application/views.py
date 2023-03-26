@@ -30,6 +30,7 @@ from decimal import Decimal
 
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from py_models.decorators import set_update_mode
+from django.db import connections
 
 
 
@@ -50,15 +51,19 @@ class GAHIBuilder:
     
     """
     
-    # Run the program AMI qualifications here (when the site loads) instead
-    # of on class instantiation, to save time
-    amiCutoffs = iqProgramQualifications.objects.all().values(
-        'percentAmi'
-        ).distinct()    # distince() returns only the unique values (no dups)
-    # List of floats of ami percentages (prepend zero for the bottom end)
-    amiCutoffPc = [Decimal('0')]+sorted(
-        [x['percentAmi'] for x in list(amiCutoffs)]
-        )
+    if 'application_iqprogramqualifications' not in connections['default'].introspection.table_names():
+        # Do nothing because the database isn't setup yet
+        print('Database not setup yet')
+    else:
+        # Run the program AMI qualifications here (when the site loads) instead
+        # of on class instantiation, to save time
+        amiCutoffs = iqProgramQualifications.objects.all().values(
+            'percentAmi'
+            ).distinct()    # distince() returns only the unique values (no dups)
+        # List of floats of ami percentages (prepend zero for the bottom end)
+        amiCutoffPc = [Decimal('0')]+sorted(
+            [x['percentAmi'] for x in list(amiCutoffs)]
+            )
 
     def __init__(self, request):
         """
