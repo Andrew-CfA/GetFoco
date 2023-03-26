@@ -37,11 +37,20 @@ the Free Software Foundation, either version 3 of the License, or
 
             
 <div style="margin-top: 3vh;">
-    <p>To get verified, please upload your</p>
-    <h3> {{program_string|linebreaks}} </h3>
+    <p style="margin-bottom: 25px;">To get verified, please upload your</p>
 
-    <br>
-    <br>
+    <div style="margin-bottom: 25px;">
+        {% for program, program_was_selected in programs.items %}
+            {% if program_was_selected %}
+                {% for option in program_options %}
+                    {% if option.document_description == program %}
+                        <p style="font-weight: 800;">{{ option.document_description }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
     <p >Uploaded documents are secure & not shared with anyone outside of Fort Collins' income eligible programs. </p>
     
 </div>
@@ -65,25 +74,15 @@ the Free Software Foundation, either version 3 of the License, or
             <div class="row" style="justify-content: space-between;">
                 <p style="font-weight: 800;">Files: <buttonQuestion  id="myBtn"><img id src="{% static 'application/images/clipart249308.png' %}" alt="back" style="width:min(4.5vw,20px); display: inline;"></buttonQuestion> </p>
                 <select name="{{ field.name }}" id="{{ field.id_for_label}}">
-
-                {% for program, program_was_selected in programs.items %}
-                    {% if program_was_selected %}
-                        {% if program == "Affordable Connectivity Program" %}
-                            <option class="option files" value="ACP Letter">ACP Letter</option>
-                        {% elif program == "Identification" %}
-                            <option class="option files" value="Identification">Identification</option>
-                        {% elif program == "SNAP Card" %}
-                            <option class="option files" value="SNAP">SNAP</option>
-                        {% elif program == "LEAP Letter" %}
-                            <option class="option files" value="LEAP Letter">LEAP Letter</option>
-                        {% elif program == "PSD Reduced Lunch Approval Letter" %}
-                            <option class="option files" value="Free and Reduced Lunch">Free and Reduced Lunch</option>
-                        {% elif program == "Medicaid Card" %}
-                            <option class="option files" value="Medicaid">Medicaid</option>
+                    {% for program, program_was_selected in programs.items %}
+                        {% if program_was_selected %}
+                            {% for option in program_options %}
+                                {% if option.document_description == program %}
+                                <option class="option files" value="{{ option.document_title }}">{{ option.document_title }}</option>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
-                    {% endif %}
-                {% endfor %}
-
+                    {% endfor %}
                 </select>
             </div>
         {% elif field.label == "Document Upload" %}
@@ -131,10 +130,17 @@ the Free Software Foundation, either version 3 of the License, or
 </style>
 
 <script>
-    var firstTimeVisitToFileUploadPage = {{ request.session.first_time_file_upload|yesno:"true,false"|escapejs }};
     var fileUploadSuccessful = JSON.parse('{{ file_upload|escapejs }}')['success_status'];
 
-    $(document).ready(function() {     
+    $(document).ready(function() {   
+        var fileUploadButton = $(".upload-btn-wrapper");
+        $("input[type='file']").css("height", fileUploadButton.height());
+
+        $(window).resize(function() {
+            var fileUploadButtonHeight = fileUploadButton.height();
+            $("input[type='file']").css("height", fileUploadButtonHeight);
+        });
+        
         $("#myBtn").click(function() {
             var modalContent = `
                 <div class ="fadeSmall">

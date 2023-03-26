@@ -8,11 +8,10 @@ import json
 from django.shortcuts import render, redirect, reverse
 from django.core.serializers.json import DjangoJSONEncoder
 
-from application.models import iqProgramQualifications
-from .forms import FileForm, FeedbackForm, TaxForm, AddressForm
+from .forms import FileForm, FeedbackForm, TaxForm
 from django.conf import settings as django_settings  
 
-from .backend import authenticate, files_to_string, get_iq_programs, what_page, blobStorageUpload, build_qualification_button, set_program_visibility
+from .backend import authenticate, get_eligiblity_programs, get_iq_programs, get_users_eligiblity_programs, what_page, blobStorageUpload, check_user_file_upload_progress
 from django.contrib.auth import get_user_model, login, authenticate
 from application.backend import broadcast_email, broadcast_sms, broadcast_email_pw_reset
 
@@ -39,26 +38,15 @@ import magic, datetime
 #Step 4 of Application Process
 @set_update_mode
 def files(request):
-    file_list = {
-        "Affordable Connectivity Program": request.user.programs.ebb_acf,
-        "Identification": request.user.programs.Identification,
-        "LEAP Letter": request.user.programs.leap,
-        "Medicaid Card": request.user.programs.medicaid,
-        "PSD Reduced Lunch Approval Letter": request.user.programs.freeReducedLunch,
-        "SNAP Card": request.user.programs.snap,
-    }
+    eligiblity_programs = get_eligiblity_programs()
+    file_list = get_users_eligiblity_programs(request)
     '''
     Variables:
     fileNames - used to name the files in the database and file upload
     fileAmount - number of file uploads per income verified documentation
     '''
+    _, file_list = check_user_file_upload_progress(request, file_list)
     if request.method == "POST":
-         # Check the user's session variables to see if they have a first_time_file_upload variable
-        # If they don't have it, create the variable and set it to True
-        if 'first_time_file_upload' not in request.session:
-            request.session['first_time_file_upload'] = True
-        else:
-            request.session['first_time_file_upload'] = False
         form = FileForm(request.POST, request.FILES)
         if form.is_valid():
             print(form)
@@ -82,28 +70,13 @@ def files(request):
                     #filetype = magic.from_file("mobileVers/" + instance.document.url)
                     filetype = magic.from_buffer(f.read())
                     logging.info(filetype)
-                    if "PNG" in filetype:
-                        pass
-                    elif "JPEG" in filetype:
-                        pass
-                    elif "JPG" in filetype:
-                        pass
-                    elif "PDF" in filetype:
+
+                    # Check if any of the following strings ("PNG", "JPEG", "JPG", "PDF") are in the filetype
+                    if any(x in filetype for x in ["PNG", "JPEG", "JPG", "PDF"]):
                         pass
                     else:
                         logging.error("File is not a valid file type. file is: " + filetype)
-                        if instance.document_title == "LEAP Letter":
-                            file_list = "LEAP Letter"
-                        if instance.document_title == "SNAP":
-                            file_list = "SNAP Card"
-                        if instance.document_title == "Free and Reduced Lunch":
-                            file_list = "PSD Reduced Lunch Approval Letter"
-                        if instance.document_title == "ACP Letter":
-                            file_list = "Affordable Connectivity Program"
-                        if instance.document_title == "Identification":
-                            file_list = "Identification"
-                        if instance.document_title == "Medicaid":
-                            file_list = "Medicaid Card"
+                        _, file_list = check_user_file_upload_progress(request, file_list)
                         return render(
                             request,
                             'dashboard/files.html',
@@ -111,7 +84,7 @@ def files(request):
                                 "message": "File is not a valid file type. Please upload either  JPG, PNG, OR PDF.",
                                 'form':form,
                                 'programs': file_list,
-                                'program_string': file_list,
+                                'program_options': eligiblity_programs,
                                 'step':5,
                                 'formPageNum':6,
                                 'Title': "Files",
@@ -119,7 +92,7 @@ def files(request):
                                 'is_prod': django_settings.IS_PROD,
                                 },
                             )
-                    
+
                 for f in request.FILES.getlist('document'):
                     fileAmount += 1
                     instance.document.save( datetime.datetime.now().isoformat() + "_" + str(fileAmount) + "_" + str(f),f) # this line allows us to save multiple files: format = iso format (f,f) = (name of file, actual file)
@@ -134,37 +107,15 @@ def files(request):
                 instance.document = str(fileNames)
                 instance.save()
                 
-                
-                # Check if the user needs to upload another form
-                Forms = request.user.files
-                checkAllForms = [not(request.user.programs.snap),not(request.user.programs.freeReducedLunch),not(request.user.programs.ebb_acf),not(request.user.programs.Identification),not(request.user.programs.leap),not(request.user.programs.medicaid),]
-                for group in Forms.all():
-                    if group.document_title == "SNAP":
-                        checkAllForms[0] = True
-                        file_list["SNAP Card"] = False
-                    if group.document_title == "Free and Reduced Lunch":
-                        checkAllForms[1] = True
-                        file_list["PSD Reduced Lunch Approval Letter"] = False
-                    if group.document_title == "ACP Letter":
-                        checkAllForms[2] = True
-                        file_list["Affordable Connectivity Program"] = False
-                    if group.document_title == "Identification":
-                        checkAllForms[3] = True
-                        file_list["Identification"] = False
-                    if group.document_title == "LEAP Letter":
-                        checkAllForms[4] = True
-                        file_list["LEAP Letter"] = False
-                    if group.document_title == "Medicaid":
-                        checkAllForms[5] = True
-                        file_list["Medicaid Card"] = False
-                if False in checkAllForms:
+                uploads_complete, file_list = check_user_file_upload_progress(request, file_list)
+                if not uploads_complete:
                     return render(
                         request,
                         'dashboard/files.html',
                         {
                             'form':form,
                             'programs': file_list,
-                            'program_string': files_to_string(file_list),
+                            'program_options': eligiblity_programs,
                             'step':5,
                             'formPageNum':6,
                             'Title': "Files",
@@ -177,41 +128,23 @@ def files(request):
                 elif request.user.programs.ebb_acf == True:
                     return redirect(reverse("application:filesInfoNeeded"))
                 else:
-                    return redirect(reverse("dashboard:broadcast")) 
-            else:
-                print("notautnehticated")
-                # TODO: Change this link
-                return render(
-                    request,
-                    'dashboard/layout.html',
-                    {
-                        'is_prod': django_settings.IS_PROD,
-                        },
-                    )
+                    return redirect(reverse("dashboard:broadcast"))
     else:
-        print(request.user)
-        # Check the user's session variables to see if they have a first_time_file_upload variable
-        # If they don't have it, create the variable and set it to True
-        if 'first_time_file_upload' not in request.session:
-            request.session['first_time_file_upload'] = True
-        else:
-            request.session['first_time_file_upload'] = False
         form = FileForm()
-    print(file_list)
-    return render(
-        request,
-        'dashboard/files.html',
-        {
-            'form':form,
-            'programs': file_list,
-            'program_string': files_to_string(file_list),
-            'step':5,
-            'formPageNum':6,
-            'Title': "Files",
-            'file_upload': json.dumps({'success_status': None}),
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
+        return render(
+            request,
+            'dashboard/files.html',
+            {
+                'form':form,
+                'programs': file_list,
+                'program_options': eligiblity_programs,
+                'step':5,
+                'formPageNum':6,
+                'Title': "Files",
+                'file_upload': json.dumps({'success_status': None}),
+                'is_prod': django_settings.IS_PROD,
+                },
+            )
 
 
 def broadcast(request):

@@ -17,7 +17,7 @@ from django.conf import settings
 from azure.storage.blob import BlockBlobService
 
 from py_models.qualification_status import QualificationStatus
-from application.models import MoreInfo, Addresses, iqProgramQualifications, Eligibility
+from application.models import MoreInfo, Addresses, iqProgramQualifications
 from decimal import Decimal
 
 
@@ -53,36 +53,6 @@ def get_user(self, user_id):
         return UserModel.objects.get(id=user_id)
     except UserModel.DoesNotExist:
         return None
-
-def files_to_string(file_list):
-    list_string = ""
-    counter = 0
-
-    print(counter)
-    # Get File_List into easy to read list to print out in template
-    for key, value in file_list.items():
-        # only add things to the list_string if its true
-        if value == True:
-            # Also add commas based on counter
-            if counter == 5:
-                list_string += "\n"
-                counter = 4
-            elif counter == 4:
-                list_string += "\n"
-                counter = 3
-            elif counter == 3:
-                list_string += "\n"
-                counter = 2
-            elif counter == 2:
-                list_string += "\n"
-                counter = 1
-            elif counter == 1:
-                list_string += "\n"
-                counter = 0
-            else:
-                counter = 5
-            list_string += key
-    return list_string
 
 # redirect user to whatever page they need to go to every time by checking which steps they've
 # completed in the application process
@@ -122,38 +92,10 @@ def what_page(user,request):
             return "application:programs"
 
         try: #check if files are all uploaded
-            file_list = {
-                "SNAP Card": request.user.programs.snap,
-                # Have Reduced Lunch be last item in the list if we add more programs
-                "PSD Reduced Lunch Approval Letter": request.user.programs.freeReducedLunch,
-                "Affordable Connectivity Program": request.user.programs.ebb_acf,
-                "Identification": request.user.programs.Identification,
-                "Medicaid Card": request.user.programs.medicaid,
-                "LEAP Letter": request.user.programs.leap,
-            }
+            file_list = get_users_eligiblity_programs(request)
+            uploads_complete, file_list = check_user_file_upload_progress(request, file_list)
 
-            Forms = request.user.files
-            checkAllForms = [not(request.user.programs.snap),not(request.user.programs.freeReducedLunch),not(request.user.programs.ebb_acf),not(request.user.programs.Identification),not(request.user.programs.leap),not(request.user.programs.medicaid),]
-            for group in Forms.all():
-                if group.document_title == "SNAP":
-                    checkAllForms[0] = True
-                    file_list["SNAP Card"] = False
-                if group.document_title == "Free and Reduced Lunch":
-                    checkAllForms[1] = True
-                    file_list["PSD Reduced Lunch Approval Letter"] = False
-                if group.document_title == "ACP Letter":
-                    checkAllForms[2] = True
-                    file_list["Affordable Connectivity Program"] = False
-                if group.document_title == "Identification":
-                    checkAllForms[3] = True
-                    file_list["Identification"] = False
-                if group.document_title == "LEAP Letter":
-                    checkAllForms[4] = True
-                    file_list["LEAP Letter"] = False
-                if group.document_title == "Medicaid":
-                    checkAllForms[5] = True
-                    file_list["Medicaid Card"] = False
-            if False in checkAllForms:
+            if not uploads_complete:
                 return "dashboard:files"
             else:
                 print("files found")
@@ -167,8 +109,6 @@ def what_page(user,request):
                 print("last 4 ssn found")
         except:
             return "application:filesInfoNeeded"
-
-
 
         return "dashboard:dashboard"
     else:
@@ -280,3 +220,86 @@ def get_iq_program_info(users_iq_program_status, iq_program):
             'program_name': 'spin',
         },
     }.get(iq_program)
+
+
+def check_user_file_upload_progress(request, file_list):
+    """Checks if user has uploaded all required documents
+    params:
+        request (object): Django request object
+        file_list (dict): Dictionary of required documents and whether or not they have been uploaded
+    Returns:
+        uploads_complete (bool): True if all required documents have been uploaded, False otherwise
+        file_list (dict): Dictionary of required documents and whether or not they have been uploaded
+    """
+    eligibility_programs = get_eligiblity_programs()
+    checkAllForms = {program['document_title'] : not getattr(request.user.programs, program['eligibility_program']) for program in eligibility_programs}
+    for file in request.user.files.all():
+        for program in eligibility_programs:
+            if file.document_title == program['document_title']:
+                checkAllForms[program['document_title']] = True
+                file_list[program['document_description']] = False
+                break
+
+    uploads_complete = all(checkAllForms.values())
+    return uploads_complete, file_list
+
+
+def get_eligiblity_programs():
+    """Returns a list of eligibility programs. This is just a shim for now
+    and will eventually be replaced by a call to the database through Django's ORM
+    Returns:
+        list: List of eligibility programs
+    """
+    return [
+        {
+            'eligibility_program': 'snap',
+            'document_title': 'SNAP',
+            'document_description': 'SNAP Card',
+            'get_ready_text': 'SNAP Card',
+        },
+        {
+            'eligibility_program': 'freeReducedLunch',
+            'document_title': 'Free and Reduced Lunch',
+            'document_description': 'PSD Reduced Lunch Approval Letter',
+            'get_ready_text': 'Poudre School District Letter (per child!)',
+        },
+        {
+            'eligibility_program': 'ebb_acf',
+            'document_title': 'ACP Letter',
+            'document_description': 'Affordable Connectivity Program',
+            'get_ready_text': 'Affordable Connectivity Program or Emergency Broadband Benefit Confirmation',
+        },
+        {
+            'eligibility_program': 'Identification',
+            'document_title': 'Identification',
+            'document_description': 'Identification',
+            'get_ready_text': 'Government Issued ID',
+        },
+        {
+            'eligibility_program': 'leap',
+            'document_title': 'LEAP Letter',
+            'document_description': 'LEAP Letter',
+            'get_ready_text': 'LEAP Letter',
+        },
+        {
+            'eligibility_program': 'medicaid',
+            'document_title': 'Medicaid',
+            'document_description': 'Medicaid Card',
+            'get_ready_text': 'Medicaid Card',
+        },
+    ]
+
+
+def get_users_eligiblity_programs(request):
+    """Returns a dictionary of eligibility programs and whether or not the user selected
+    the programs they can upload documents for.
+    params:
+        request (object): Django request object
+    Returns:
+        file_list (dict): Dictionary of eligibility programs and whether or not the user selected them
+    """
+    eligibility_programs = get_eligiblity_programs()
+    file_list = {}
+    for program in eligibility_programs:
+        file_list[program['document_description']] = getattr(request.user.programs, program['eligibility_program'])
+    return file_list
