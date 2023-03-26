@@ -20,7 +20,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from dashboard.backend import get_iq_program_info
-from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, attestationForm, UserUpdateForm, EligibilityUpdateForm
+from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, UserUpdateForm, EligibilityUpdateForm
 from .backend import addressCheck, validateUSPS, enroll_connexion_updates, get_dependant_info, model_to_dict
 from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility, EligibilityHistory
 
@@ -934,39 +934,6 @@ def IQProgramQuickApply(request, iq_program):
             },
         )
 
-
-def attestation(request):
-    if request.method == "POST": 
-        try:
-            existing = request.user.attestations
-            form = attestationForm(request.POST,instance = existing)
-        except AttributeError or ObjectDoesNotExist:
-            form = attestationForm(request.POST or None)
-        if form.is_valid():
-            print(form.data)
-            print(request.session)
-            try:
-                instance = form.save(commit=False)
-                instance.user_id = request.user
-                instance.save()
-                return redirect(reverse("dashboard:broadcast"))
-            except IntegrityError:
-                print("User already has information filled out for this section")
-            return redirect(reverse("application:available"))
-    else:
-        form = attestationForm()
-
-    return render(
-        request,
-        "application/attestation.html",
-        {
-            'form':form,
-            'step':6,
-            'formPageNum':formPageNum,
-            'Title': "Attestation",
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
 
 
 

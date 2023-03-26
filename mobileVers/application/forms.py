@@ -12,7 +12,7 @@ from django.contrib.auth.password_validation import validate_password
 
 from dashboard.models import TaxInformation
 
-from .models import User, Addresses, Eligibility, programs, choices, addressLookup, futureEmails, attestations, MoreInfo
+from .models import User, Addresses, Eligibility, programs, choices, addressLookup, futureEmails, MoreInfo
 
 # form for user account creation
 class UserForm(forms.ModelForm):
@@ -143,16 +143,7 @@ class programForm(forms.ModelForm):
             'Identification':'Identification Card',
             'ebb_acf':'Affordable Connectivity Program (ACP)',
             'leap':'Low-income Energy Assistance Program (LEAP)',
-        } 
-
-class attestationForm(forms.ModelForm):
-    class Meta:
-        model = attestations
-        fields = ['localAttestation', 'completeAttestation',]
-        labels  = { 
-            'localAttestation':'I am lawfully present in the United States and/or am ONLY applying on behalf on my children (under 18 years of age) who are lawfully present.',
-            'completeAttestation':'I verify the information stated on this application is true.',
-        } 
+        }
 
 class addressLookupForm(forms.ModelForm):
     class Meta:

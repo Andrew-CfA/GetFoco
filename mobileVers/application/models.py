@@ -491,6 +491,8 @@ class Dashboard_form_rearch(GenericTimeStampedModel):
     document_path = models.FileField(max_length=5000, upload_to=userfiles_path)
     
 
+# TODO: Should be deleted, but might need to ETL the data
+# before the model is deleted
 class attestations(TimeStampedModel):
     user_id = models.OneToOneField(
         User,
