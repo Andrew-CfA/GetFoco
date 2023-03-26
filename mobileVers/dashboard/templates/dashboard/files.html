@@ -37,11 +37,20 @@ the Free Software Foundation, either version 3 of the License, or
 
             
 <div style="margin-top: 3vh;">
-    <p>To get verified, please upload your</p>
-    <h3> {{program_string|linebreaks}} </h3>
+    <p style="margin-bottom: 25px;">To get verified, please upload your</p>
 
-    <br>
-    <br>
+    <div style="margin-bottom: 25px;">
+        {% for program, program_was_selected in programs.items %}
+            {% if program_was_selected %}
+                {% for option in program_options %}
+                    {% if option.document_description == program %}
+                        <p style="font-weight: 800;">{{ option.document_description }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
     <p >Uploaded documents are secure & not shared with anyone outside of Fort Collins' income eligible programs. </p>
     
 </div>

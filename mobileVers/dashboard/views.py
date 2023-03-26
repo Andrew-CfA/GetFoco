@@ -11,7 +11,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from .forms import FileForm, FeedbackForm, TaxForm
 from django.conf import settings as django_settings  
 
-from .backend import authenticate, files_to_string, get_eligiblity_programs, get_iq_programs, get_users_eligiblity_programs, what_page, blobStorageUpload, check_user_file_upload_progress
+from .backend import authenticate, get_eligiblity_programs, get_iq_programs, get_users_eligiblity_programs, what_page, blobStorageUpload, check_user_file_upload_progress
 from django.contrib.auth import get_user_model, login, authenticate
 from application.backend import broadcast_email, broadcast_sms, broadcast_email_pw_reset
 
@@ -84,7 +84,6 @@ def files(request):
                                 "message": "File is not a valid file type. Please upload either  JPG, PNG, OR PDF.",
                                 'form':form,
                                 'programs': file_list,
-                                'program_string': files_to_string(file_list),
                                 'program_options': eligiblity_programs,
                                 'step':5,
                                 'formPageNum':6,
@@ -116,7 +115,6 @@ def files(request):
                         {
                             'form':form,
                             'programs': file_list,
-                            'program_string': files_to_string(file_list),
                             'program_options': eligiblity_programs,
                             'step':5,
                             'formPageNum':6,
@@ -139,7 +137,6 @@ def files(request):
             {
                 'form':form,
                 'programs': file_list,
-                'program_string': files_to_string(file_list),
                 'program_options': eligiblity_programs,
                 'step':5,
                 'formPageNum':6,

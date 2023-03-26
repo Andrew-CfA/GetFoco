@@ -54,36 +54,6 @@ def get_user(self, user_id):
     except UserModel.DoesNotExist:
         return None
 
-def files_to_string(file_list):
-    list_string = ""
-    counter = 0
-
-    print(counter)
-    # Get File_List into easy to read list to print out in template
-    for key, value in file_list.items():
-        # only add things to the list_string if its true
-        if value == True:
-            # Also add commas based on counter
-            if counter == 5:
-                list_string += "\n"
-                counter = 4
-            elif counter == 4:
-                list_string += "\n"
-                counter = 3
-            elif counter == 3:
-                list_string += "\n"
-                counter = 2
-            elif counter == 2:
-                list_string += "\n"
-                counter = 1
-            elif counter == 1:
-                list_string += "\n"
-                counter = 0
-            else:
-                counter = 5
-            list_string += key
-    return list_string
-
 # redirect user to whatever page they need to go to every time by checking which steps they've
 # completed in the application process
 def what_page(user,request):
