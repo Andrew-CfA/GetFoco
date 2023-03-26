@@ -31,13 +31,10 @@ urlpatterns = [
     path('quickNotFound', views.quickNotFound, name='quickNotFound'),
     path('addressCorrection', views.addressCorrection, name='addressCorrection'),
     path('inServiceArea', views.inServiceArea, name='inServiceArea'),
-    path('GRQuickApply', views.GRQuickApply, name='GRQuickApply'),
     path('takeUSPSaddress', views.takeUSPSaddress, name='takeUSPSaddress'),
 
-    # Recreation Dependent Pages
-    path('RecreationQuickApply', views.RecreationQuickApply, name='RecreationQuickApply'),
-    path('ConnexionQuickApply', views.ConnexionQuickApply, name='ConnexionQuickApply'),
-    path('SPINQuickApply', views.SPINQuickApply, name='SPINQuickApply'),
+    # Create the IQ Program Quick Apply Page that has a parameter for the iq_program
+    path('IQProgramQuickApply/<str:iq_program>', views.IQProgramQuickApply, name='IQProgramQuickApply'),
     # ETC. pages
     path('comingSoon', views.comingSoon, name='comingSoon'),
     path('privacyPolicy', views.privacyPolicy, name='privacyPolicy'),

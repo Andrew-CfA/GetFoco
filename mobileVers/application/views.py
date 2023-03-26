@@ -18,6 +18,8 @@ from django.contrib import messages
 from django.http import QueryDict
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+
+from dashboard.backend import get_iq_program_info
 from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, attestationForm, UserUpdateForm, EligibilityUpdateForm
 from .backend import addressCheck, validateUSPS, enroll_connexion_updates, get_dependant_info, model_to_dict
 from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility, EligibilityHistory
@@ -886,25 +888,24 @@ def finances(request):
             },
         )
 
-def ConnexionQuickApply(request):
-    obj = request.user.eligibility
-    addr = request.user.addresses
-    print(obj.ConnexionQualified)
+
+def IQProgramQuickApply(request, iq_program):
+    iq_program = get_iq_program_info(request.user.eligibility, iq_program)
+
+    print(iq_program['status_for_user'])
     #print(request.user.eligibility.GRQualified)
     
     # Calculate if within the qualification range
-    qualifyAmiPc = iqProgramQualifications.objects.filter(name='connexion').values(
+    qualifyAmiPc = iqProgramQualifications.objects.filter(name=iq_program['program_name']).values(
         'percentAmi'
         ).first()['percentAmi']
-    print(obj.AmiRange_max)
-    print('Connexion max AMI %:',qualifyAmiPc)
-    
-    # If GenericQualified is 'ACTIVE' or 'PENDING' (this will assume they are being truthful with their income range)
-    if (obj.GenericQualified == QualificationStatus.ACTIVE.name or obj.GenericQualified == QualificationStatus.PENDING.name) and obj.AmiRange_max <= qualifyAmiPc:
-        obj.ConnexionQualified = QualificationStatus.PENDING.name
-        print(obj.ConnexionQualified)
-        obj.save()
-        
+    print(f'{iq_program["program_name"]} max AMI %:',qualifyAmiPc)
+
+    setattr(request.user.eligibility, iq_program['eligibility_column_name'], QualificationStatus.PENDING.name)
+    if iq_program['program_name'] == 'spin':
+        setattr(request.user.eligibility, 'spin_privacy_acknowledgement', True)
+    elif iq_program['program_name'] == 'connexion':
+        addr = request.user.addresses
         ## Check for Connexion services
         # Recreate the relevant parts of addressDict as if from validateUSPS()
         addressDict = {
@@ -915,152 +916,23 @@ def ConnexionQuickApply(request):
                     },
                 },
             }
-        isInGMA, hasConnexion = addressCheck(addressDict)
+        _, hasConnexion = addressCheck(addressDict)
         # Connexion status unknown, but since isInGMA==True at this point in
         # the application, Connexion will be available at some point
         if not hasConnexion:    # this covers both None and False
             return redirect(reverse("application:comingSoon"))
-        else:  # hasConnexion==True is the only remaining option
-            return render(
-                request,
-                "application/quickApply.html",
-                {
-                    'programName': 'Reduced-Rate Connexion',
-                    'Title': "Reduced-Rate Connexion Quick Apply Complete",
-                    'is_prod': django_settings.IS_PROD,
-                    },
-                )
-    else:
-        obj.ConnexionQualified = QualificationStatus.NOTQUALIFIED.name
-        print(obj.ConnexionQualified)
-        obj.save()
         
-        return render(
-            request,
-            'application/notQualify.html',
-            {
-                'programName': 'Reduced-Rate Connexion',
-                'Title': "Reduced-Rate Connexion Not Qualified",
-                'is_prod': django_settings.IS_PROD,
-                },
-            )
+    request.user.eligibility.save()
 
-def GRQuickApply(request):
-    obj = request.user.eligibility
-    print(obj.GRqualified)
-    #print(request.user.eligibility.GRQualified)
-    
-    
-    # Calculate if within the qualification range
-    qualifyAmiPc = iqProgramQualifications.objects.filter(name='grocery').values(
-        'percentAmi'
-        ).first()['percentAmi']  
-    print('Grocery max AMI %:',qualifyAmiPc)
-    
-    # If GenericQualified is 'ACTIVE' or 'PENDING' (this will assume they are being truthful with their income range)
-    if (obj.GenericQualified == QualificationStatus.ACTIVE.name or obj.GenericQualified == QualificationStatus.PENDING.name) and obj.AmiRange_max <= qualifyAmiPc:
-        obj.GRqualified = QualificationStatus.PENDING.name
-        obj.save()
-        return render(
-            request,
-            "application/quickApply.html",
-            {
-                'programName': 'Grocery Tax Rebate',
-                'Title': "Grocery Tax Rebate Quick Apply Complete",
-                'is_prod': django_settings.IS_PROD,
-                },
-            )
-    else:
-        obj.GRqualified = QualificationStatus.NOTQUALIFIED.name
-        obj.save()
-        return render(
-            request,
-            "application/notQualify.html",
-            {
-                'programName': 'Grocery Tax Rebate',
-                'Title': "Grocery Tax Rebate Not Qualified",
-                'is_prod': django_settings.IS_PROD,
-                },
-            )
-    print(obj.GRqualified)
-
-def RecreationQuickApply(request):
-    obj = request.user.eligibility
-    print(obj.RecreationQualified)
-    #print(request.user.eligibility.GRQualified)
-    
-    # Calculate if within the qualification range
-    qualifyAmiPc = iqProgramQualifications.objects.filter(name='recreation').values(
-        'percentAmi'
-        ).first()['percentAmi']
-    print('Recreation max AMI %:',qualifyAmiPc)
-    
-    # If GenericQualified is 'ACTIVE' or 'PENDING' (this will assume they are being truthful with their income range)
-    if (obj.GenericQualified == QualificationStatus.ACTIVE.name or obj.GenericQualified == QualificationStatus.PENDING.name) and obj.AmiRange_max <= qualifyAmiPc:
-        obj.RecreationQualified = QualificationStatus.PENDING.name
-        obj.save()
-        return render(
-            request,
-            "application/quickApply.html",
-            {
-                'programName': 'Recreation',
-                'Title': "Recreation Quick Apply Complete",
-                'is_prod': django_settings.IS_PROD,
-                },
-            )
-    else:
-        obj.RecreationQualified = QualificationStatus.NOTQUALIFIED.name        
-        print(obj.RecreationQualified)
-        obj.save()
-        return render(
-            request,
-            "application/notQualify.html",
-            {
-                'programName': 'Recreation',
-                'Title': "Recreation Not Qualified",
-                'is_prod': django_settings.IS_PROD,
-                },
-            )
-
-def SPINQuickApply(request):
-    obj = request.user.eligibility
-    print(obj.SPINQualified)
-    #print(request.user.eligibility.GRQualified)
-    
-    # Calculate if within the qualification range
-
-    qualifyAmiPc = iqProgramQualifications.objects.filter(name='spin').values(
-        'percentAmi'
-        ).first()['percentAmi']
-    print('SPIN max AMI %:',qualifyAmiPc)
-    
-    # If GenericQualified is 'ACTIVE' or 'PENDING' (this will assume they are being truthful with their income range)
-    if (obj.GenericQualified == QualificationStatus.ACTIVE.name or obj.GenericQualified == QualificationStatus.PENDING.name) and obj.AmiRange_max <= qualifyAmiPc:
-        obj.SPINQualified = QualificationStatus.PENDING.name
-        obj.spin_privacy_acknowledgement = True
-        obj.save()
-        return render(
-            request,
-            "application/quickApply.html",
-            {
-                'programName': 'Spin',
-                'Title': "Spin Quick Apply Complete",
-                'is_prod': django_settings.IS_PROD,
-                },
-            )
-    else:
-        obj.SPINQualified = QualificationStatus.NOTQUALIFIED.name        
-        print(obj.SPINQualified)
-        obj.save()
-        return render(
-            request,
-            "application/notQualify.html",
-            {
-                'programName': 'SPIN',
-                'Title': "SPIN Not Qualified",
-                'is_prod': django_settings.IS_PROD,
-                },
-            )
+    return render(
+        request,
+        "application/quickApply.html",
+        {
+            'programName': iq_program['program_name'].title(),
+            'Title': f"{iq_program['program_name'].title()} Quick Apply Complete",
+            'is_prod': django_settings.IS_PROD,
+            },
+        )
 
 
 def attestation(request):

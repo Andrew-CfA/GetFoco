@@ -178,7 +178,7 @@ def what_page(user,request):
 def build_qualification_button(users_enrollment_status):
     # Create a dictionary to hold the button information
     return {
-        'NOT QUALIFIED': {
+        'NOTQUALIFIED': {
             "text": "Can't Enroll",
             "color": "red",
             "textColor": "white"
@@ -225,11 +225,11 @@ def set_program_visibility(users_eligibility, program_name):
         return "none"
 
 
-def get_iq_program_info(users_iq_program_status, program):
+def get_iq_program_info(users_iq_program_status, iq_program):
     return {
         'connexion': {
             'status_for_user': users_iq_program_status.ConnexionQualified,
-            'quick_apply_link': reverse('application:ConnexionQuickApply'),
+            'quick_apply_link': reverse('application:IQProgramQuickApply', kwargs={'iq_program': iq_program}),
             'learn_more_link': 'https://www.fcgov.com/connexion/digital-equity',
             'title': 'Reduced-Rate Connexion',
             'subtitle': 'Connexion Assistance',
@@ -237,10 +237,12 @@ def get_iq_program_info(users_iq_program_status, program):
             'supplemental_info': 'Applications accepted all year',
             'eligibility_review_status': "We are reviewing your application! Stay tuned here and check your email for updates." if users_iq_program_status.ConnexionQualified == 'PENDING' else "",
             'eligibility_review_time_period': "Estimated Notification Time: Two Weeks" if users_iq_program_status.ConnexionQualified == 'PENDING' else "",
+            'eligibility_column_name': 'ConnexionQualified',
+            'program_name': 'connexion',
         },
         'grocery': {
             'status_for_user': users_iq_program_status.GRqualified,
-            'quick_apply_link': reverse('application:GRQuickApply'),
+            'quick_apply_link': reverse('application:IQProgramQuickApply', kwargs={'iq_program': iq_program}),
             'learn_more_link': 'https://www.fcgov.com/rebate/',
             'title': 'Grocery Tax Rebate',
             'subtitle': 'Food Assistance',
@@ -248,10 +250,12 @@ def get_iq_program_info(users_iq_program_status, program):
             'supplemental_info': 'Applications accepted all year',
             'eligibility_review_status': "We are reviewing your application! Stay tuned here and check your email for updates." if users_iq_program_status.GRqualified == 'PENDING' else "",
             'eligibility_review_time_period': "Estimated Notification Time: Two Weeks" if users_iq_program_status.GRqualified == 'PENDING' else "",
+            'eligibility_column_name': 'GRqualified',
+            'program_name': 'grocery',
         },
         'recreation': {
             'status_for_user': users_iq_program_status.RecreationQualified,
-            'quick_apply_link': reverse('application:RecreationQuickApply'),
+            'quick_apply_link': reverse('application:IQProgramQuickApply', kwargs={'iq_program': iq_program}),
             'learn_more_link': 'https://www.fcgov.com/recreation/reducedfeeprogram',
             'title': 'Recreation Reduced Fee',
             'subtitle': 'Recreation Assistance',
@@ -259,6 +263,8 @@ def get_iq_program_info(users_iq_program_status, program):
             'supplemental_info': 'Applications accepted all year',
             'eligibility_review_status': "We are reviewing your application! Stay tuned here and check your email for updates." if users_iq_program_status.RecreationQualified == 'PENDING' else "",
             'eligibility_review_time_period': "Estimated Notification Time: Two Weeks" if users_iq_program_status.RecreationQualified == 'PENDING' else "",
+            'eligibility_column_name': 'RecreationQualified',
+            'program_name': 'recreation',
         },
         'spin': {
             'status_for_user': users_iq_program_status.SPINQualified,
@@ -270,5 +276,7 @@ def get_iq_program_info(users_iq_program_status, program):
             'supplemental_info': 'Applications accepted all year',
             'eligibility_review_status': "We are reviewing your application! Stay tuned here and check your email for updates." if users_iq_program_status.SPINQualified == 'PENDING' else "",
             'eligibility_review_time_period': "Estimated Notification Time: Two Weeks" if users_iq_program_status.SPINQualified == 'PENDING' else "",
+            'eligibility_column_name': 'SPINQualified',
+            'program_name': 'spin',
         },
-    }.get(program)
+    }.get(iq_program)
