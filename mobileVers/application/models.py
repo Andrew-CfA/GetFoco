@@ -179,6 +179,7 @@ class Eligibility(TimeStampedModel):
     GRqualified = models.CharField(max_length=20)
     RecreationQualified = models.CharField(max_length=20)
     SPINQualified = models.CharField(max_length=20)
+    SpinAccessQualified_depr = models.CharField(max_length=20)
 
     #TODO 5/13/2021
     #insert other rebate flags here i.e.

@@ -159,8 +159,34 @@ the Free Software Foundation, either version 3 of the License, or
                 confirmButtonText: 'Continue'
             })
         });
+    $(document).ready(function() {     
+        $("#myBtn").click(function() {
+            var modalContent = `
+                <div class ="fadeSmall">
+                    <p style="color: var(--darkblue);">If you are uploading multiple files, be sure to click and <b>hold</b> the Ctrl key on your keyboard and click on each file. See an example below!</p>
+                </div>
+
+                <div class ="fadeLarge">
+                    <p style="color: var(--darkblue);">Be sure to take your pictures first and then choose gallery or similar and long press or hold on each item to upload multiple files. See an example below!</p>
+                </div>
+
+                <div class="fadeSmall">
+                    <img src="{% static 'application/images/step_5_desktop_instructions.gif' %}">
+                </div>
+                <div class="fadeLarge">
+                    <img src="{% static 'application/images/step_5_mobile_instructions.gif' %}">
+                </div>
+            `;
+            Swal.fire( {
+                title: 'Uploading Multiple Files',
+                html: modalContent,
+                confirmButtonColor: '#13467D',
+                confirmButtonText: 'Continue'
+            })
+        });
         
         if (fileUploadSuccessful === null) {
+            // The user has come to the page for the first time
             // The user has come to the page for the first time
             // or has refreshed the page
             Swal.fire( {
@@ -171,6 +197,15 @@ the Free Software Foundation, either version 3 of the License, or
             })
         } else if (fileUploadSuccessful) {
             Swal.fire( {
+                title: 'File Upload',
+                html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
+                confirmButtonColor: '#13467D',
+                confirmButtonText: 'Continue'
+            })
+        } else if (fileUploadSuccessful) {
+            Swal.fire( {
+                title: 'Your file has been uploaded!',
+                html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
                 title: 'Your file has been uploaded!',
                 html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
                 icon: 'success',
