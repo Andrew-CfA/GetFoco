@@ -18,7 +18,7 @@ urlpatterns = [
     path('finances', views.finances, name='finances'),
     path('programs', views.programs, name='programs'),
     path('attestation', views.attestation, name='attestation'),
-    path('moreInfoNeeded', views.moreInfoNeeded, name='moreInfoNeeded'),
+    path('householdMembers', views.householdMembers, name='householdMembers'),
     path('filesInfoNeeded', views.filesInfoNeeded, name='filesInfoNeeded'),
     
 

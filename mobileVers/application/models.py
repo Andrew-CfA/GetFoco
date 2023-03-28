@@ -78,6 +78,19 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
+# Class to automate generic timestamps in database data
+class GenericTimeStampedModel(models.Model):
+    """
+    An abstract base class model that provides auto-updating ``created_at`` and
+    ``modified_at`` fields.
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        abstract = True
+
+
 class CIEmailField(CaseInsensitiveFieldMixin, models.EmailField):
     """
     Create an email field with case-insensitivity.
@@ -200,6 +213,19 @@ class MoreInfo(TimeStampedModel):
     dependentInformation = JSONField(null=True,blank=True)
     #dependentsBirthdate = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
     #dependentsName = models.CharField(max_length=20)
+
+class HouseholdMembers(GenericTimeStampedModel):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,   # set this to the primary key of this model
+    )
+
+    # Store the household info (individuals' names and birthdates) as JSON for
+    # quick storage and reference
+    household_info = JSONField(null=True,blank=True)
+    created_at_init_temp = models.DateTimeField(null=True)
+    modified_at_init_temp = models.DateTimeField(null=True)
     
 
 # Programs model class attached to user (will delete as user account is deleted too)
