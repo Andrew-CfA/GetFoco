@@ -6,6 +6,7 @@ The universal income-qualified application for the City of Fort Collins, Colorad
 
 # Table of Contents
 1. [Get FoCo](#get-foco)
+1. [Table of Contents](#table-of-contents)
 1. [Development and Deployment](#development-and-deployment)
     1. [manage.py](#managepy)
     1. [Local Development](#local-development)
@@ -26,6 +27,9 @@ The universal income-qualified application for the City of Fort Collins, Colorad
         1. [Transferring Between Databases](#transferring-between-databases)
         1. [Set Up Database Users](#set-up-database-users)
 1. [Request a Consultation](#request-a-consultation)
+1. [Appendix](#appendix)
+    1. [Database Administration Tools](#database-administration-tools)
+        1. [Delete User](#delete-user)
 
 # Development and Deployment
 This app uses files in the `settings/` directory for its environment settings. There are three categories of use cases:
@@ -179,61 +183,88 @@ If there isn't yet existing data, just run Django migrations to the new \<target
     pg_restore -v --no-owner --host=<target_hostname> --port=5432 --username=<target_admin_username> --dbname=<target_database_name> <target_local_backup_file>
 
 ### Set Up Database Users
-This section details setting up users and roles, and setting proper permissions. Roles are used for generic permissions so that future users can be added without having to re-grant all permissions.
+This section details the order of steps to set up users, roles, and proper permissions. Roles are used for generic permissions so that future users can be added without having to re-grant all permissions.
 
 The admin user shouldn't be used for development or live database connections; a privileged user should instead be created for local development access and a base user created with minimal privileges for the webapp. The privileged user will be stored in each environment's `secrets_*.json` file and the base user will be in the `*.env` file (see [App Secrets](#app-secrets)).
 
-#### Revoke Initial Access
-Azure Database for Postgres Flexible Server with Postgres-only Authentication gives full access to the 'public' role by default (which is counterintuitive). Run these commands once on a new database to reset to zero-trust (where \<database_name\> is the database for use with Django, e.g. `getfoco_dev`).
+1. Revoke initial access
 
-    REVOKE ALL ON SCHEMA public FROM public;
-    REVOKE ALL ON ALL TABLES IN SCHEMA public FROM public;
-    REVOKE ALL ON DATABASE <database_name> FROM public;
-    REVOKE ALL ON DATABASE azure_maintenance FROM public;
-    REVOKE ALL ON DATABASE azure_sys FROM public;
-    REVOKE ALL ON DATABASE postgres FROM public;
+    Azure Database for Postgres Flexible Server with Postgres-only Authentication gives full access to the 'public' role by default (which is counterintuitive). Run these commands once on a new database to reset to zero-trust (where \<database_name\> is the database for use with Django, e.g. `getfoco_dev`).
 
-#### Create Admin Role
-Create and permissions an admin user role (named `admin_role`) without login privileges, then grant this role to the Postgres admin account.
+        REVOKE ALL ON SCHEMA public FROM public;
+        REVOKE ALL ON ALL TABLES IN SCHEMA public FROM public;
+        REVOKE ALL ON DATABASE <database_name> FROM public;
+        REVOKE ALL ON DATABASE azure_maintenance FROM public;
+        REVOKE ALL ON DATABASE azure_sys FROM public;
+        REVOKE ALL ON DATABASE postgres FROM public;
 
-    CREATE ROLE admin_role INHERIT;
-    GRANT ALL ON SCHEMA public TO admin_role;
-    GRANT ALL ON DATABASE <database_name> TO admin_role;
-    GRANT ALL ON ALL TABLES IN SCHEMA public TO admin_role;
-    GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO admin_role;
-    GRANT ALL ON DATABASE postgres TO admin_role;        
-    GRANT admin_role TO <admin_user>;
-    ALTER DEFAULT PRIVILEGES FOR ROLE admin_role IN SCHEMA public GRANT ALL ON TABLES TO admin_role;
-    ALTER DEFAULT PRIVILEGES FOR ROLE admin_role GRANT ALL ON SCHEMAS TO admin_role;
+1. Create admin role
 
-#### Create Basic Role
-Create and permissions base user role (named `base_role`, for use via Django) without login privileges.
+    Create and permissions an admin user role (named `admin_role`) without login privileges, then grant this role to the Postgres admin account.
 
-    CREATE ROLE base_role INHERIT;
-    GRANT CONNECT ON DATABASE <database_name> TO base_role;
-    GRANT USAGE ON SCHEMA public TO base_role;
-    GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO base_role;
-    GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO base_role;
-    -- Grant this role to admin user (permanently, but to no material affect) to alter default privileges
-    GRANT base_role TO <admin_user>;
-    -- This is so all tables GRANTs apply to new tables as well
-    ALTER DEFAULT PRIVILEGES FOR ROLE base_role IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO base_role;
+        CREATE ROLE admin_role INHERIT;
+        GRANT ALL ON SCHEMA public TO admin_role;
+        GRANT ALL ON DATABASE <database_name> TO admin_role;
+        GRANT ALL ON ALL TABLES IN SCHEMA public TO admin_role;
+        GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO admin_role;
+        GRANT ALL ON DATABASE postgres TO admin_role;        
+        GRANT admin_role TO <admin_user>;
 
-#### Create Privileged Role
-Create and permissions privileged user role (named `privileged_role`, for local developer use) without login privileges. Start by granting `base_role` permissions then add CREATE/DROP table permissions.
+1. Create basic role
 
-    CREATE ROLE privileged_role INHERIT;
-    GRANT base_role TO privileged_role;
-    GRANT CREATE ON SCHEMA public TO privileged_role;
-    GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO privileged_role;
+    Create and permissions base user role (named `base_role`, for use via Django) without login privileges.
 
-#### Create and Assign Users
-Create users (with passwords and login privileges) and assign the proper role to each (`base_role` for Django users, `privileged_role` for local developers).
+        CREATE ROLE base_role INHERIT;
+        GRANT CONNECT ON DATABASE <database_name> TO base_role;
+        GRANT USAGE ON SCHEMA public TO base_role;
+        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO base_role;
+        GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO base_role;
+        -- Grant this role to admin user (permanently, but to no material affect) to alter default privileges
+        GRANT base_role TO <admin_user>;
+        -- This is so all tables GRANTs apply to new tables as well
+        ALTER DEFAULT PRIVILEGES FOR ROLE base_role IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO base_role;
 
-    CREATE USER <username> WITH LOGIN PASSWORD '<password>' INHERIT;
-    GRANT <role> TO <username>;
+1. Create privileged role
 
-#### Delete User
+    Create and permissions privileged user role (named `privileged_role`, for local developer use) without login privileges. Start by granting `base_role` permissions then add CREATE/DROP table permissions.
+
+        CREATE ROLE privileged_role INHERIT;
+        GRANT base_role TO privileged_role;
+        GRANT CREATE ON SCHEMA public TO privileged_role;
+        GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO privileged_role;
+
+1. Create and assign users
+
+    Create users (with passwords and login privileges) and assign the proper role to each (`base_role` for Django users, `privileged_role` for local developers).
+
+        CREATE USER <username> WITH LOGIN PASSWORD '<password>' INHERIT;
+        GRANT <role> TO <username>;
+
+1. Alter default privileges
+
+    Once the privileged user *(not role)* is created, GRANT that user to the admin user so that the admin user can alter default privileges on behalf of the privileged user. Altering the default privileges as below will ensure `base_role` (and users within that role) has the proper privileges on any new tables within the `public` schema that are created by the privileged user.
+
+    > Note that the ALTER DEFAULT PRIVILEGES command is run *for* the table-creation user (privileged user), *on* `base_role`. Because it's specific to the privileged user and not the privileged *role*, the ALTER DEFAULT PRIVILEGES command will need to be repeated for each privileged user that will be creating tables.
+
+        -- Grant this role to admin user to alter default privileges
+        GRANT <privileged_user> TO <admin_user>;
+
+        -- This is so all tables GRANTs apply to new tables as well
+        ALTER DEFAULT PRIVILEGES FOR USER <privileged_user> GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO base_role;    
+
+# Request a Consultation
+
+The Get FoCo team is proud of the product we've created and we've released it as open-source to encourage its use in other organizations. If you'd like a consultation for implementing in your organization, please contact any of the program contributors with what you're looking for and we'll be in touch:
+
+Tim Campbell (program integration): `ConsultTim [at] outlook [dot] com`
+
+Andrew Hernandez (software development): `JonAndrew [at] outlook [dot] com`
+
+# Appendix
+
+## Database Administration Tools
+
+### Delete User
 This is in the event a user needs to be deleted (except the original admin user, which can't be deleted). A role can be deleted using this same method, but permissions will need to be dispersed to a new user if proper access is to be maintained.
 
     REVOKE privileged_role FROM <username> CASCADE;
@@ -251,11 +282,3 @@ This is in the event a user needs to be deleted (except the original admin user,
     --DROP OWNED BY <username>;
     
     DROP USER <username>;
-
-# Request a Consultation
-
-The Get FoCo team is proud of the product we've created and we've released it as open-source to encourage its use in other organizations. If you'd like a consultation for implementing in your organization, please contact any of the program contributors with what you're looking for and we'll be in touch:
-
-Tim Campbell (program integration): `ConsultTim [at] outlook [dot] com`
-
-Andrew Hernandez (software development): `JonAndrew [at] outlook [dot] com`
