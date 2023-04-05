@@ -17,8 +17,7 @@ from django.conf import settings
 from azure.storage.blob import BlockBlobService
 
 from py_models.qualification_status import QualificationStatus
-from application.models import MoreInfo, Addresses, iqProgramQualifications, Eligibility
-from decimal import Decimal
+from application.models import HouseholdMembers, Addresses, iqProgramQualifications
 
 
 def blobStorageUpload(filename, file):
@@ -108,13 +107,13 @@ def what_page(user,request):
             return "application:finances"
 
         try: #check if dependents / birthdays are filled
-            if(MoreInfo.objects.all().filter(user_id_id=searchForUser).exists()):
+            if(HouseholdMembers.objects.all().filter(user_id=searchForUser).exists()):
                 print("MoreInfo exists")
             else:
                 print("MoreInfo doesn't exist")
-                return "application:moreInfoNeeded"
+                return "application:householdMembers"
         except AttributeError or ObjectDoesNotExist:
-            return "application:moreInfoNeeded"
+            return "application:householdMembers"
         
         try: #check if programs is filled out
             value = request.user.programs

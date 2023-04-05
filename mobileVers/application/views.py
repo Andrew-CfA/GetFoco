@@ -4,31 +4,25 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version
 """
-from concurrent.futures.process import _python_exit
 import json
 from django.core.serializers.json import DjangoJSONEncoder
-from multiprocessing.sharedctypes import Value
 from django.conf import settings as django_settings
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login, logout
-from django.forms.models import modelformset_factory
-from django.contrib.auth.models import AnonymousUser
-from django.contrib.auth.password_validation import validate_password
-from django.contrib import messages
 from django.http import QueryDict
 from django.db import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, MoreInfoForm, attestationForm, UserUpdateForm, EligibilityUpdateForm
-from .backend import addressCheck, validateUSPS, enroll_connexion_updates, get_dependant_info, model_to_dict
-from .models import AMI, MoreInfo, iqProgramQualifications, User, Eligibility, EligibilityHistory
+from django.core.exceptions import ObjectDoesNotExist
+from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, HouseholdMembersForm, attestationForm, UserUpdateForm, EligibilityUpdateForm
+from .backend import addressCheck, serialize_household_members, validateUSPS, enroll_connexion_updates, model_to_dict
+from .models import AMI, iqProgramQualifications, User, Eligibility, EligibilityHistory
 
 from py_models.qualification_status import QualificationStatus
 
-import logging, re
+import logging
 import usaddress
 from decimal import Decimal
 
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from py_models.decorators import set_update_mode
 
 
@@ -715,60 +709,45 @@ def filesInfoNeeded(request):
             'is_prod': django_settings.IS_PROD,
             },
         )
-     
+
 @set_update_mode
-def moreInfoNeeded(request):
+def householdMembers(request):
     if request.method =="POST":
         # Check if the update_mode exists in the POST data.
         update_mode = request.POST.get('update_mode')
         try:
-            if update_mode:
-                existing = MoreInfo.objects.get(user_id=request.user.id)
-                form = MoreInfoForm(request.POST,instance=existing)
-            else:
-                existing = request.user.MoreInfo
-                form = MoreInfoForm(request.POST,instance=existing)
+            existing = request.user.householdmembers
+            form = HouseholdMembersForm(request.POST,instance=existing)
         except AttributeError or ObjectDoesNotExist:
-            form = MoreInfoForm(request.POST or None)
-        
-        try:
-            instance = form.save(commit=False)
-            instance.user_id = request.user
-            instance.dependentInformation = str(form.data)
-            instance.save()
-            if update_mode:
-                return redirect(f"{reverse('dashboard:settings')}?page_updated=financial")
-            return redirect(reverse("application:programs"))
-        except IntegrityError:
-            print("User already has information filled out for this section")
-            return redirect(reverse("application:programs"))
+            form = HouseholdMembersForm(request.POST or None)
+
+        instance = form.save(commit=False)
+        instance.user_id = request.user.id        
+        instance.household_info = serialize_household_members(request)
+        instance.save()
+        if update_mode:
+            return redirect(f"{reverse('dashboard:settings')}?page_updated=financial")
+        return redirect(reverse("application:programs"))
     else:
-        dependant_info = None
-        # We're only checking if the query parameter even exists, not its value
-        # if there is a query parameter, we're in update mode and we want to show the form
-        # with user's existing data. If there is no query parameter, the user is just now
-        # starting the application.
-        if request.session.get('update_mode'):
-            # Query the users table for the user's data
-            more_info = MoreInfo.objects.get(user_id=request.user.id)
-            dependant_info = get_dependant_info(more_info)
-            form = MoreInfoForm(instance=more_info)
-        else:
-            form = MoreInfoForm()
-     
-        return render(
+        form = HouseholdMembersForm(request.POST or None)
+        try:
+            household_info = request.user.householdmembers.household_info
+        except AttributeError:
+            household_info = None
+
+    return render(
             request,
-            "application/moreInfoNeeded.html",
+            "application/householdMembers.html",
             {
                 'step':3,
                 'dependent': str(request.user.eligibility.dependents),
                 'list':list(range(request.user.eligibility.dependents)),
                 'form':form,
                 'formPageNum':6,
-                'Title': "More Info Needed",
+                'Title': "Household Members",
                 'is_prod': django_settings.IS_PROD,
                 'update_mode': request.session.get('update_mode'),
-                'form_data': json.dumps(dependant_info) if dependant_info else None,
+                'form_data': json.dumps(household_info) if household_info else [],
                 },
             )
 
@@ -822,7 +801,7 @@ def finances(request):
                 user=request.user,
                 # Convert the eligibility object to a dictionary and then to a JSON string
                 # and set it to the historical_eligibility field
-                historical_eligibility=json.dumps(users_eligibility, cls=DjangoJSONEncoder)                                
+                historical_eligibility=json.loads(json.dumps(users_eligibility, cls=DjangoJSONEncoder))                                
             )
             eligibility_history.save()
 
@@ -856,9 +835,9 @@ def finances(request):
             Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.PENDING.name)
 
         if update_mode:
-            return redirect(f'{reverse("application:moreInfoNeeded")}?update_mode=1')
+            return redirect(f'{reverse("application:householdMembers")}?update_mode=1')
         else:
-            return redirect(reverse("application:moreInfoNeeded"))
+            return redirect(reverse("application:householdMembers"))
 
     else:
         if request.session.get('update_mode'):

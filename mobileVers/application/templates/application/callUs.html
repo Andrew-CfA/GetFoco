@@ -7,11 +7,12 @@ the Free Software Foundation, either version 3 of the License, or
 <!-- This brings in the CSS-->
 {% load static %}
 
+<!-- TODO: This page should no longer be referenced - ensure it is indeed no longer needed and delete it -->
 <!DOCTYPE html>
 <html lang="en">
     <!--Get the various stylesheets I need like my fonts and CSS-->
     <head>
-        <title>Feedback Received</title>
+        <title>Call Us</title>
         <link href="{% static 'application/styles_app.css' %}" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap" rel="stylesheet">
@@ -39,14 +40,34 @@ the Free Software Foundation, either version 3 of the License, or
             <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR {{ db_env_str }} ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
         {% endif %}
         
-        <div class="content spaceAround">
+        <div class="fadeLarge">
+            <div class=nav>
+                <a class="row" onClick="window.history.back();return false;">
+                    <img src="{% static 'application/images/BackArrow-white.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;">
+                    <p style = "color:white; font-weight: 700;">BACK</p>
+                </a>
+                <img src="{% static 'application/images/X_white.svg' %}" alt="back" style="width:max(2.6vw, 16px); margin-right: 5px;" onclick="location.href='{% url 'application:index' %}'">
+            </div>
+        </div>
+
+        <div class="fadeSmall">
+            <div class=navClean>
+                <a class="row" onClick="window.history.back();return false;">
+                    <img src="{% static 'application/images/BackArrow-darkblue.svg' %}" alt="back" style="width:max(4.5vw, 16px); margin-right: 5px;">
+                    <p style = "color:#13467D; font-weight: 700;">BACK</p>
+                </a>
+                <img src="{% static 'application/images/X_gray.svg' %}" alt="back" style="width:max(2.6vw, 16px); margin-right: 5px;" onclick="location.href='{% url 'application:index' %}'">
+            </div>
+        </div>
+        <div class="content spaceAround" style="padding: 0 0 0 3vw;">
             <!--NOTE: For the future have numbers change based on database-->
-            <h1><b>Thank you for submitting your feedback!</b></h1>
+            <h2><b>We need some more information to set you up with the Grocery Rebate Program, please give us a call at: 970-416-2304 or email us at <a class=yellow href="mailto:groceryrebates@fcgov.com"><u>groceryrebates@fcgov.com!</u></a></b></h2>
                 <!--Whatever I need in the other pages, I can enter it here-->
 
         </div>
-        <div class="footer">
+        <div class="footer" style="width:100%">
             <button onclick="location.href='{% url 'dashboard:dashboard' %}'"> CONTINUE </button>
         </div>
     </body>
 </html>
+

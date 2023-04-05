@@ -13,6 +13,8 @@ psycopg2-binary
 django-crispy-forms
 python-magic
 azure-storage-blob==2.1.0
+gunicorn
+whitenoise
 #pytesseract
 #tesseract need to system install, not pip install... i think
 #poppler need to system install
