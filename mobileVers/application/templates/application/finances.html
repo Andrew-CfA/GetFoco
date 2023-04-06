@@ -101,16 +101,16 @@ the Free Software Foundation, either version 3 of the License, or
 
   $(document).ready(function(){
     $("#id_dependents").on("input", function() {
-      var url = $("#eligibilityForm").attr("gahi-selector-url");  // get the url of the `load_cities` view
-      var dependentsId = $(this).val();  // get the selected country ID from the HTML input
+      var url = $("#eligibilityForm").attr("gahi-selector-url");  // get the url of the `gahi-selector` view
+      var dependentsId = $(this).val();  // get the selected GAHI range from the HTML input
 
       $.ajax({                       // initialize an AJAX request
-        url: '{% url 'application:ajax_load_gahi' %}',                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        url: '{% url 'application:ajax_load_gahi' %}',                    // set the url of the request (= /hr/income_dropdown_list_options/)
         data: {
-          'dependents': dependentsId       // add the country id to the GET parameters
+          'dependents': dependentsId       // add the number of individuals to the GET parameters
         },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-          $("#gahiDiv").html(data);  // replace the contents of the city input with the data that came from the server
+        success: function (data) {   // `data` is the return of the `gahi-selector` view function
+          $("#gahiDiv").html(data);  // replace the contents of the individuals input with the data that came from the server
 
           if (update_mode) {
             $("#id_grossAnnualHouseholdIncome").val('{{ form.grossAnnualHouseholdIncome.value }}');
