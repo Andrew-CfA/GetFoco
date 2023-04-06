@@ -229,7 +229,7 @@ def get_iq_program_info(users_iq_program_status, program):
         'connexion': {
             'status_for_user': users_iq_program_status.ConnexionQualified,
             'quick_apply_link': reverse('application:ConnexionQuickApply'),
-            'learn_more_link': 'https://www.fcgov.com/connexion/digital-equity',
+            'learn_more_link': 'https://fcconnexion.com/digital-inclusion-program/',
             'title': 'Reduced-Rate Connexion',
             'subtitle': 'Connexion Assistance',
             'description': 'As Connexion comes online in neighborhoods across our community, the City of Fort Collins is committed to fast, affordable internet. Digital Access & Equity is an income-qualified rate of $19.95 per month for 1 gig-speed of internet plus wireless.',
