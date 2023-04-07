@@ -70,7 +70,7 @@ the Free Software Foundation, either version 3 of the License, or
                   <a style="color: {{ dashboard_color }} ; " href="{% url 'dashboard:dashboard' %}"><li>Dashboard</li></a>
                   <a style="color:{{ program_list_color }}; " href="{% url 'dashboard:ProgramsList' %}"><li>Program List</li></a>
                   <a style="color:{{ Settings_color }}; " href="{% url 'dashboard:settings' %}"><li>Settings</li></a>
-                  {% if max_ami <= 0.6 and eligibility == 'ACTIVE' %}
+                  {% if badge_visible %}
                   <a class="badge" style="color:{{ Settings_color }}; " href="#"><li>Badge</li></a>
                   {% endif %}
                   <a style="color:{{ Privacy_Policy_color }}; " href="{% url 'application:privacyPolicy' %}"><li>Privacy Policy</li></a>
@@ -88,7 +88,7 @@ the Free Software Foundation, either version 3 of the License, or
                   <p> <img src="{% static 'dashboard/images/Dashboard.svg' %}">  <a style="color: {{ dashboard_color }}; text-decoration:none; " href="{% url 'dashboard:dashboard' %}">Dashboard</a></p>
                   <p> <img src="{% static 'dashboard/images/ProgramList.svg' %}"> <a style="color:{{ program_list_color }}; text-decoration:none;" href="{% url 'dashboard:ProgramsList' %}">Programs</a></p>
                   <p> <img src="{% static 'dashboard/images/Settings.svg' %}">  <a style="color:{{ Settings_color }};text-decoration:none; " href="{% url 'dashboard:settings' %}">Settings</a></p>
-                  {% if eligibility == 'ACTIVE' %}
+                  {% if badge_visible %}
                   <p class="badge">  <i class="fa-solid fa-certificate"></i><a style="color:white;text-decoration:none;padding-left:10px;" href="#">Badge</a></p>
                   {% endif %}
                   <p> <img src="{% static 'dashboard/images/PrivacyPolicy.svg' %}">  <a style="color:{{ Privacy_Policy_color }};text-decoration:none; " href="{% url 'application:privacyPolicy' %}">Privacy Policy</a></p>

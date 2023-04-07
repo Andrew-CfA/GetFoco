@@ -568,8 +568,8 @@ def dashboardGetFoco(request):
             "clientEmail": request.user.email,
 
             'is_prod': django_settings.IS_PROD,
-            'eligibility': request.user.eligibility.GenericQualified,
             'proxy_viewed_dashboard': proxy_viewed_dashboard,
+            'badge_visible': True if float(request.user.eligibility.AmiRange_max) <= float(0.6000) and request.user.eligibility.GenericQualified == 'ACTIVE' else False,
         },
     )
 
