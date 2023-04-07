@@ -159,31 +159,6 @@ the Free Software Foundation, either version 3 of the License, or
                 confirmButtonText: 'Continue'
             })
         });
-    $(document).ready(function() {     
-        $("#myBtn").click(function() {
-            var modalContent = `
-                <div class ="fadeSmall">
-                    <p style="color: var(--darkblue);">If you are uploading multiple files, be sure to click and <b>hold</b> the Ctrl key on your keyboard and click on each file. See an example below!</p>
-                </div>
-
-                <div class ="fadeLarge">
-                    <p style="color: var(--darkblue);">Be sure to take your pictures first and then choose gallery or similar and long press or hold on each item to upload multiple files. See an example below!</p>
-                </div>
-
-                <div class="fadeSmall">
-                    <img src="{% static 'application/images/step_5_desktop_instructions.gif' %}">
-                </div>
-                <div class="fadeLarge">
-                    <img src="{% static 'application/images/step_5_mobile_instructions.gif' %}">
-                </div>
-            `;
-            Swal.fire( {
-                title: 'Uploading Multiple Files',
-                html: modalContent,
-                confirmButtonColor: '#13467D',
-                confirmButtonText: 'Continue'
-            })
-        });
         
         if (fileUploadSuccessful === null) {
             // The user has come to the page for the first time
