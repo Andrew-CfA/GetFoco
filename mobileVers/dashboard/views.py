@@ -172,10 +172,6 @@ def files(request):
                             'is_prod': django_settings.IS_PROD,
                             },
                         )
-                
-                # if affordable connectivity program is chosen
-                elif request.user.programs.ebb_acf == True:
-                    return redirect(reverse("application:filesInfoNeeded"))
                 else:
                     return redirect(reverse("dashboard:broadcast")) 
             else:

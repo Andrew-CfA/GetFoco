@@ -159,16 +159,6 @@ def what_page(user,request):
         except AttributeError:
             return "dashboard:files"
 
-        try: #check if ACP last four SSN is needed or not...
-            if ((request.user.programs.ebb_acf) == True) and ((request.user.taxinformation.last4SSN) == "NULL"):
-                return "application:filesInfoNeeded"
-            else:
-                print("last 4 ssn found")
-        except:
-            return "application:filesInfoNeeded"
-
-
-
         return "dashboard:dashboard"
     else:
         return "application:account"

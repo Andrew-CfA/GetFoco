@@ -19,7 +19,6 @@ urlpatterns = [
     path('programs', views.programs, name='programs'),
     path('attestation', views.attestation, name='attestation'),
     path('householdMembers', views.householdMembers, name='householdMembers'),
-    path('filesInfoNeeded', views.filesInfoNeeded, name='filesInfoNeeded'),
     
 
     # Available/NotAvailable Digital Equity in your area
