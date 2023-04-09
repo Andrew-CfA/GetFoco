@@ -679,43 +679,6 @@ def account(request):
             'update_mode': request.session.get('update_mode'),
             },
         )
-def filesInfoNeeded(request):
-    '''
-    can be used in the future for more information that may be needed from client pertaining to IQ programs
-    i.e. ACP requires last 4 digits of SSN
-    '''
-    if request.method =="POST":
-        try:
-            existing = request.user.MoreInfo
-            form = FilesInfoForm(request.POST,instance = existing)
-        except AttributeError or ObjectDoesNotExist:
-            form = FilesInfoForm(request.POST or None)
-        if form.is_valid():
-            try:
-                instance = form.save(commit=False)
-                instance.user_id = request.user
-                instance.last4SSN = form.cleaned_data['last4SSN']
-                instance.save()
-                return redirect(reverse("dashboard:broadcast"))
-            except IntegrityError:
-                print("User already has information filled out for this section")
-                return redirect(reverse("dashboard:broadcast"))
-        else:
-            print(form.data)
-    else:
-        form = FilesInfoForm()
-     
-    return render(
-        request,
-        "application/filesInfoNeeded.html",
-        {
-            'step':5,
-            'form':form,
-            'formPageNum':6,
-            'Title': "IQ Program Info Needed",
-            'is_prod': django_settings.IS_PROD,
-            },
-        )
 
 @set_update_mode
 def householdMembers(request):

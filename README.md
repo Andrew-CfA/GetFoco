@@ -256,9 +256,11 @@ The admin user shouldn't be used for development or live database connections; a
 
 The Get FoCo team is proud of the product we've created and we've released it as open-source to encourage its use in other organizations. If you'd like a consultation for implementing in your organization, please contact any of the program contributors with what you're looking for and we'll be in touch:
 
-Tim Campbell (program integration): `ConsultTim [at] outlook [dot] com`
+Tim Campbell (program integration, backend development): `ConsultTim [at] outlook [dot] com`
 
 Andrew Hernandez (software development): `JonAndrew [at] outlook [dot] com`
+
+Jade Cowan (software development): `jade.cowan [at] penoptech [dot] com`
 
 # Appendix
 

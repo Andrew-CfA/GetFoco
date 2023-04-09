@@ -101,14 +101,6 @@ def what_page(user,request):
         except AttributeError:
             return "dashboard:files"
 
-        try: #check if ACP last four SSN is needed or not...
-            if ((request.user.programs.ebb_acf) == True) and ((request.user.taxinformation.last4SSN) == "NULL"):
-                return "application:filesInfoNeeded"
-            else:
-                print("last 4 ssn found")
-        except:
-            return "application:filesInfoNeeded"
-
         return "dashboard:dashboard"
     else:
         return "application:account"
@@ -169,7 +161,7 @@ def get_iq_program_info(users_iq_program_status, iq_program):
         'connexion': {
             'status_for_user': users_iq_program_status.ConnexionQualified,
             'quick_apply_link': reverse('application:IQProgramQuickApply', kwargs={'iq_program': iq_program}),
-            'learn_more_link': 'https://www.fcgov.com/connexion/digital-equity',
+            'learn_more_link': 'https://fcconnexion.com/digital-inclusion-program/',
             'title': 'Reduced-Rate Connexion',
             'subtitle': 'Connexion Assistance',
             'description': 'As Connexion comes online in neighborhoods across our community, the City of Fort Collins is committed to fast, affordable internet. Digital Access & Equity is an income-qualified rate of $19.95 per month for 1 gig-speed of internet plus wireless.',

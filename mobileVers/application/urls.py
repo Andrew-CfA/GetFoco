@@ -18,7 +18,6 @@ urlpatterns = [
     path('finances', views.finances, name='finances'),
     path('programs', views.programs, name='programs'),
     path('householdMembers', views.householdMembers, name='householdMembers'),
-    path('filesInfoNeeded', views.filesInfoNeeded, name='filesInfoNeeded'),
     
 
     # Available/NotAvailable Digital Equity in your area
