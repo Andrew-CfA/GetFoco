@@ -9,8 +9,8 @@ the Free Software Foundation, either version 3 of the License, or
 Here you'll find some useful backend logic / functions used in the main application, most of these functions are used to 
 supplement the application and to keep views.py clutter to a minimum!
 '''
-import csv
 import ast
+import json
 from usps import USPSApi, Address
 import re
 import requests
@@ -25,7 +25,7 @@ from twilio.rest import Client
 from django.conf import settings    
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from django.template.loader import render_to_string
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 def broadcast_sms(phone_Number):
@@ -373,23 +373,6 @@ def broadcast_email_pw_reset(email, content):
     except Exception as e:
         print(e.message)
 
-def get_dependant_info(more_info):
-    """
-    In order to update the dependant information, we need to parse the QueryDict string
-    stored in the more_info object. This function will parse the string and return a
-    dictionary of the dependant information.
-    :param more_info: more_info object
-    :return: dictionary of dependant information
-    """
-    try:
-        dependant_info = more_info.dependentInformation
-        pattern = re.compile(r"<QueryDict: |>")
-        cleaned_string = pattern.sub("", dependant_info)
-        dependant_info = ast.literal_eval(cleaned_string)
-        return dependant_info
-    except Exception as exception:
-        print(exception)
-
 
 def model_to_dict(model):
     """
@@ -407,3 +390,23 @@ def model_to_dict(model):
             value = value.strftime('%Y-%m-%d %H:%M:%S')
         model_dict[field.name] = value
     return model_dict
+
+
+def serialize_household_members(request):
+    """
+    Serialize the household members from the request body. Into a list of dictionaries.
+    then convert the list of dictionaries into json, so it can be stored in the users
+    household_info. Each dictionary should have a 'name' and 'birthdate
+    :param request: request object
+    """
+    # Parse the form data from the request body into a dictionary
+    data = urllib.parse.parse_qs(request.body.decode('utf-8'))
+
+    # Extract the household member data and exclude csrfmiddlewaretoken
+    household_members_data = {k: v for k, v in data.items() if k != 'csrfmiddlewaretoken'}
+    
+    # Create a list of dictionaries with 'name' and 'birthdate' keys
+    household_members = [{'name': data['name'][i], 'birthdate': data['birthdate'][i]} for i in range(len(household_members_data['name']))]
+
+    household_info = json.loads(json.dumps({'persons_in_household': household_members}, cls=DjangoJSONEncoder))
+    return household_info

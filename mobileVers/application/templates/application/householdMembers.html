@@ -17,7 +17,7 @@ the Free Software Foundation, either version 3 of the License, or
 </div>
 <div class=fadeLarge><h2 style="font-weight: 700; margin:5vh 0"> Please share basic information about your income </h2></div>
 
-<form action="{% url 'application:moreInfoNeeded' %}" method="post" autocomplete="false">
+<form action="{% url 'application:householdMembers' %}" method="post" autocomplete="false">
     {% csrf_token %}
     
     <div >
@@ -39,7 +39,7 @@ the Free Software Foundation, either version 3 of the License, or
 </form>
 
 <style>
-    label[for="id_dependentsName"] {
+    label[for="id_name"] {
         margin-top: 35px;
     }
 </style>
@@ -48,22 +48,13 @@ the Free Software Foundation, either version 3 of the License, or
     var update_mode = {{ update_mode|yesno:"true,false" }};
     var formData = JSON.parse('{{ form_data | escapejs }}');
 
-    // If we are in update mode, fill in the form with the data we have in the formData object
-    // dependentsName will be an array that contains the names of the dependents
-    // dependentsBirth will be an array that contains the birthdates of the dependents
-    //id_dependentsName id_dependentsBirthdate these are the ids of the input fields in the form
+    var household_names = document.getElementsByName("name");
+    var household_birthdates = document.getElementsByName("birthdate");
+
     if (update_mode) {
-        // get the input fields by name="dependentsName" and name="dependentsBirthdate"
-        var dependentsName = document.getElementsByName("dependentsName");
-        var dependentsBirth = document.getElementsByName("dependentsBirthdate");
-        // NOTE: Capturing the dependentInformation field to set it to null is a workaround
-        // Long term solution is an entire overhaul the entire form
-        var dependentInformation = document.getElementsByName("dependentInformation");
-        // fill in the input fields with the data from the formData object
-        
         // Check if the new number of household members is different from the old number of household members
         // If it is let the user know to check over the names and birthdates
-        if (dependentsName.length !== formData.dependentsName.length) {
+        if (household_names.length !== formData.persons_in_household.length) {
             Swal.fire({
                 title: 'Household Information',
                 text: 'The members of your household have changed since you last submitted your application. Please make sure their names and birthdays are up to date.',
@@ -72,16 +63,18 @@ the Free Software Foundation, either version 3 of the License, or
                 confirmButtonColor: '#13467D'
             });
         }
-        
-        for (var i = 0; i < dependentsName.length; i++) {
-            if (formData.dependentsName[i]) {
-                dependentsName[i].value = formData.dependentsName[i];
-                dependentsBirth[i].value = formData.dependentsBirthdate[i];
-                dependentInformation[i].value = "null";
-            } else {
-                dependentInformation[i].value = "null";
+    }
+
+    try {
+        for (var i = 0; i < household_names.length; i++) {
+            if (formData.persons_in_household[i]) {
+                household_names[i].value = formData.persons_in_household[i].name;
+                household_birthdates[i].value = formData.persons_in_household[i].birthdate;
             }
         }
+    } catch (error) {
+        console.warn("User had no household members to prefill form");
     }
+
 </script>
 {% endblock %}

@@ -51,8 +51,13 @@ the Free Software Foundation, either version 3 of the License, or
 
     <body style="height:100vh">
 
-        {% if is_prod is False %}
-            <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR TESTING ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
+        {% if is_prod is not True %}
+            {% if is_prod is False %}
+                {% firstof "TESTING" as db_env_str %}
+            {% else %}
+                {% firstof "STAGING" as db_env_str %}
+            {% endif %}
+            <div style="background-color: #FF5E5E; text-align: center; font-size: x-large; ">WARNING: THIS SITE IS FOR {{ db_env_str }} ONLY<br>To enroll in Get FoCo, go to <a href="https://getfoco.fcgov.com" target="_blank">https://getfoco.fcgov.com</a> instead</div>
         {% endif %}
 
         <div class =fadeLarge><img style="display: block;  padding-top: 4%;margin-left: auto; margin-right: auto; width: 30%;" src="{% static 'application/images/CityLogoWhite-01.png' %}"></div>

@@ -17,7 +17,7 @@ urlpatterns = [
     path('account', views.account, name='account'),
     path('finances', views.finances, name='finances'),
     path('programs', views.programs, name='programs'),
-    path('moreInfoNeeded', views.moreInfoNeeded, name='moreInfoNeeded'),
+    path('householdMembers', views.householdMembers, name='householdMembers'),
     path('filesInfoNeeded', views.filesInfoNeeded, name='filesInfoNeeded'),
     
 

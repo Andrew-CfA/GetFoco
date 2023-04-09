@@ -5,14 +5,13 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version
 """
 # All of the forms built from models are here 
+import json
 from django import forms
-from django.db.models.fields import CharField, DateField, TextField
-from django.forms import widgets
 from django.contrib.auth.password_validation import validate_password
 
 from dashboard.models import TaxInformation
 
-from .models import User, Addresses, Eligibility, programs, choices, addressLookup, futureEmails, MoreInfo
+from .models import HouseholdMembers, User, Addresses, Eligibility, programs, choices, addressLookup, futureEmails
 
 # form for user account creation
 class UserForm(forms.ModelForm):
@@ -115,13 +114,14 @@ class EligibilityUpdateForm(forms.ModelForm):
 
 class DateInput(forms.DateInput):
     input_type ='date'
-class MoreInfoForm(forms.ModelForm):
-    dependentsName = forms.CharField(label='First & Last Name of Individual')
-    dependentsBirthdate = forms.DateField(label="Their Birthdate", widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+
+
+class HouseholdMembersForm(forms.ModelForm):
+    name = forms.CharField(label='First & Last Name of Individual')
+    birthdate = forms.DateField(label="Their Birthdate", widget=forms.widgets.DateInput(attrs={'type': 'date'}))
     class Meta:
-        model = MoreInfo
-        fields = ['dependentsName','dependentsBirthdate','dependentInformation']
-        widgets = {'dependentInformation': forms.HiddenInput(),}
+        model = HouseholdMembers
+        fields = ['name', 'birthdate']
 
 
 class FilesInfoForm(forms.ModelForm):

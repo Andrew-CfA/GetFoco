@@ -391,6 +391,7 @@ class Eligibility(TimeStampedModel):
     GRqualified = models.CharField(max_length=20)
     RecreationQualified = models.CharField(max_length=20)
     SPINQualified = models.CharField(max_length=20)
+    SpinAccessQualified_depr = models.CharField(max_length=20)
 
     #TODO 5/13/2021
     #insert other rebate flags here i.e.
@@ -412,7 +413,7 @@ class MoreInfo(TimeStampedModel):
     #dependentsBirthdate = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
     #dependentsName = models.CharField(max_length=20)
 
-class MoreInfo_rearch(GenericTimeStampedModel):
+class HouseholdMembers(GenericTimeStampedModel):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -422,8 +423,8 @@ class MoreInfo_rearch(GenericTimeStampedModel):
     # Store the household info (individuals' names and birthdates) as JSON for
     # quick storage and reference
     household_info = JSONField(null=True,blank=True)
-    created_at_init_temp = models.DateTimeField()
-    modified_at_init_temp = models.DateTimeField()
+    created_at_init_temp = models.DateTimeField(null=True)
+    modified_at_init_temp = models.DateTimeField(null=True)
     
 
 # Programs model class attached to user (will delete as user account is deleted too)

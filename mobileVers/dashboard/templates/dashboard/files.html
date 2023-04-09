@@ -177,6 +177,15 @@ the Free Software Foundation, either version 3 of the License, or
             })
         } else if (fileUploadSuccessful) {
             Swal.fire( {
+                title: 'File Upload',
+                html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
+                confirmButtonColor: '#13467D',
+                confirmButtonText: 'Continue'
+            })
+        } else if (fileUploadSuccessful) {
+            Swal.fire( {
+                title: 'Your file has been uploaded!',
+                html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
                 title: 'Your file has been uploaded!',
                 html: "<img src=\"{% static 'application/images/sample_documents.png' %}\" alt=\"Sample Documents\" style=\"margin-bottom:15px\"><p style=\"color:#13467D\">Please upload a card, a copy of an email, or a letter from qualifying programs. Take a screen shot like the example of the EBT card. Please make sure the names and information are clear.</p>",
                 icon: 'success',
