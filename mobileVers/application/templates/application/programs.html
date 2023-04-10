@@ -25,39 +25,17 @@ the Free Software Foundation, either version 3 of the License, or
 
 <form action="{% url 'application:programs' %}" method="post" autocomplete="false">
   {% csrf_token %}
-  {% for field in form%}
-
-  {% if field.label == "Identification Card" %}
-  <div style="display: none;">
-    <input style="display: none;" id="{{ field.id_for_label}}" type="checkbox" checked required name="{{ field.name}}">
-    <label class="checklabel" for="{{ field.id_for_label}}">
-
-      <style>
-        input:not(.checked)~label span.buttonCheck {
-          color: white;
-        }
-      </style>
-
-      <span class="buttonCheck">{{field.label}}</span>
+  {% for program in programs %}
+    <input style="display: none;" id="{{ program.program_name }}" type="checkbox" name="{{ program.program_name }}" value="program.id">
+    <label class="checklabel" for="{{ program.program_name }}">
+        <style>
+            input:not(.checked)~label span.buttonCheck {
+                color: white;
+            }
+        </style>
+        <span class="buttonCheck">{{ program.friendly_name }}</span>
     </label>
-  </div>
-
-  {% else %}
-  <input style="display: none;" id="{{ field.id_for_label}}" type="checkbox" name="{{ field.name}}">
-  <label class="checklabel" for="{{ field.id_for_label}}">
-
-    <style>
-      input:not(.checked)~label span.buttonCheck {
-        color: white;
-      }
-    </style>
-
-    <span class="buttonCheck">{{field.label}}</span>
-  </label>
-  {% endif %}
-
   {% endfor %}
-
 
   <div class="footer">
     <button id="btnContinue" type="submit" disabled> SELECT A PROGRAM </button>

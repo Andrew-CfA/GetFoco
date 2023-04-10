@@ -5,7 +5,7 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version
 -->
 {% if valid is True %}
-    <select name="grossAnnualHouseholdIncome" id="id_grossAnnualHouseholdIncome">
+    <select name="household_income" id="household_income">
         <option value="">---------</option>
         {% for gahi in gahiList %}
             <option value="{{ gahi.val }}">{{ gahi.text }}</option>

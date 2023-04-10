@@ -36,7 +36,7 @@ the Free Software Foundation, either version 3 of the License, or
 <div class=fadeLarge><h2 style="font-weight: 700; margin:5vh 0"> Please share basic information about your income </h2></div>
 
 
-<form action="{% url 'application:finances' %}" method="post" autocomplete="false" id="eligibilityForm" gahi-selector-url="{% url 'application:ajax_load_gahi' %}" novalidate>
+<form action="{% url 'application:finances' %}" method="post" autocomplete="false" id="eligibilityForm" novalidate>
     {% csrf_token %}
 
     {% if update_mode is True %}
@@ -45,7 +45,7 @@ the Free Software Foundation, either version 3 of the License, or
       <div class="input" style="padding-top:0">
           <label class="labelword">How long have you lived at this address?</label>
           <div class="row" style="justify-content:left; padding-top:5%">
-              {% for choice in form.rent %}
+              {% for choice in form.duration_at_address %}
                   <label for="{{choice.id_for_label}}" class="row" style="padding-right: 5%;">
                       <span class="radio">{{ choice.tag }}</span>
                       <p>{{ choice.choice_label }}</p>
@@ -54,36 +54,21 @@ the Free Software Foundation, either version 3 of the License, or
           </div> 
       </div>
     {% endif %}
-    {% for field in form %}
-        {% if field.label == "Rent" %}
-        {% elif field.label == 'Number of Dependents' %}
 
-        {% if form.errors %}
-            {% for error in field.errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-            </div>
-            {% endfor %}
-        {% endif %}
-
-        <div class="input">
-            <label class="labelword"style="position:relative">How many individuals are in your household?</label>  <a href="{% url 'application:dependentInfo' %}"><img src="{% static 'application/images/clipart249308.png' %}" alt="info" style="width:min(4.5vw,20px);"></a>
-            {% if update_mode is True %}
-            <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}" value="{{ form.dependents.value }}" style="height: 3vh;">
-            {% else %}
-            <input class="fill" type="text" name="{{ field.name }}" id="{{ field.id_for_label}}" style="height: 3vh;">
-            {% endif %}
-          </div>
+    <div class="input">
+        <label class="labelword"style="position:relative">How many individuals are in your household?</label>  <a href="{% url 'application:dependentInfo' %}"><img src="{% static 'application/images/clipart249308.png' %}" alt="info" style="width:min(4.5vw,20px);"></a>
+        {% if update_mode is True %}
+        <input class="fill" type="text" name="{{ form.number_persons_in_household.name }}" id="{{ form.number_persons_in_household.id_for_label}}" value="{{ form.dependents.value }}" style="height: 3vh;">
         {% else %}
-        <div class="input">
-            <label class="labelword" style="position:relative">How much is your gross annual household income? <buttonQuestion  id="myBtn"><img id src="{% static 'application/images/clipart249308.png' %}" alt="back" style="width:min(4.5vw,20px); display: inline;"></buttonQuestion></label>
-            <br>
-            <div name="gahiDiv" id="gahiDiv">
-            </div>
-        </div>
-
+        <input class="fill" type="text" name="{{ form.number_persons_in_household.name }}" id="{{ form.number_persons_in_household.id_for_label}}" style="height: 3vh;">
         {% endif %}
-    {% endfor %}
+    </div>
+    <div class="input">
+        <label class="labelword" style="position:relative">How much is your gross annual household income? <buttonQuestion  id="myBtn"><img id src="{% static 'application/images/clipart249308.png' %}" alt="back" style="width:min(4.5vw,20px); display: inline;"></buttonQuestion></label>
+        <br>
+        <div name="gahiDiv" id="gahiDiv">
+        </div>
+    </div>
 
     <div class="footer">
       {% if update_mode is True %}
@@ -100,26 +85,25 @@ the Free Software Foundation, either version 3 of the License, or
   var update_mode = {{ update_mode|yesno:"true,false" }};
 
   $(document).ready(function(){
-    $("#id_dependents").on("input", function() {
-      var url = $("#eligibilityForm").attr("gahi-selector-url");  // get the url of the `gahi-selector` view
-      var dependentsId = $(this).val();  // get the selected GAHI range from the HTML input
+    $("#id_number_persons_in_household").on("input", function() {
+      var number_persons_in_household = $(this).val();  // get the selected GAHI range from the HTML input
 
       $.ajax({                       // initialize an AJAX request
         url: '{% url 'application:ajax_load_gahi' %}',                    // set the url of the request (= /hr/income_dropdown_list_options/)
         data: {
-          'dependents': dependentsId       // add the number of individuals to the GET parameters
+          'number_persons_in_household': number_persons_in_household       // add the number of individuals to the GET parameters
         },
         success: function (data) {   // `data` is the return of the `gahi-selector` view function
           $("#gahiDiv").html(data);  // replace the contents of the individuals input with the data that came from the server
 
           if (update_mode) {
-            $("#id_grossAnnualHouseholdIncome").val('{{ form.grossAnnualHouseholdIncome.value }}');
+            $("#household_income").val('{{ form.household_income.value }}');
           }
         }
       });
     });
 
-    $("#id_dependents").trigger('input');
+    $("#id_number_persons_in_household").trigger('input');
 
     // Get the modal
     var modal = document.getElementById("myModal");

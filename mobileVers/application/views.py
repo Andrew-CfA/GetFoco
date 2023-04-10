@@ -5,6 +5,8 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version
 """
 import json
+import logging
+import usaddress
 from django.core.serializers.json import DjangoJSONEncoder
 from django.conf import settings as django_settings
 from django.shortcuts import render, redirect, reverse
@@ -14,19 +16,18 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 from dashboard.backend import get_iq_program_info, get_eligiblity_programs
-from .forms import FilesInfoForm, UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, HouseholdMembersForm, UserUpdateForm, EligibilityUpdateForm
+from .forms import UserForm, AddressForm, EligibilityForm, programForm, addressLookupForm, futureEmailsForm, HouseholdMembersForm, UserUpdateForm, EligibilityUpdateForm
 from .backend import addressCheck, serialize_household_members, validateUSPS, enroll_connexion_updates, model_to_dict
-from .models import AMI, iqProgramQualifications, User, Eligibility, EligibilityHistory
+from .models import AMI, AMI_rearch, Eligibility_rearch, iq_programs_rearch, iqProgramQualifications, User, EligibilityHistory, iqProgramQualifications_rearch, programs_rearch
 
 from py_models.qualification_status import QualificationStatus
 
-import logging
-import usaddress
 from decimal import Decimal
 
 from django.http import HttpResponseRedirect, JsonResponse
 from py_models.decorators import set_update_mode
 from django.db import connections
+from django.db.models import Q
 
 
 
@@ -82,23 +83,23 @@ class GAHIBuilder:
         self.list = []
         self.valid = False  # default to invalid result
         
-        dependentsStr = request.GET.get('dependents')
+        number_persons_in_householdStr = request.GET.get('number_persons_in_household')
         try:
             try:
                 # Return the AMI value for the number entered
                 ami = AMI.objects.filter(
-                    householdNum=dependentsStr,
+                    householdNum=number_persons_in_householdStr,
                     active=True,
                     ).order_by('ami').first().ami
-            except AttributeError:  # catch error of 'dependents' value not found
+            except AttributeError:  # catch error of 'number_persons_in_household' value not found
                 # If number in household is invalid, display that instead of a
-                # dropdown (if dependents cannot be converted to int, a
+                # dropdown (if number_persons_in_household cannot be converted to int, a
                 # ValueError will be raised before the if statement).
-                dependents = int(dependentsStr)
-                if dependents < 1:
+                number_persons_in_household = int(number_persons_in_householdStr)
+                if number_persons_in_household < 1:
                     raise ValueError
                 else:
-                    print(dependents,'individuals in household')
+                    print(number_persons_in_household,'individuals in household')
                     
                     # Find the max defined number in household, and compare it
                     # to the input - anything greater than max will have the
@@ -112,14 +113,14 @@ class GAHIBuilder:
                         householdNum=maxHousehold,
                         active=True,
                         ).order_by('ami').first().ami + \
-                        (dependents - maxHousehold) * \
+                        (number_persons_in_household - maxHousehold) * \
                             AMI.objects.filter(
                                 householdNum='Each Additional',
                                 active=True,
                                 ).order_by('ami').first().ami
-                    # print('Base is',AMI.objects.filter(householdNum=maxHousehold,active=True).order_by('ami').first().ami,'Additional is',(dependents - maxHousehold)*AMI.objects.filter(householdNum='Each Additional',active=True).order_by('ami').first().ami)
+                    # print('Base is',AMI.objects.filter(householdNum=maxHousehold,active=True).order_by('ami').first().ami,'Additional is',(number_persons_in_household - maxHousehold)*AMI.objects.filter(householdNum='Each Additional',active=True).order_by('ami').first().ami)
                 
-        # Catch invalid dependents
+        # Catch invalid number_persons_in_household
         except ValueError:
             print("Invalid number of individuals")
             self.list.append(
@@ -589,7 +590,6 @@ def takeUSPSaddress(request):
         return redirect(reverse("application:inServiceArea"))
 
 
-
 def inServiceArea(request):
     if request.user.addresses.isInGMA:
         return redirect(reverse("application:finances")) #TODO figure out to clean?
@@ -599,18 +599,18 @@ def inServiceArea(request):
 
 @set_update_mode
 def account(request):
-    if request.method == "POST": 
-        # maybe also do some password requirements here too
+    if request.method == "POST":
+        # Check if the update_mode exists in the POST data.
+        update_mode = request.POST.get('update_mode')
         try:
             existing = request.user
-            # Check if the update_mode exists in the POST data.
-            update_mode = request.POST.get('update_mode')
             if update_mode:
                 form = UserUpdateForm(request.POST,instance = existing)
             else:
                 form = UserForm(request.POST,instance = existing)
         except AttributeError or ObjectDoesNotExist:
             form = UserForm(request.POST or None)
+
         if form.is_valid() and update_mode:
             form.save()
             return JsonResponse({"redirect":f"{reverse('dashboard:settings')}?page_updated=account"})
@@ -710,8 +710,8 @@ def householdMembers(request):
             "application/householdMembers.html",
             {
                 'step':3,
-                'dependent': str(request.user.eligibility.dependents),
-                'list':list(range(request.user.eligibility.dependents)),
+                'dependent': str(request.user.eligibility_rearch.number_persons_in_household),
+                'list':list(range(request.user.eligibility_rearch.number_persons_in_household)),
                 'form':form,
                 'formPageNum':6,
                 'Title': "Household Members",
@@ -751,13 +751,25 @@ def finances(request):
         except AttributeError or ObjectDoesNotExist:
             form = EligibilityForm(request.POST or None)
 
-        instance = form.save(commit=False)
-        instance.user_id = request.user       
-        
         # Parse the 'value' (carat-delimited) from the GAHIBuilder output
-        instance.AmiRange_min, instance.AmiRange_max = [
-            Decimal(x) for x in form.cleaned_data['grossAnnualHouseholdIncome'].split('^')
+        ami_range_min, ami_range_max = [
+            Decimal(x) for x in form.data['household_income'].split('^')
             ]
+        
+        # Remove the household_income field from the form data so that it doesn't
+        # throw an error when we try to save the form, since we don't have a field
+        # for it in the model.
+        del form.fields['household_income']
+
+        instance = form.save(commit=False)
+        instance.user_id = request.user.id
+        instance.ami_range_min = ami_range_min 
+        instance.ami_range_max = ami_range_max
+
+        # Get the first is_active program from the application_ami_rearch table
+        # and set the form instance's year_valid equal to that program's year_valid
+        # field.
+        instance.ami_year = AMI_rearch.objects.filter(is_active=True).first().year_valid
 
         # The gist of this if/else block is that we want to keep a user's program
         # statuses the same if they are in a PENDING or ACTIVE state. However, if
@@ -766,7 +778,7 @@ def finances(request):
         if update_mode:
             # Save the user's current eligibility data to the database in the
             # eligibility history table.
-            users_eligibility = model_to_dict(Eligibility.objects.get(user_id=request.user.id))
+            users_eligibility = model_to_dict(Eligibility_rearch.objects.get(user_id=request.user.id))
             eligibility_history = EligibilityHistory.objects.create(
                 user=request.user,
                 # Convert the eligibility object to a dictionary and then to a JSON string
@@ -775,35 +787,35 @@ def finances(request):
             )
             eligibility_history.save()
 
-            # Loop through all of the attributes in the request.user.eligibility object
+            # Loop through all of the attributes in the request.user.eligibility_rearch object
             # and set them to "" if they contain the word "Qualified", have a NOTQUALIFED
-            # status and the new AmiRange_max is less than the old AmiRange_max.
-            if instance.AmiRange_max < previous_max_ami:
-                instance.GenericQualified = QualificationStatus.PENDING.name
-                for attr in dir(request.user.eligibility):
-                    if "qualified" in attr.lower() and "GenericQualified" != attr:
-                        if getattr(request.user.eligibility, attr) == QualificationStatus.NOTQUALIFIED.name:
-                            setattr(request.user.eligibility, attr, "")
+            # status and the new ami_range_max is less than the old ami_range_max.
+            if instance.ami_range_max < previous_max_ami:
+                instance.is_income_verified = None
+                # Query all of the porgrams (iq_programs_rearch) that the user is currently enrolled in
+                # and set their is_enrolled field to None if is_enrolled is not True.
+                for program in request.user.iq_programs_rearch.all():
+                    if program.is_enrolled != True:
+                        program.is_enrolled = None
+                        program.save()
         else:
-            # Ensure AmiRange_max < 1 (that's all we need for GenericQualified)
-            if instance.AmiRange_max < Decimal('1'):
+            # Ensure ami_range_max < 1 (that's all we need for GenericQualified)
+            if instance.ami_range_max < Decimal('1'):
                 print("GAHI is below program AMI ranges")
-                instance.GenericQualified = QualificationStatus.PENDING.name
+                instance.is_income_verified = False
             else:
                 print("GAHI is greater than program AMI ranges")
-                instance.GenericQualified = QualificationStatus.NOTQUALIFIED.name             
+                instance.is_income_verified = False            
             
         print("SAVING")
         instance.save()
 
         # auto apply grocery rebate people if their AMI is <=30%
-        if ((request.user.eligibility.AmiRange_max <= Decimal('0.3') and request.user.eligibility.GRqualified != QualificationStatus.ACTIVE.name)):
-            # Update the current model so the dashboard displays correctly
-            request.user.eligibility.GRqualified = QualificationStatus.PENDING.name
-
-            # Update the database
-            Eligibility.objects.filter(user_id_id=request.user.id).update(GRqualified=QualificationStatus.PENDING.name)
-
+        if ((request.user.eligibility_rearch.ami_range_max <= Decimal('0.3') and not request.user.eligibility_rearch.is_income_verified)):
+            # Find the iq program id for the program_name = 'grocery' in the application_iqprogramqualifications_rearch table
+            iq_program_id = iqProgramQualifications_rearch.objects.get(program_name='grocery').id
+            # Create a new iq_programs_rearch object with the user_id and program_id
+            iq_programs_rearch.objects.create(user_id=request.user.id, program_id=iq_program_id)
         if update_mode:
             return redirect(f'{reverse("application:householdMembers")}?update_mode=1')
         else:
@@ -812,7 +824,7 @@ def finances(request):
     else:
         if request.session.get('update_mode'):
             # Query the users table for the user's data
-            eligibility = Eligibility.objects.get(user_id=request.user.id)
+            eligibility = Eligibility_rearch.objects.get(user_id=request.user.id)
             form = EligibilityUpdateForm(instance=eligibility)
         else:
             form = EligibilityForm()
@@ -877,8 +889,6 @@ def IQProgramQuickApply(request, iq_program):
         )
 
 
-
-
 def programs(request):
     if request.method == "POST": 
         try:
@@ -899,27 +909,21 @@ def programs(request):
             #enter upload code here for client to upload images
             return redirect(reverse("application:available"))
     else:
-        form = programForm()
+        # Get all of the programs (except the one with identification and where is_active is False) from the application_programs_rearch table
+        # ordered by the friendly_name field acending
+        programs = programs_rearch.objects.filter(~Q(program_name='identification')).filter(is_active=True).order_by('friendly_name')
 
     return render(
         request,
         'application/programs.html',
         {
-            'form':form,
+            'programs':programs,
             'step':4,
             'formPageNum':formPageNum,
             'Title': "Programs",
             'is_prod': django_settings.IS_PROD,
             },
         )
-
-
-
-
-
-
-
-
 
 def notAvailable(request):
     return render(

@@ -4,16 +4,13 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version
 """
-
-import datetime
-
-from unicodedata import decimal
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.postgres.fields import JSONField
+
 
 # Create custom user manager class (because django only likes to use usernames as usernames not email)
 class CustomUserManager(BaseUserManager):
@@ -98,7 +95,7 @@ class IQProgramTimeStampedModel(models.Model):
     ``enrolled_at`` fields.
     """
     applied_at = models.DateTimeField(auto_now_add=True)
-    enrolled_at = models.DateTimeField()
+    enrolled_at = models.DateTimeField(null=True)
     
     class Meta:
         abstract = True
@@ -262,12 +259,6 @@ class AMI_rearch(GenericTimeStampedModel):
         ]
 
 
-choices = (
-    ('More than 3 Years', 'More than 3 Years'),
-    ('1 to 3 Years', '1 to 3 Years'),
-    ('Less than a Year', 'Less than a Year'),
-)
-
 # Eligibility model class attached to user (will delete as user account is deleted too)
 class Eligibility_rearch(GenericTimeStampedModel):
     user = models.OneToOneField(
@@ -276,7 +267,7 @@ class Eligibility_rearch(GenericTimeStampedModel):
         primary_key=True,   # set this to the primary key of this model
     )
 
-    duration_at_address = models.CharField(choices=choices, max_length=200)
+    duration_at_address = models.CharField(max_length=200)
     number_persons_in_household = models.IntegerField(100, default=1)
 
     # Note that ami_year is the same value as 'year_valid' in AMI_rearch (but
@@ -371,40 +362,6 @@ class iq_programs_rearch(IQProgramTimeStampedModel):
     )
 
     is_enrolled = models.BooleanField(default=False)
-    
-
-# Eligibility model class attached to user (will delete as user account is deleted too)
-class Eligibility(TimeStampedModel):
-    user_id = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
-
-    rent = models.CharField(choices=choices, max_length=200)
-    #TODO: possibly add field for how many total individuals are in the household
-    dependents = models.IntegerField(100, default=1)
-
-    DEqualified = models.CharField(max_length=20)
-    GenericQualified = models.CharField(max_length=20)
-    ConnexionQualified = models.CharField(max_length=20)
-    GRqualified = models.CharField(max_length=20)
-    RecreationQualified = models.CharField(max_length=20)
-    SPINQualified = models.CharField(max_length=20)
-    SpinAccessQualified_depr = models.CharField(max_length=20)
-
-    #TODO 5/13/2021
-    #insert other rebate flags here i.e.
-    #xQualified = models.CharField(max_length=20)
-    #utilitiesQualified = models.CharField(max_length=20)
-    
-
-    grossAnnualHouseholdIncome = models.CharField(max_length=20)    
-    # Define the min and max Gross Annual Household Income as a fraction of 
-    # AMI (which is a function of number of individuals in household)
-    AmiRange_min = models.DecimalField(max_digits=5, decimal_places=4)
-    AmiRange_max = models.DecimalField(max_digits=5, decimal_places=4)
-    spin_privacy_acknowledgement = models.BooleanField(default=False)
 
 
 class MoreInfo(TimeStampedModel):
@@ -462,7 +419,8 @@ class programs_rearch(GenericTimeStampedModel):
     # max_length is currently set to a large value, but below Postgres's 
     # VARCHAR(MAX).
 
-    friendly_program_name = models.CharField(max_length=5000)
+    friendly_name = models.CharField(max_length=5000)
+    friendly_description = models.CharField(max_length=5000)
     
     is_active = models.BooleanField(default=True)
 

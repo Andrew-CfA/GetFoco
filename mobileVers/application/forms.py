@@ -5,13 +5,10 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version
 """
 # All of the forms built from models are here 
-import json
 from django import forms
 from django.contrib.auth.password_validation import validate_password
 
-from dashboard.models import TaxInformation
-
-from .models import HouseholdMembers, User, Addresses, Eligibility, programs, choices, addressLookup, futureEmails
+from .models import HouseholdMembers, User, Addresses, addressLookup, futureEmails, Eligibility_rearch, programs_rearch
 
 # form for user account creation
 class UserForm(forms.ModelForm):
@@ -69,8 +66,6 @@ class UserUpdateForm(forms.ModelForm):
             user.save()
         return user
 
-
-# form for addresses
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Addresses
@@ -83,34 +78,31 @@ class AddressForm(forms.ModelForm):
             'state':'State', 
             'zipCode':'Zip Code',
         }
-        #widgets = {
-            #'zipCode':TextField(attrs={'type':'number'}),
-            #'document': ClearableFileInput(attrs={'multiple': True}),
-            #=forms.widgets.DateInput(attrs={'type': 'date'})
-        #} 
 
-# form for basic finance eligibility
 class EligibilityForm(forms.ModelForm):
-    rent = forms.ChoiceField(choices=choices,widget=forms.RadioSelect(),label="Rent")
+    choices = (
+        ('More than 3 Years', 'More than 3 Years'),
+        ('1 to 3 Years', '1 to 3 Years'),
+        ('Less than a Year', 'Less than a Year'),
+    )
+    duration_at_address = forms.ChoiceField(choices=choices, widget=forms.RadioSelect())
+    household_income = forms.ChoiceField()
     class Meta:
-        model = Eligibility
-        fields = ['rent','dependents', 'grossAnnualHouseholdIncome']
+        model = Eligibility_rearch
+        fields = ['duration_at_address','number_persons_in_household',]
         labels  = {
-            'rent':'Rent',
-            'dependents':'Number of Dependents', 
-            'grossAnnualHouseholdIncome':'Adjusted Gross Annual Household Income',
-        } 
+            'duration_at_address':'How long have you lived at this address?',
+            'number_persons_in_household': 'How many individuals are in your household?', 
+        }
 
 class EligibilityUpdateForm(forms.ModelForm):
     class Meta:
-        model = Eligibility
-        fields = ['dependents', 'grossAnnualHouseholdIncome']
+        model = Eligibility_rearch
+        fields = ['number_persons_in_household',]
         labels  = {
-            'dependents':'Number of Dependents', 
-            'grossAnnualHouseholdIncome':'Adjusted Gross Annual Household Income',
+            'number_persons_in_household': 'How many individuals are in your household?', 
         } 
 
-# form for basic finance eligibility
 
 class DateInput(forms.DateInput):
     input_type ='date'
@@ -124,26 +116,7 @@ class HouseholdMembersForm(forms.ModelForm):
         fields = ['name', 'birthdate']
 
 
-class FilesInfoForm(forms.ModelForm):
-    last4SSN = forms.DecimalField(label='Because you uploaded an Affordable Connectivity Program confirmation, please enter the last four digits of your SSN')
-    class Meta:
-        model = TaxInformation
-        fields = ['last4SSN']
 
-
-# programs they are available for
-class programForm(forms.ModelForm):
-    class Meta:
-        model = programs
-        fields = ['ebb_acf', 'Identification', 'leap', 'medicaid', 'freeReducedLunch', 'snap'] #ebb_acf = Emergency Broadband Benefit AKA Affordable Connectivity Program
-        labels  = { 
-            'snap':'Supplemental Nutrition Assistance Program (SNAP)',
-            'medicaid':'Medicaid',
-            'freeReducedLunch': 'Poudre School District Free and Reduced Lunch',
-            'Identification':'Identification Card',
-            'ebb_acf':'Affordable Connectivity Program (ACP)',
-            'leap':'Low-income Energy Assistance Program (LEAP)',
-        }
 
 class addressLookupForm(forms.ModelForm):
     class Meta:
